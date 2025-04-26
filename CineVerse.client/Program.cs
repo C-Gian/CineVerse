@@ -1,13 +1,31 @@
 using CineVerse.client;
+using CineVerse.client.Options;
 using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
+using Microsoft.Extensions.Options;
 using MudBlazor.Services;
+using RestSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMudServices();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
+
+builder.Services.Configure<ApiOptions>(
+    builder.Configuration.GetSection("Api"));
+
+builder.Services.AddSingleton(sp =>
+{
+    var opt = sp.GetRequiredService<IOptions<ApiOptions>>().Value;
+    var rest = new RestClient(new RestClientOptions(opt.BaseUrl)
+    {
+        ThrowOnAnyError = false
+    });
+
+    return rest;
+});
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

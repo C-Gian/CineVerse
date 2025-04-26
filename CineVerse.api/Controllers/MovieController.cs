@@ -11,23 +11,17 @@ namespace CineVerse.api.Controllers;
 [Microsoft.AspNetCore.Components.Route("api/[controller]")]
 public class MovieController : ControllerBase
 {
-    #region Properties
-
-    [Inject]
-    public IMovieService MovieService { get; set; }
-
-    #endregion
-
     #region Fields
 
+    private readonly IMovieService _movieService;
     private readonly ILogger<MovieController> _logger;
 
     #endregion
 
-
-
-    public MovieController(ILogger<MovieController> logger)
+    public MovieController(IMovieService movieService,
+                           ILogger<MovieController> logger)
     {
+        _movieService = movieService;
         _logger = logger;
     }
 
@@ -35,7 +29,7 @@ public class MovieController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<MovieDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPopularMovies([FromQuery] int page = 1, CancellationToken ct = default)
     {
-        var movies = await MovieService.GetPopularMovies(ct);
+        var movies = await _movieService.GetPopularMovies(page, ct);
         return Ok(movies);
     }
 }
