@@ -1,0 +1,41 @@
+using CineVerse.api.Models;
+using CineVerse.api.Services.Interfaces;
+using CineVerse.shared.DTOs;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace CineVerse.api.Controllers;
+
+[ApiController]
+[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+public class MovieController : ControllerBase
+{
+    #region Properties
+
+    [Inject]
+    public IMovieService MovieService { get; set; }
+
+    #endregion
+
+    #region Fields
+
+    private readonly ILogger<MovieController> _logger;
+
+    #endregion
+
+
+
+    public MovieController(ILogger<MovieController> logger)
+    {
+        _logger = logger;
+    }
+
+    [HttpGet("popular")]
+    [ProducesResponseType(typeof(IEnumerable<MovieDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPopularMovies([FromQuery] int page = 1, CancellationToken ct = default)
+    {
+        var movies = await MovieService.GetPopularMovies(ct);
+        return Ok(movies);
+    }
+}

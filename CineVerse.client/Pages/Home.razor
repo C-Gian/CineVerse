@@ -1,0 +1,19 @@
+﻿@page "/"
+
+@if (IsLoading)
+{
+    <MudProgressCircular Size="Size.Large" Class="m-6" />
+} else
+{
+    <MudGrid Spacing="@Spacing" Justify="Justify.Center">
+        <MudItem>
+            <MudPaper Height="140px" Width="140px" />
+        </MudItem>
+        <MudItem>
+            <MudPaper Height="140px" Width="140px" />
+        </MudItem>
+        <MudItem>
+            <MudPaper Height="140px" Width="140px" />
+        </MudItem>
+    </MudGrid>
+}
