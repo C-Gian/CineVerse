@@ -1,9 +1,6 @@
 using CineVerse.api.ApiResponses;
 using CineVerse.api.Services.Interfaces;
-using CineVerse.shared.DTOs;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CineVerse.api.Controllers;
 
@@ -27,6 +24,8 @@ public class GenreController : ControllerBase
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<GenreResultResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll(CancellationToken ct = default) =>
-        Ok(await _genreService.GetMovieGenres(ct));
+    public async Task<IActionResult> GetAll(CancellationToken ct = default)
+    {
+        return Ok(await _genreService.GetMovieGenres(ct));
+    }
 }

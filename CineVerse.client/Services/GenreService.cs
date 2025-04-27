@@ -8,13 +8,15 @@ public class GenreService(RestClient rest) : IGenreService
 {
     public async Task<List<Genre>> GetGenres(CancellationToken ct = default)
     {
-        var req = new RestRequest("/api/genre/all");
+        var req = new RestRequest("api/genre/all");
+
+        var debugUri = rest.BuildUri(req);
 
         var res = await rest.ExecuteGetAsync<List<Genre>>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
-            throw new ApplicationException($"API error ({res.StatusCode})");
-
+            throw new Exception($"API error ({res.StatusCode})");
+         
         return res.Data;
     }
 }
