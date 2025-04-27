@@ -26,7 +26,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("popular")]
-    [ProducesResponseType(typeof(IEnumerable<MovieDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPopularMovies([FromQuery] int page = 1, CancellationToken ct = default)
     {
         var movies = await _movieService.GetPopularMovies(page, ct);

@@ -1,3 +1,18 @@
-﻿namespace CineVerse.api.Models;
+﻿using System.Text.Json.Serialization;
 
-public class MovieResponse(int Page, Movie[] Results, int Total_Pages, int Total_Results);
+namespace CineVerse.api.Models;
+
+public class MovieResponse
+{
+    [JsonPropertyName("page")]
+    public int Page { get; set; }
+
+    [JsonPropertyName("results")]
+    public List<MovieResultResponse> Results { get; set; } = [];
+
+    [JsonPropertyName("total_pages")]
+    public int TotalPages { get; set; }
+
+    [JsonPropertyName("total_results")]
+    public int TotalResults { get; set; }
+}
