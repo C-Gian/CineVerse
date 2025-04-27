@@ -1,9 +1,6 @@
 using CineVerse.api.ApiResponses;
 using CineVerse.api.Services.Interfaces;
-using CineVerse.shared.DTOs;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CineVerse.api.Controllers;
 
