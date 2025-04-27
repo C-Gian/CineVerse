@@ -1,5 +1,4 @@
-﻿using CineVerse.api.Models;
-using CineVerse.shared.DTOs;
+﻿using CineVerse.api.ApiResponses;
 
 namespace CineVerse.api.Services.Interfaces;
 

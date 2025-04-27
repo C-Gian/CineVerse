@@ -5,9 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace CineVerse.api.Services;
 
-public class MovieService : IMovieService
+public class GenreService : IGenreService
 {
-    public MovieService(IHttpClientFactory factory, IOptions<TmdbOptions> opt)
+    public GenreService(IHttpClientFactory factory, IOptions<TmdbOptions> opt)
     {
         _apiKey = opt.Value.ApiKey;
         _http = factory.CreateClient("tmdb");
@@ -23,16 +23,13 @@ public class MovieService : IMovieService
     public readonly HttpClient _http;
 
     #endregion
-
-
-
-    public async Task<List<MovieResultResponse>> GetPopularMovies(int page, CancellationToken ct)
+    public async Task<List<GenreResultResponse>> GetMovieGenres(CancellationToken ct)
     {
-        var url = $"movie/popular?api_key={_apiKey}&page={page}";
+        var url = $"genre/movie/list?api_key={_apiKey}";
 
-        var result = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
+        var result = await _http.GetFromJsonAsync<GenreResponse>(url, ct)
                    ?? throw new ApplicationException("Empty TMDB response");
 
-        return result.Results;
+        return result.Genres;
     }
 }
