@@ -28,6 +28,7 @@ public partial class Home
         Genres = await LoadGenresAsync();
         IsLoading = false;
     }
+
     //private async Task<List<Movie>> LoadMoviesAsync()
     //{
     //    var movies = await MovieService.GetPopularMovies();

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CineVerse.api.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+[Route("api/[controller]")]
 public class MovieController : ControllerBase
 {
     #region Fields

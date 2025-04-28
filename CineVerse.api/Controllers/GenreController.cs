@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CineVerse.api.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Components.Route("api/[controller]")]
+[Route("api/[controller]")]
 public class GenreController : ControllerBase
 {
     #region Fields
@@ -15,17 +15,17 @@ public class GenreController : ControllerBase
 
     #endregion
 
-    public GenreController(IGenreService genreService,
-                           ILogger<GenreController> logger)
+    public GenreController(IGenreService genreService, ILogger<GenreController> logger)
     {
         _genreService = genreService;
         _logger = logger;
     }
 
+
     [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<GenreResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken ct = default)
     {
-        return Ok(await _genreService.GetMovieGenres(ct));
+        var result = await _genreService.GetMovieGenres(ct);
+        return Ok(result);
     }
 }
