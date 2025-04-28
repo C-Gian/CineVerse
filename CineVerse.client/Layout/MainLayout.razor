@@ -9,9 +9,15 @@
 <div class="layout-root" style="background-color: red;">
 
     <MudAppBar Dense="true"
+               Position="Position.Fixed"
                Elevation="0"
                Color="Color.Primary"
                Class="appbar">
+
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                Color="Color.Inherit"
+                Edge="Edge.Start"
+                OnClick="ToggleDrawer" />
 
         <MudDrawerHeader Class="logo-area">
             <img src="/cineverse-icon.png" width="28" />
@@ -26,11 +32,23 @@
     <div class="main-area" style="background-color: blue;">
 
         <MudDrawer Variant="DrawerVariant.Mini"
+                   MiniWidth="72"
                    Elevation="0"
                    Color="Color.Tertiary"
-                   Class="drawer">
+                   Class="drawer"
+                   Open="@_drawerOpen">
 
-            <NavMenu />
+            <MudNavMenu Dense="true">
+                <MudNavLink Icon="@Icons.Material.Filled.Home"
+                            Href="/"
+                            HideTextWhenMini="true">Home</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.Movie"
+                            Href="/movies"
+                            HideTextWhenMini="true">Movies</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Filled.LocalOffer"
+                            Href="/genres"
+                            HideTextWhenMini="true">Genres</MudNavLink>
+            </MudNavMenu>
         </MudDrawer>
 
         <div class="content-area p-6" style="background-color: green;">
@@ -45,7 +63,17 @@
 	<a class="dismiss">🗙</a>
 </div>
 
+@code {
+    private bool _drawerOpen = true;
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+}
+
 <style>
+
+    :root {
+        --appbar-h: 56px; 
+    }
+
     .layout-root {
         display: flex;
         flex-direction: column;
@@ -53,20 +81,27 @@
     }
 
     .appbar {
-        height: 56px;
+        height: var(--appbar-h);
+        z-index: 2000;
+        border-bottom: none;
         flex-shrink: 0;
         border-bottom: none;
     }
 
     .main-area {
-        flex: 1;
         display: flex;
-        overflow: hidden; 
+        height: calc(100vh - var(--appbar-h));
+        padding-top: var(--appbar-h); 
+        overflow: hidden;
     }
 
     .drawer {
-        width: 200px !important;
+        transition: width 250ms ease;
         border-right: none;
+    }
+
+    .drawer.mud-drawer-closed {
+        width: 72px; 
     }
 
     .logo-area {
