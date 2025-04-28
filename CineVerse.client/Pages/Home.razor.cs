@@ -8,7 +8,7 @@ public partial class Home
 {
     #region Properties
 
-    //public List<Movie> Movies { get; set; } = new();
+    public List<Movie> Movies { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
     public int Spacing { get; set; } = 6;
@@ -24,17 +24,17 @@ public partial class Home
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        //Movies = await LoadMoviesAsync();
+        Movies = await LoadMoviesAsync();
         Genres = await LoadGenresAsync();
         IsLoading = false;
     }
 
-    //private async Task<List<Movie>> LoadMoviesAsync()
-    //{
-    //    var movies = await MovieService.GetPopularMovies();
-    //    movies ??= new List<Movie>();
-    //    return movies;
-    //}
+    private async Task<List<Movie>> LoadMoviesAsync()
+    {
+        var movies = await MovieService.GetPopularMovies(1);
+        movies ??= new List<Movie>();
+        return movies;
+    }
 
     private async Task<List<Genre>> LoadGenresAsync()
     {
