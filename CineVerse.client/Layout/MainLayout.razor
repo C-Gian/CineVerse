@@ -1,28 +1,58 @@
 ﻿@inherits LayoutComponentBase
+@inject MudTheme Theme
 
-<MudThemeProvider />
+<MudThemeProvider Theme="Theme" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<div class="page">
-	<div class="sidebar">
-		<NavMenu />
-	</div>
+<MudLayout>
 
-	<main>
-		<div class="top-row px-4">
-			<a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-		</div>
+    <!-- left drawer ------------------------------------------------>
+    <MudDrawer Elevation="0"
+               Variant="DrawerVariant.Mini"
+               Color="Color.Transparent"
+               Class="drawer">
+        <MudDrawerHeader Class="logo-area">
+            <img src="/cineverse-icon.png" width="28" />
+            <MudText Typo="Typo.h6" Class="ml-2">CineVerse</MudText>
+        </MudDrawerHeader>
+    </MudDrawer>
 
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
-</div>
+    <!-- Top-bar ------------------------------------------------------------->
+    <MudAppBar Elevation="0" Color="Color.Transparent" Dense="true">
+        <MudSpacer />
+        <MudAvatar Size="Size.Medium" Img="https://i.pravatar.cc/40" />
+    </MudAppBar>
+
+    <!-- body content ---------------------------------------------------->
+    <MudMainContent Class="p-6">
+        @Body
+    </MudMainContent>
+
+</MudLayout>
 
 <div id="blazor-error-ui">
 	An unhandled error has occurred.
 	<a href="" class="reload">Reload</a>
 	<a class="dismiss">🗙</a>
 </div>
+
+<style>
+    .drawer {
+        width: 200px !important;             
+        border-right: none;
+    }
+
+    .logo-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    body {
+        overflow: hidden;      
+    }
+
+</style>

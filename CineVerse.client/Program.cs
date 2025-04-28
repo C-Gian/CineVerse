@@ -2,6 +2,7 @@ using CineVerse.client;
 using CineVerse.client.Options;
 using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
+using CineVerse.Client.Theme;
 using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 using RestSharp;
@@ -9,6 +10,8 @@ using RestSharp;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMudServices();
+
+builder.Services.AddSingleton(AppTheme.Dark);
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
