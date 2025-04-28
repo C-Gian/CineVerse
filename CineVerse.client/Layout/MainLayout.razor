@@ -6,31 +6,38 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout>
+<div class="layout-root" style="background-color: red;">
 
-    <!-- left drawer ------------------------------------------------>
-    <MudDrawer Elevation="0"
-               Variant="DrawerVariant.Mini"
-               Color="Color.Transparent"
-               Class="drawer">
+    <MudAppBar Dense="true"
+               Elevation="0"
+               Color="Color.Primary"
+               Class="appbar">
+
         <MudDrawerHeader Class="logo-area">
             <img src="/cineverse-icon.png" width="28" />
-            <MudText Typo="Typo.h6" Class="ml-2">CineVerse</MudText>
+            <MudText Typo="Typo.h6" Class="ml-2">CINEVERSE</MudText>
         </MudDrawerHeader>
-    </MudDrawer>
 
-    <!-- Top-bar ------------------------------------------------------------->
-    <MudAppBar Elevation="0" Color="Color.Transparent" Dense="true">
         <MudSpacer />
+
         <MudAvatar Size="Size.Medium" Img="https://i.pravatar.cc/40" />
     </MudAppBar>
 
-    <!-- body content ---------------------------------------------------->
-    <MudMainContent Class="p-6">
-        @Body
-    </MudMainContent>
+    <div class="main-area" style="background-color: blue;">
 
-</MudLayout>
+        <MudDrawer Variant="DrawerVariant.Mini"
+                   Elevation="0"
+                   Color="Color.Tertiary"
+                   Class="drawer">
+
+            <NavMenu />
+        </MudDrawer>
+
+        <div class="content-area p-6" style="background-color: green;">
+            @Body
+        </div>
+    </div>
+</div>
 
 <div id="blazor-error-ui">
 	An unhandled error has occurred.
@@ -39,8 +46,26 @@
 </div>
 
 <style>
+    .layout-root {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; 
+    }
+
+    .appbar {
+        height: 56px;
+        flex-shrink: 0;
+        border-bottom: none;
+    }
+
+    .main-area {
+        flex: 1;
+        display: flex;
+        overflow: hidden; 
+    }
+
     .drawer {
-        width: 200px !important;             
+        width: 200px !important;
         border-right: none;
     }
 
@@ -51,8 +76,9 @@
         padding: 12px 0;
     }
 
-    body {
-        overflow: hidden;      
+    .content-area {
+        flex: 1;
+        overflow: auto;
     }
 
 </style>
