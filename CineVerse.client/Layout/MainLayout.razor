@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using CineVerse.Client.Theme
+@inherits LayoutComponentBase
 @inject MudTheme Theme
 
 <MudThemeProvider Theme="Theme" />
@@ -6,12 +7,13 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<div class="layout-root" style="background-color: red;">
+<div class="layout-root">
 
     <MudAppBar Dense="true"
                Position="Position.Fixed"
                Elevation="0"
-               Color="Color.Primary"
+               Color="Color.Default"
+               Style="@($"background-color:{Theme.PaletteDark.AppbarBackground}; color: #FFFFFF;")"
                Class="appbar">
 
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
@@ -20,7 +22,7 @@
                 OnClick="ToggleDrawer" />
 
         <MudDrawerHeader Class="logo-area">
-            <img src="/cineverse-icon.png" width="28" />
+            <img src="/cineverse-icon.png" width="48" />
             <MudText Typo="Typo.h6" Class="ml-2">CINEVERSE</MudText>
         </MudDrawerHeader>
 
@@ -29,12 +31,13 @@
         <MudAvatar Size="Size.Medium" Img="https://i.pravatar.cc/40" />
     </MudAppBar>
 
-    <div class="main-area" style="background-color: blue;">
+    <div class="main-area">
 
         <MudDrawer Variant="DrawerVariant.Mini"
                    MiniWidth="72"
                    Elevation="0"
-                   Color="Color.Tertiary"
+                   Color="Color.Default"
+                   Style="@($"background-color:{Theme.PaletteDark.AppbarBackground}; color: #FFFFFF;")"
                    Class="drawer"
                    Open="@_drawerOpen">
 
@@ -45,13 +48,10 @@
                 <MudNavLink Icon="@Icons.Material.Filled.Movie"
                             Href="/movies"
                             HideTextWhenMini="true">Movies</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.LocalOffer"
-                            Href="/genres"
-                            HideTextWhenMini="true">Genres</MudNavLink>
             </MudNavMenu>
         </MudDrawer>
 
-        <div class="content-area p-6" style="background-color: green;">
+        <div class="content-area p-6">
             @Body
         </div>
     </div>
@@ -78,6 +78,7 @@
         display: flex;
         flex-direction: column;
         height: 100vh; 
+        /* background-color: red; */
     }
 
     .appbar {
@@ -93,12 +94,14 @@
         height: calc(100vh - var(--appbar-h));
         margin-top: var(--appbar-h); 
         overflow: hidden;
+        /* background-color: blue; */
     }
 
     .drawer {
         transition: width 250ms ease;
         position: fixed !important;
         border-right: none;
+        border-right: 1px solid #2A2E3D;
     }
 
     .drawer.mud-drawer-closed {
@@ -116,6 +119,9 @@
         flex: 1;
         height: 100%;
         overflow: auto;
+        background-color: #0E0E16;
+        color: #FFFFFF;
+        /* background-color: green; */
     }
 
 </style>
