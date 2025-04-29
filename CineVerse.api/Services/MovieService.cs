@@ -24,11 +24,19 @@ public class MovieService : IMovieService
 
     #endregion
 
-
-
     public async Task<List<MovieResultResponse>> GetPopularMovies(int page, CancellationToken ct)
     {
         var url = $"movie/popular?api_key={_apiKey}&page={page}";
+
+        var result = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result.Results;
+    }
+
+    public async Task<List<MovieResultResponse>> SearchMovie(string query, int page, CancellationToken ct)
+    {
+        var url = $"search/movie?api_key={_apiKey}&query={query}&page={page}";
 
         var result = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
                    ?? throw new ApplicationException("Empty TMDB response");

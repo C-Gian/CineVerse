@@ -1,21 +1,45 @@
 ﻿@page "/"
+@using CineVerse.client.Components
 
-@* @if (IsLoading)
+@if (IsLoading)
 {
-    <MudProgressCircular Size="Size.Large" Class="m-6" />
-} else
+	<MudProgressCircular Size="Size.Large" Class="m-6" />
+}
+else
 {
-    <MudGrid Spacing="@Spacing" Justify="Justify.Center">
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-    </MudGrid>
-} *@
+	<div class="search-container">
+		<MudTextField @bind-Value="_query"
+		Placeholder="Search for a movie…"
+		Adornment="Adornment.Start"
+		AdornmentIcon="@Icons.Material.Filled.Search"
+		Immediate="true"
+		OnKeyDown="HandleKeyDown"
+		Class="search-box" />
+		<MudButton Color="Color.Primary"
+		Variant="Variant.Filled"
+		OnClick="SearchAsync">Search</MudButton>
+	</div>
 
-<h1 style="font-size: 50px;">CIAO</h1>
+
+	@if (Movies?.Any() == true)
+	{
+		<MovieGrid Movies="Movies" />
+	} else
+	{
+		<h1>NO MOVIES</h1>
+	}
+}
+
+
+<style>
+	.search-container {
+		display: flex;
+		gap: 0.75rem;
+		max-width: 480px;
+		margin: 2rem auto;
+	}
+
+	.search-box {
+		flex: 1;
+	}
+</style>

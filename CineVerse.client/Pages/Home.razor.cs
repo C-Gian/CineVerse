@@ -1,13 +1,13 @@
 ﻿using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Pages;
 
 public partial class Home
 {
     #region Properties
-
     public List<Movie> Movies { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
@@ -18,6 +18,12 @@ public partial class Home
 
     [Inject]
     public IGenreService GenreService { get; set; }
+
+    #endregion
+
+    #region Fields
+
+    private string _query = string.Empty;
 
     #endregion
 
@@ -41,5 +47,18 @@ public partial class Home
         var genres = await GenreService.GetGenres();
         genres ??= new List<Genre>();
         return genres;
+    }
+
+    private async Task SearchAsync()
+    {
+        Movies = await MovieService.SearchMovie(_query, 1);
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key is "Enter")
+        {
+            await SearchAsync();
+        }
     }
 }

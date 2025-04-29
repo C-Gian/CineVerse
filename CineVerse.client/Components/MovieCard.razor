@@ -1,0 +1,35 @@
+﻿@inherits ComponentBase
+
+<MudCard Class="poster-card">
+	<MudCardMedia Image="@PosterUrl(Movie.PosterPath)" Height="195" />
+	<MudCardContent Class="p-0 pt-2">
+		<MudText Typo="Typo.subtitle2" Class="title">@Movie.Title</MudText>
+		<MudText Typo="Typo.caption" Class="year">@Movie.ReleaseDate?.Split('-')[0]</MudText>
+	</MudCardContent>
+</MudCard>
+
+
+<style>
+	.poster-card {
+		width: 130px;
+		background-color: #1A1D2B;
+		border-radius: 12px;
+		transition: transform .25s ease;
+	}
+
+	.poster-card:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 6px 16px rgba(0,0,0,.35);
+	}
+
+	.title {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.year {
+		opacity: .7;
+	}
+
+</style>

@@ -29,4 +29,12 @@ public class MovieController : ControllerBase
         var movies = await _movieService.GetPopularMovies(page, ct);
         return Ok(movies);
     }
+
+    [HttpGet("search")]
+    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> SearchMovie([FromQuery] string query, [FromQuery] int page = 1, CancellationToken ct = default)
+    {
+        var movies = await _movieService.SearchMovie(query, page, ct);
+        return Ok(movies);
+    }
 }

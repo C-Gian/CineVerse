@@ -1,0 +1,17 @@
+﻿<MudGrid Gutter="Size.Large">
+	@foreach (var movie in Movies)
+	{
+		<MudItem xs="6" sm="4" md="3" lg="2">
+			<MovieCard Movie="movie" />
+		</MudItem>
+	}
+</MudGrid>
+
+@* <MudStack Direction="Row" Justify="Center" Spacing="2" Class="mt-6">
+	<MudButton Variant="Variant.Outlined"
+			   Disabled="@(_page<=1)"
+			   OnClick="PrevPage">Prev</MudButton>
+	<MudButton Variant="Variant.Outlined"
+			   Disabled="@(_page>=_totalPages)"
+			   OnClick="NextPage">Next</MudButton>
+</MudStack> *@
