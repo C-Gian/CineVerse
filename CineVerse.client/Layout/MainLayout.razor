@@ -91,12 +91,13 @@
     .main-area {
         display: flex;
         height: calc(100vh - var(--appbar-h));
-        padding-top: var(--appbar-h); 
+        margin-top: var(--appbar-h); 
         overflow: hidden;
     }
 
     .drawer {
         transition: width 250ms ease;
+        position: fixed !important;
         border-right: none;
     }
 
@@ -113,6 +114,7 @@
 
     .content-area {
         flex: 1;
+        height: 100%;
         overflow: auto;
     }
 
