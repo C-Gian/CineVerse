@@ -7,4 +7,12 @@ public partial class MovieGrid
 {
     [Parameter]
     public List<Movie> Movies { get; set; } = new();
+
+    public int Page { get; set; } = 1;
+
+
+    private void LoadPage(int newPage)
+    {
+        Page = newPage;
+    }
 }

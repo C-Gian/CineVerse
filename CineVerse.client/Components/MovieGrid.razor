@@ -7,11 +7,10 @@
 	}
 </MudGrid>
 
-@* <MudStack Direction="Row" Justify="Center" Spacing="2" Class="mt-6">
-	<MudButton Variant="Variant.Outlined"
-			   Disabled="@(_page<=1)"
-			   OnClick="PrevPage">Prev</MudButton>
-	<MudButton Variant="Variant.Outlined"
-			   Disabled="@(_page>=_totalPages)"
-			   OnClick="NextPage">Next</MudButton>
-</MudStack> *@
+<MudPagination 
+	@bind-Selected="@Page"
+	PageChanged="@LoadPage"
+	ShowFirstButton="true" 
+	ShowLastButton="true" 
+	Count="@Movies.Count" 
+	Class="mt-4"/>

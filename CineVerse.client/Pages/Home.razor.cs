@@ -12,6 +12,8 @@ public partial class Home
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
     public int Spacing { get; set; } = 6;
+    public int Page { get; set; } = 1;
+    public int TotalPages { get; set; } = 1;
 
     [Inject]
     public IMovieService MovieService { get; set; }
