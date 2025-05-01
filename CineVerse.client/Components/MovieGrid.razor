@@ -1,5 +1,7 @@
-﻿<MudGrid Gutter="Size.Large">
-	@foreach (var movie in Movies)
+﻿@using CineVerse.client.Models
+
+<MudGrid Spacing="4" Justify="Justify.Center">
+	@foreach (var movie in Movies.Take(10))
 	{
 		<MudItem xs="6" sm="4" md="3" lg="2">
 			<MovieCard Movie="movie" />
@@ -7,10 +9,4 @@
 	}
 </MudGrid>
 
-<MudPagination 
-	@bind-Selected="@Page"
-	PageChanged="@LoadPage"
-	ShowFirstButton="true" 
-	ShowLastButton="true" 
-	Count="@Movies.Count" 
-	Class="mt-4"/>
+<Pager TItem="Movie" Items="Movies" DefaultPageSize="10"></Pager>
