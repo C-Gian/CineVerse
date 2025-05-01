@@ -24,7 +24,7 @@ else
 
 	@if (Movies?.Any() == true)
 	{
-		<MovieGrid Movies="Movies" />
+		<MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" MoviesResponse="MoviesResponse" />
 	} else
 	{
 		<h1>NO MOVIES</h1>

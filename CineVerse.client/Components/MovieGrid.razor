@@ -1,12 +1,21 @@
 ﻿@using CineVerse.client.Models
 
-<MudGrid Spacing="4" Justify="Justify.Center">
-	@foreach (var movie in Movies.Take(10))
-	{
-		<MudItem xs="6" sm="4" md="3" lg="2">
-			<MovieCard Movie="movie" />
-		</MudItem>
-	}
-</MudGrid>
+<div class="poster-grid">
+	@foreach (var movie in Movies)
+    {
+		<MovieCard Movie="movie" />
+    }
+</div>
 
-<Pager TItem="Movie" Items="Movies" DefaultPageSize="10"></Pager>
+<Pager TItem="Movie" Items="Movies" PageChanged="PageChanged" MoviesResponse="MoviesResponse"></Pager>
+
+
+<style>
+	.poster-grid {
+		display: grid;
+		grid-template-columns: repeat(7, 170px);
+		gap: 1.25rem;
+		margin: 50px;
+		justify-content: space-between;
+	}
+</style>

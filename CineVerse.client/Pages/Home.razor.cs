@@ -1,5 +1,7 @@
-﻿using CineVerse.client.Models;
+﻿using System.Collections.Generic;
+using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
+using CineVerse.Client.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -8,12 +10,12 @@ namespace CineVerse.client.Pages;
 public partial class Home
 {
     #region Properties
+    public int Page { get; set; } = 1;
     public List<Movie> Movies { get; set; } = new();
+    public Queue<Movie> MovieBuffer { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
-    public int Spacing { get; set; } = 6;
-    public int Page { get; set; } = 1;
-    public int TotalPages { get; set; } = 1;
+    public MoviesApiResponse MoviesResponse { get; set; }
 
     [Inject]
     public IMovieService MovieService { get; set; }
@@ -27,28 +29,66 @@ public partial class Home
 
     private string _query = string.Empty;
 
+    private readonly SemaphoreSlim _gate = new(1, 1);
+
     #endregion
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         IsLoading = true;
-        Movies = await LoadMoviesAsync();
-        Genres = await LoadGenresAsync();
+        await LoadMoviesAsync(1);
         IsLoading = false;
     }
 
-    private async Task<List<Movie>> LoadMoviesAsync()
+    private async Task LoadMoviesAsync(int pageNumber)
     {
-        var movies = await MovieService.GetPopularMovies(1);
-        movies ??= new List<Movie>();
-        return movies;
+        await _gate.WaitAsync();
+
+        try
+        {
+            Movies = [];
+            if (MovieBuffer.Any())
+            {
+                Movies.AddRange(MovieBuffer.DequeueChunk(MovieBuffer.Count));
+                MovieBuffer = [];
+            }
+
+            var movieResponse = await GetPopularMoviesAsync(Page);
+            Movies.AddRange(movieResponse.Results);
+
+            if (Movies.Count < 21)
+            {
+                movieResponse = await GetPopularMoviesAsync(Page+1);
+                Movies.AddRange(movieResponse.Results);
+            }
+
+            if (Movies.Count > 21)
+            {
+                MovieBuffer.EnqueueRange(Movies.Skip(21));
+                Movies = Movies.Take(21).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally 
+        { 
+            _gate.Release(); 
+        }
     }
 
-    private async Task<List<Genre>> LoadGenresAsync()
+    private async Task<MoviesApiResponse> GetPopularMoviesAsync(int pageNumber)
     {
-        var genres = await GenreService.GetGenres();
-        genres ??= new List<Genre>();
-        return genres;
+        var response = await MovieService.GetPopularMovies(pageNumber) ?? new MoviesApiResponse();
+        MoviesResponse = response;
+        return response;
+    }
+
+    private async Task LoadGenresAsync()
+    {
+        Genres = await GenreService.GetGenres() ?? new List<Genre>();
     }
 
     private async Task SearchAsync()

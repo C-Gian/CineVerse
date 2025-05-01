@@ -1,11 +1,12 @@
 ﻿@typeparam TItem
 @using System.Linq
+@using CineVerse.client.Services.Interfaces
 
 <div>
     <div class="pagination-controls">
         <button @onclick="PreviousPage" disabled="@IsPreviousDisabled">Previous</button>
 
-        @foreach (var pageNumber in Enumerable.Range(1, TotalPages))
+        @foreach (var pageNumber in Enumerable.Range(1, (TotalPages > 10 ? 10 : TotalPages)))
         {
             <button @onclick="() => GoToPage(pageNumber)" class="@(CurrentPage == pageNumber ? "active" : "")">
                 @pageNumber
@@ -18,20 +19,35 @@
 </div>
 
 @code {
-    [Parameter] public IEnumerable<TItem> Items { get; set; }
-    [Parameter] public int DefaultPageSize { get; set; } = 10;
-    [Parameter] public RenderFragment ChildContentHeader { get; set; }
-    [Parameter] public RenderFragment<TItem> ChildContentRow { get; set; }
+    [Parameter] 
+    public IEnumerable<TItem> Items { get; set; }
+
+    [Parameter] 
+    public int DefaultPageSize { get; set; } = 21;
+
+    [Parameter] 
+    public RenderFragment ChildContentHeader { get; set; }
+
+    [Parameter] 
+    public RenderFragment<TItem> ChildContentRow { get; set; }
+
+    [Parameter] 
+    public EventCallback<int> PageChanged { get; set; }
+
+    [Parameter]
+    public MoviesApiResponse MoviesResponse { get; set; }
+
 
     private int PageSize { get; set; }
     private List<TItem> PaginatedData => Items.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
     private int CurrentPage { get; set; } = 1;
-
-    private readonly int[] PageSizes = new[] { 5, 10, 20, 50 };
+    private int TotalPages => MoviesResponse.TotalPages;
+    private bool IsPreviousDisabled => CurrentPage == 1;
+    private bool IsNextDisabled => CurrentPage == TotalPages;
 
     protected override void OnInitialized()
     {
-        PageSize = DefaultPageSize;
+        PageSize = 21;
     }
 
     private void NextPage()
@@ -40,6 +56,7 @@
         {
             CurrentPage++;
         }
+        PageChanged.InvokeAsync(CurrentPage);
     }
 
     private void PreviousPage()
@@ -48,21 +65,19 @@
         {
             CurrentPage--;
         }
+
+        PageChanged.InvokeAsync(CurrentPage);
     }
 
     private void GoToPage(int pageNumber)
     {
         CurrentPage = pageNumber;
+
+        PageChanged.InvokeAsync(pageNumber);
     }
-
-    private int TotalPages => (int)Math.Ceiling(Items.Count() / (double)PageSize);
-
-    private bool IsPreviousDisabled => CurrentPage == 1;
-    private bool IsNextDisabled => CurrentPage == TotalPages;
 }
 
 <style>
-
     .pagination-controls {
         display: flex;
         align-items: center;
@@ -70,44 +85,44 @@
         margin-top: 20px;
     }
 
-        .pagination-controls button {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            color: #007bff;
-            padding: 5px 10px;
-            margin: 0 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+    .pagination-controls button {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        color: #007bff;
+        padding: 5px 10px;
+        margin: 0 5px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-            .pagination-controls button:hover {
-                background-color: #007bff;
-                color: white;
-            }
+    .pagination-controls button:hover {
+        background-color: #007bff;
+        color: white;
+    }
 
-            .pagination-controls button.active {
-                background-color: #007bff;
-                color: white;
-                font-weight: bold;
-            }
+    .pagination-controls button.active {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
 
-            .pagination-controls button:disabled {
-                background-color: #e9ecef;
-                color: #6c757d;
-                cursor: not-allowed;
-                border-color: #ced4da;
-            }
+    .pagination-controls button:disabled {
+        background-color: #e9ecef;
+        color: #6c757d;
+        cursor: not-allowed;
+        border-color: #ced4da;
+    }
 
-        .pagination-controls select {
-            margin-right: 15px;
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid #dee2e6;
-        }
+    .pagination-controls select {
+        margin-right: 15px;
+        padding: 5px;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+    }
 
-        .pagination-controls label {
-            margin-right: 5px;
-            font-weight: bold;
-        }
-        </style>
+    .pagination-controls label {
+        margin-right: 5px;
+        font-weight: bold;
+    }
+</style>
