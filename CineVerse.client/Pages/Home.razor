@@ -9,16 +9,16 @@ else
 {
 	<div class="search-container">
 		<MudTextField @bind-Value="_query"
-		Placeholder="Search for a movie…"
-		Adornment="Adornment.Start"
-		AdornmentIcon="@Icons.Material.Filled.Search"
-		Immediate="true"
-		OnKeyDown="HandleKeyDown"
-		Class="search-box" />
+			Placeholder="Search for a movie…"
+			Adornment="Adornment.Start"
+			AdornmentIcon="@Icons.Material.Filled.Search"
+			Immediate="true"
+			OnKeyDown="HandleKeyDown"
+			Class="search-box" />
 
 		<MudButton Color="Color.Primary"
-		Variant="Variant.Filled"
-		OnClick="SearchAsync">Search</MudButton>
+			Variant="Variant.Filled"
+			OnClick="SearchAsync">Search</MudButton>
 	</div>
 
 

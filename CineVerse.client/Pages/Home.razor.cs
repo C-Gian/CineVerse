@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CineVerse.client.Models;
+﻿using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using CineVerse.Client.Utils;
 using Microsoft.AspNetCore.Components;
@@ -10,7 +9,7 @@ namespace CineVerse.client.Pages;
 public partial class Home
 {
     #region Properties
-    public int Page { get; set; } = 1;
+    public List<int> PagesLoaded { get; set; } = new();
     public List<Movie> Movies { get; set; } = new();
     public Queue<Movie> MovieBuffer { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
@@ -38,6 +37,7 @@ public partial class Home
         await base.OnInitializedAsync();
         IsLoading = true;
         await LoadMoviesAsync(1);
+        PagesLoaded.AddRange([1, 2]);
         IsLoading = false;
     }
 
@@ -48,25 +48,73 @@ public partial class Home
         try
         {
             Movies = [];
-            if (MovieBuffer.Any())
+
+            if (!PagesLoaded.Contains(pageNumber))
             {
-                Movies.AddRange(MovieBuffer.DequeueChunk(MovieBuffer.Count));
+                //calling a non cached page.
+                //example: currently on page 1, means page 1 and 2 are loaded, we call page 3 or further.
                 MovieBuffer = [];
-            }
 
-            var movieResponse = await GetPopularMoviesAsync(Page);
-            Movies.AddRange(movieResponse.Results);
+                var movieResponse = await GetPopularMoviesAsync(pageNumber);
+                var movieResponse2 = await GetPopularMoviesAsync(pageNumber + 1);
 
-            if (Movies.Count < 21)
-            {
-                movieResponse = await GetPopularMoviesAsync(Page+1);
                 Movies.AddRange(movieResponse.Results);
-            }
+                Movies.AddRange(movieResponse2.Results);
 
-            if (Movies.Count > 21)
+                PagesLoaded = [pageNumber, pageNumber + 1];
+
+                if (Movies.Count > 21)
+                {
+                    MovieBuffer.EnqueueRange(Movies.Skip(21));
+                    Movies = Movies.Take(21).ToList();
+                }
+            } 
+            else
             {
-                MovieBuffer.EnqueueRange(Movies.Skip(21));
-                Movies = Movies.Take(21).ToList();
+                //calling the next page from the current one, so we need to load from the buffer.
+                //example: currently on page 1, means page 1 and 2 are loaded, we call page 2.
+                if (MovieBuffer.Any())
+                {
+                    Movies.AddRange(MovieBuffer.DequeueChunk(MovieBuffer.Count));
+                    MovieBuffer = [];
+
+                    var movieResponse = await GetPopularMoviesAsync(pageNumber + 1);
+                    Movies.AddRange(movieResponse.Results);
+
+                    PagesLoaded = [pageNumber, pageNumber + 1];
+
+                    if (Movies.Count < 21)
+                    {
+                        var movieResponse2 = await GetPopularMoviesAsync(pageNumber + 2);
+                        Movies.AddRange(movieResponse2.Results);
+
+                        PagesLoaded.Add(pageNumber + 2);
+                    }
+
+                    if (Movies.Count > 21)
+                    {
+                        MovieBuffer.EnqueueRange(Movies.Skip(21));
+                        Movies = Movies.Take(21).ToList();
+                    }
+                } 
+                else
+                {
+                    //if for any reason buffer is empty even if we call the cached page,
+                    //with this code we can prevent error and load correct data anyway.
+                    var movieResponse = await GetPopularMoviesAsync(pageNumber);
+                    var movieResponse2 = await GetPopularMoviesAsync(pageNumber+1);
+
+                    Movies.AddRange(movieResponse.Results);
+                    Movies.AddRange(movieResponse2.Results);
+
+                    PagesLoaded = [pageNumber, pageNumber + 1];
+
+                    if (Movies.Count > 21)
+                    {
+                        MovieBuffer.EnqueueRange(Movies.Skip(21));
+                        Movies = Movies.Take(21).ToList();
+                    }
+                }
             }
         }
         catch (Exception ex)
