@@ -8,7 +8,9 @@
 
 		@foreach (var pageNumber in Enumerable.Range(1, (TotalPages > 10 ? 10 : TotalPages)))
 		{
-			<button @onclick="() => GoToPage(pageNumber)" class="@(CurrentPage == pageNumber ? "active" : "")">
+			<button @onclick="() => GoToPage(pageNumber)" 
+				class="@(CurrentPage == pageNumber ? "active" : "")" 
+				disabled="@(CurrentPage == pageNumber)">
 				@pageNumber
 			</button>
 		}
@@ -38,7 +40,10 @@
 	public EventCallback<int> PageChanged { get; set; }
 
 	[Parameter]
-	public MoviesApiResponse MoviesResponse { get; set; }
+	public int TotalPages { get; set; }
+
+	[Parameter]
+	public int CurrentPage { get; set; }
 
 	#endregion
 
@@ -46,8 +51,6 @@
 
 	private int PageSize { get; set; }
 	private List<TItem> PaginatedData => Items.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-	private int CurrentPage { get; set; } = 1;
-	private int TotalPages => MoviesResponse.TotalPages;
 	private bool IsPreviousDisabled => CurrentPage == 1;
 	private bool IsNextDisabled => CurrentPage == TotalPages;
 
@@ -133,5 +136,13 @@
 		.pagination-controls label {
 			margin-right: 5px;
 			font-weight: bold;
+		}
+
+		.pagination-controls button.active:disabled {
+			background-color: #007bff;
+			border-color: #007bff;
+			color: #fff;
+			opacity: 1; 
+			cursor: default;
 		}
 </style>
