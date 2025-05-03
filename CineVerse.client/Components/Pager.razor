@@ -4,18 +4,23 @@
 
 <div>
 	<div class="pagination-controls">
+
+		<button @onclick="FirstPage" disabled="@IsFirstPageDisabled">FirstPage</button>
+
 		<button @onclick="PreviousPage" disabled="@IsPreviousDisabled">Previous</button>
 
-		@foreach (var pageNumber in Enumerable.Range(1, (TotalPages > 10 ? 10 : TotalPages)))
+		@foreach (var pageNumber in PageWindow)
 		{
 			<button @onclick="() => GoToPage(pageNumber)" 
-				class="@(CurrentPage == pageNumber ? "active" : "")" 
-				disabled="@(CurrentPage == pageNumber)">
+			class="@(CurrentPage == pageNumber ? "active" : "")" 
+			disabled="@(CurrentPage == pageNumber)">
 				@pageNumber
 			</button>
 		}
 
 		<button @onclick="NextPage" disabled="@IsNextDisabled">Next</button>
+
+		<button @onclick="LastPage" disabled="@IsLastPageDisabled">Last Page</button>
 	</div>
 
 </div>
@@ -28,19 +33,7 @@
 	public IEnumerable<TItem> Items { get; set; }
 
 	[Parameter]
-	public int DefaultPageSize { get; set; } = 21;
-
-	[Parameter]
-	public RenderFragment ChildContentHeader { get; set; }
-
-	[Parameter]
-	public RenderFragment<TItem> ChildContentRow { get; set; }
-
-	[Parameter]
 	public EventCallback<int> PageChanged { get; set; }
-
-	[Parameter]
-	public int TotalPages { get; set; }
 
 	[Parameter]
 	public int CurrentPage { get; set; }
@@ -49,17 +42,23 @@
 
 	#region Fields
 
-	private int PageSize { get; set; }
+	private int PageSize { get; set; } = 40;
+	private int TotalPages { get; set; } = 500;
 	private List<TItem> PaginatedData => Items.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+	private bool IsFirstPageDisabled => CurrentPage == 1;
 	private bool IsPreviousDisabled => CurrentPage == 1;
 	private bool IsNextDisabled => CurrentPage == TotalPages;
+	private bool IsLastPageDisabled => CurrentPage == TotalPages;
+	private const int MaxButtons = 10;
+	private int _current => Math.Clamp(CurrentPage, 1, TotalPages);
 
 	#endregion
 
-
-	protected override void OnInitialized()
+	private void FirstPage()
 	{
-		PageSize = 21;
+		CurrentPage = 1;
+
+		PageChanged.InvokeAsync(CurrentPage);
 	}
 
 	private void NextPage()
@@ -81,11 +80,37 @@
 		PageChanged.InvokeAsync(CurrentPage);
 	}
 
+	private void LastPage()
+	{
+		CurrentPage = TotalPages;
+
+		PageChanged.InvokeAsync(CurrentPage);
+	}
+
 	private void GoToPage(int pageNumber)
 	{
 		CurrentPage = pageNumber;
 
 		PageChanged.InvokeAsync(pageNumber);
+	}
+
+	private IEnumerable<int> PageWindow
+	{
+		get
+		{
+			if (TotalPages <= MaxButtons)
+				return Enumerable.Range(1, TotalPages);
+
+			int half = MaxButtons / 2;   
+			int start = _current - half;       
+			int end = _current + half - 1;  
+
+			if (start < 1) { end += 1 - start; start = 1; }
+			if (end > TotalPages) { start -= end - TotalPages; end = TotalPages; }
+
+			start = Math.Max(1, start);
+			return Enumerable.Range(start, MaxButtons);
+		}
 	}
 }
 

@@ -12,8 +12,5 @@ public partial class MovieGrid
     public EventCallback<int> PageChanged { get; set; }
 
     [Parameter]
-    public int TotalPages { get; set; }
-
-    [Parameter]
     public int CurrentPage { get; set; }
 }

@@ -22,9 +22,9 @@ else
 	</div>
 
 
-	@if (Movies?.Any() == true)
+	@if (Movies.Any())
 	{
-		<MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" TotalPages="TotalPages" CurrentPage="PagesLoaded.Min()" />
+		<MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="CurrentPage" />
 	} else
 	{
 		<h1>NO MOVIES</h1>
