@@ -1,96 +1,158 @@
-.page {
-    position: relative;
+:root {
+    --clr-bg: #04070F;
+    --clr-surface: #1A1D2B;
+    --clr-surface-2: rgba(26,29,43,.85);
+    --clr-primary: #7459FF;
+    --clr-border: rgba(255,255,255,.06);
+}
+
+.layout-root {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    background: var(--clr-bg);
 }
 
-main {
-    flex: 1;
+.flex-spacer {
+    flex: 1
 }
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-}
-
-.top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
+.appbar {
+    height: 75px !important;
     display: flex;
     align-items: center;
+    padding: 0 1rem;
+    background: #080a16;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--clr-border);
+    z-index: 2000;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-@media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
+.icon-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    transition: background .25s;
 }
 
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
+    .icon-btn:hover {
+        background: rgba(255,255,255,.08);
     }
 
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-left: .5rem;
 }
 
-#blazor-error-ui {
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+.logo-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #fff;
+    letter-spacing: .5px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.drawer {
     position: fixed;
-    width: 100%;
-    z-index: 1000;
+    top: 56px; 
+    bottom: 0;
+    width: var(--drawer-w);
+    background-color: #080a16;
+    border-right: 1px solid var(--clr-border);
+    backdrop-filter: blur(8px);
+    transition: width .25s;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
+    .drawer.closed {
+        width: 80px;
     }
+
+    .drawer.open {
+        width: 240px;
+    }
+
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .95rem 1.6rem;
+    color: #AAB0C0;
+    text-decoration: none;
+    font-size: .95rem;
+    border-radius: 10px;
+    transition: background .25s,color .25s;
+}
+
+    .nav-link i {
+        font-size: 1.7rem;
+    }
+
+    .nav-link:hover {
+        background: rgba(255,255,255,.06);
+        color: #fff;
+    }
+
+    .nav-link.active {
+        background: var(--clr-primary);
+        color: #fff;
+    }
+
+.nav-text {
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity .25s;
+}
+
+.drawer.closed .nav-text {
+    opacity: 0;
+}
+
+.main-area {
+    display: flex;
+    background-color: #03060b;
+    height: calc(100vh - 75px);
+}
+
+.content-area {
+    flex: 1;
+    margin-left: 90px;
+    overflow: auto;
+    transition: margin-left .25s;
+}
+
+.drawer.open + .content-area {
+    margin-left: 240px;
+}
+
+.content-area::-webkit-scrollbar {
+    width: 8px
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background: #282C3C;
+    border-radius: 4px
+}

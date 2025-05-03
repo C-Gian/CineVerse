@@ -9,116 +9,55 @@
 
 <div class="layout-root">
 
-    <MudAppBar Dense="true"
-               Position="Position.Fixed"
-               Elevation="0"
-               Color="Color.Default"
-               Style="@($"background-color:{Theme.PaletteDark.AppbarBackground}; color: #FFFFFF;")"
-               Class="appbar">
+    <!-- ▸ APP BAR ------------------------------------------------------>
+    <div class="appbar">
+        <button class="icon-btn" @onclick="ToggleDrawer">
+            <i class="material-icons">menu</i>
+        </button>
 
-        <MudIconButton Icon="@Icons.Material.Filled.Menu"
-                Color="Color.Inherit"
-                Edge="Edge.Start"
-                OnClick="ToggleDrawer" />
+        <div class="logo-area">
+            <img src="/cineverse-icon.png" width="38" />
+            <span class="logo-text">CINEVERSE</span>
+        </div>
 
-        <MudDrawerHeader Class="logo-area">
-            <img src="/cineverse-icon.png" width="48" />
-            <MudText Typo="Typo.h6" Class="ml-2">CINEVERSE</MudText>
-        </MudDrawerHeader>
+        <div class="flex-spacer"></div>
 
-        <MudSpacer />
+        <img class="avatar" src="https://i.pravatar.cc/40" />
+    </div>
 
-        <MudAvatar Size="Size.Medium" Img="https://i.pravatar.cc/40" />
-    </MudAppBar>
-
+    <!-- ▸ MAIN --------------------------------------------------------->
     <div class="main-area">
 
-        <MudDrawer Variant="DrawerVariant.Mini"
-                   MiniWidth="72"
-                   Elevation="0"
-                   Color="Color.Default"
-                   Style="@($"background-color:{Theme.PaletteDark.AppbarBackground}; color: #FFFFFF;")"
-                   Class="drawer"
-                   Open="@_drawerOpen">
+        <!-- DRAWER -->
+        <nav class="drawer @( _drawerOpen ? "open" : "closed")"
+             style="--drawer-w:72px;">
+            <ul class="nav-list">
+                <li>
+                    <a href="/" class="nav-link @(CurrentUrl=="/" ? "active":null)">
+                        <i class="material-icons">home</i>
+                        <span class="nav-text">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/movies" class="nav-link @(CurrentUrl=="/movies" ? "active":null)">
+                        <i class="material-icons">movie</i>
+                        <span class="nav-text">Movies</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-            <MudNavMenu Dense="true">
-                <MudNavLink Icon="@Icons.Material.Filled.Home"
-                            Href="/"
-                            HideTextWhenMini="true">Home</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Filled.Movie"
-                            Href="/movies"
-                            HideTextWhenMini="true">Movies</MudNavLink>
-            </MudNavMenu>
-        </MudDrawer>
-
-        <div class="content-area p-6">
+        <!-- CONTENUTO PAGINA -->
+        <main class="content-area">
             @Body
-        </div>
+        </main>
     </div>
-</div>
-
-<div id="blazor-error-ui">
-	An unhandled error has occurred.
-	<a href="" class="reload">Reload</a>
-	<a class="dismiss">🗙</a>
 </div>
 
 @code {
     private bool _drawerOpen = true;
     private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
+    private string CurrentUrl => NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 }
-
-<style>
-
-    :root {
-        --appbar-h: 56px; 
-    }
-
-    .layout-root {
-        display: flex;
-        flex-direction: column;
-        height: 100vh; 
-    }
-
-    .appbar {
-        height: var(--appbar-h);
-        z-index: 2000;
-        border-bottom: none;
-        flex-shrink: 0;
-        border-bottom: none;
-    }
-
-    .main-area {
-        display: flex;
-        height: calc(100vh - var(--appbar-h));
-        margin-top: var(--appbar-h); 
-        overflow: hidden;
-    }
-
-    .drawer {
-        transition: width 250ms ease;
-        position: fixed !important;
-        border-right: none;
-        border-right: 1px solid #2A2E3D;
-    }
-
-    .drawer.mud-drawer-closed {
-        width: 72px; 
-    }
-
-    .logo-area {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 0;
-    }
-
-    .content-area {
-        flex: 1;
-        height: 100%;
-        overflow: auto;
-        background-color: #04070f;
-        color: #FFFFFF;
-    }
-
-</style>
