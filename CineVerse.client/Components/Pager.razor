@@ -2,27 +2,26 @@
 @using System.Linq
 @using CineVerse.client.Services.Interfaces
 
-<div>
+<div class="pager">
 	<div class="pagination-controls">
 
-		<button @onclick="FirstPage" disabled="@IsFirstPageDisabled">FirstPage</button>
+		<button class="nav-btn" @onclick="FirstPage" disabled="@IsFirstPageDisabled">FirstPage</button>
 
-		<button @onclick="PreviousPage" disabled="@IsPreviousDisabled">Previous</button>
+		<button class="nav-btn" @onclick="PreviousPage" disabled="@IsPreviousDisabled">Previous</button>
 
 		@foreach (var pageNumber in PageWindow)
 		{
-			<button @onclick="() => GoToPage(pageNumber)" 
-			class="@(CurrentPage == pageNumber ? "active" : "")" 
-			disabled="@(CurrentPage == pageNumber)">
+			<button @onclick="() => GoToPage(pageNumber)"
+					class="page-btn @(CurrentPage == pageNumber ? "active" : null)"
+					disabled="@(CurrentPage == pageNumber)">
 				@pageNumber
 			</button>
 		}
 
-		<button @onclick="NextPage" disabled="@IsNextDisabled">Next</button>
+		<button class="nav-btn" @onclick="NextPage" disabled="@IsNextDisabled">Next</button>
 
-		<button @onclick="LastPage" disabled="@IsLastPageDisabled">Last Page</button>
+		<button class="nav-btn" @onclick="LastPage" disabled="@IsLastPageDisabled">Last Page</button>
 	</div>
-
 </div>
 
 @code {
@@ -101,9 +100,9 @@
 			if (TotalPages <= MaxButtons)
 				return Enumerable.Range(1, TotalPages);
 
-			int half = MaxButtons / 2;   
-			int start = _current - half;       
-			int end = _current + half - 1;  
+			int half = MaxButtons / 2;
+			int start = _current - half;
+			int end = _current + half - 1;
 
 			if (start < 1) { end += 1 - start; start = 1; }
 			if (end > TotalPages) { start -= end - TotalPages; end = TotalPages; }
@@ -115,59 +114,70 @@
 }
 
 <style>
-	.pagination-controls {
+	.pager {
 		display: flex;
-		align-items: center;
 		justify-content: center;
-		margin-top: 20px;
+		align-items: center;
+		gap: .55rem;
+		margin: 2rem 0;
+		flex-wrap: wrap;
 	}
 
-		.pagination-controls button {
-			background-color: #f8f9fa;
-			border: 1px solid #dee2e6;
-			color: #007bff;
-			padding: 5px 10px;
-			margin: 0 5px;
-			border-radius: 4px;
-			cursor: pointer;
-			transition: background-color 0.3s ease, color 0.3s ease;
-		}
+	.nav-btn {
+		margin-left: 10px;
+		margin-right: 10px;
+		min-width: 66px;
+		padding: .45rem .9rem;
+		font-size: .85rem;
+		font-weight: 600;
+		border-radius: 7px;
+		border: 1px solid rgba(255,255,255,.08);
+		background: rgba(255,255,255,.03);
+		color: #AAB0C0;
+		cursor: pointer;
+		transition: background .25s, border .25s, color .25s;
+	}
 
-			.pagination-controls button:hover {
-				background-color: #007bff;
-				color: white;
-			}
-
-			.pagination-controls button.active {
-				background-color: #007bff;
-				color: white;
-				font-weight: bold;
-			}
-
-			.pagination-controls button:disabled {
-				background-color: #e9ecef;
-				color: #6c757d;
-				cursor: not-allowed;
-				border-color: #ced4da;
-			}
-
-		.pagination-controls select {
-			margin-right: 15px;
-			padding: 5px;
-			border-radius: 4px;
-			border: 1px solid #dee2e6;
-		}
-
-		.pagination-controls label {
-			margin-right: 5px;
-			font-weight: bold;
-		}
-
-		.pagination-controls button.active:disabled {
-			background-color: #007bff;
-			border-color: #007bff;
+		.nav-btn:hover:not(:disabled) {
+			background: rgba(255,255,255,.06);
+			border-color: rgba(255,255,255,.12);
 			color: #fff;
-			opacity: 1; 
+		}
+
+		.nav-btn:disabled {
+			opacity: .35;
 			cursor: default;
 		}
+
+	.page-btn {
+		margin-left: 2px;
+		margin-right: 2px;
+		width: 40px;
+		height: 40px;
+		font-size: .9rem;
+		border-radius: 10px;
+		border: 1px solid rgba(255,255,255,.06);
+		background: rgba(255,255,255,.03);
+		color: #AAB0C0;
+		cursor: pointer;
+		transition: background .25s, color .25s, transform .2s;
+	}
+
+		.page-btn:hover:not(:disabled) {
+			transform: translateY(-3px);
+			background: rgba(255,255,255,.07);
+			color: #fff;
+		}
+
+		.page-btn.active {
+			background: #7459ff;
+			border-color: #7459ff;
+			color: #fff;
+		}
+
+			.page-btn.active:disabled {
+				opacity: 1;
+				cursor: default;
+			}
+
 </style>
