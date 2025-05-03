@@ -53,8 +53,7 @@ public partial class AllMovies
         {
             Movies = [];
 
-            var test = (pageNumber * 2) - 1;
-            var movieResponse = await GetPopularMoviesAsync(test);
+            var movieResponse = await GetPopularMoviesAsync((pageNumber * 2) - 1);
             var movieResponse2 = await GetPopularMoviesAsync(pageNumber*2);
 
             Movies.AddRange(movieResponse.Results);

@@ -22,11 +22,27 @@ public class MovieController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet("now_playing")]
+    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetNowPlayingMovies([FromQuery] int page = 1, CancellationToken ct = default)
+    {
+        var movies = await _movieService.GetNowPlayingMovies(page, ct);
+        return Ok(movies);
+    }
+
     [HttpGet("popular")]
     [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPopularMovies([FromQuery] int page = 1, CancellationToken ct = default)
     {
         var movies = await _movieService.GetPopularMovies(page, ct);
+        return Ok(movies);
+    }
+
+    [HttpGet("upcoming")]
+    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUpcomingMovies([FromQuery] int page = 1, CancellationToken ct = default)
+    {
+        var movies = await _movieService.GetUpcomingMovies(page, ct);
         return Ok(movies);
     }
 

@@ -1,0 +1,74 @@
+﻿@typeparam TItem
+
+<div class="carousel-wrapper" @onmouseenter="Pause" @onmouseleave="Resume">
+    <button class="nav left" @onclick="Prev">&#10094;</button>
+
+    <div class="carousel-viewport">
+        <div class="carousel-track" style="@TrackStyle">
+            @foreach (var item in Items)
+            {
+                <div class="carousel-slide" style="width: 200px;">
+                    @SlideTemplate(item)
+                </div>
+            }
+        </div>
+    </div>
+
+    <button class="nav right" @onclick="Next">&#10095;</button>
+</div>
+
+
+<style>
+
+    .carousel-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding: 1rem 2.5rem;
+    }
+
+    .carousel-viewport {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        flex-wrap: nowrap;
+    }
+
+    .carousel-slide {
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.07);
+        color: #fff;
+        border: none;
+        font-size: 1.75rem;
+        cursor: pointer;
+        padding: .5rem;
+        border-radius: 50%;
+        z-index: 10;
+        transition: background .25s;
+    }
+
+        .nav:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .nav.left {
+            left: 0.5rem;
+        }
+
+        .nav.right {
+            right: 0.5rem;
+        }
+
+
+</style>
