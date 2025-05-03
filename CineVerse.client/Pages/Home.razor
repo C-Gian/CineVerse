@@ -7,19 +7,21 @@
 }
 else
 {
-	<div class="search-container">
-		<MudTextField @bind-Value="_query"
-			Placeholder="Search for a movie…"
-			Adornment="Adornment.Start"
-			AdornmentIcon="@Icons.Material.Filled.Search"
-			Immediate="true"
-			OnKeyDown="HandleKeyDown"
-			Class="search-box" />
+    <div class="search-panel">
 
-		<MudButton Color="Color.Primary"
-			Variant="Variant.Filled"
-			OnClick="SearchAsync">Search</MudButton>
-	</div>
+        <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="text"
+                   placeholder="Search for a movie…"
+                   @bind="_query"
+                   @onkeydown="HandleKeyDown" />
+        </div>
+
+        <button class="search-btn" @onclick="() => LoadMoviesAsync(1)">
+            SEARCH
+        </button>
+
+    </div>
 
 
 	@if (Movies.Any())
@@ -33,14 +35,70 @@ else
 
 
 <style>
-	.search-container {
-		display: flex;
-		gap: 0.75rem;
-		max-width: 480px;
-		margin: 2rem auto;
-	}
+    .search-panel {
+        margin: 50px;
+        padding: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        border-radius: 18px;
+        background: rgba(26,29,43,0.75); 
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.06);
+    }
 
-	.search-box {
-		flex: 1;
-	}
+    .search-box {
+        position: relative;
+        flex: 1;
+    }
+
+        .search-box .icon {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: #7a7a7a;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 56px;
+            padding: 0 18px 0 48px; 
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 1rem;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+            .search-box input::placeholder {
+                color: #5e647a;
+            }
+
+    .search-btn {
+        min-width: 180px;
+        height: 56px;
+        border-radius: 12px;
+        background: #2d2668;
+        border: 1px solid #2d2668;
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: .4px;
+        cursor: pointer;
+        transition: background .25s, border .25s;
+    }
+
+        .search-btn:hover {
+            background: #6047e6;
+            border-color: #7a68ff;
+        }
+
+        .search-btn:active {
+            background: #4b39c4;
+            border-color: #7a68ff;
+        }
 </style>
