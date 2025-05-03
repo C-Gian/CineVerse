@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace CineVerse.Client.Theme;
+namespace CineVerse.client;
 
 public class AppTheme : MudTheme
 {

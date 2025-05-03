@@ -2,7 +2,6 @@ using CineVerse.client;
 using CineVerse.client.Options;
 using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
-using CineVerse.Client.Theme;
 using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 using RestSharp;

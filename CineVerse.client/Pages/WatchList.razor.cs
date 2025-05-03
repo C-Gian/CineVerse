@@ -1,5 +1,5 @@
 ﻿namespace CineVerse.client.Pages;
 
-public partial class Home
+public partial class WatchList
 {
 }
