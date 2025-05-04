@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Timers;
 
 namespace CineVerse.client.Components;
 
@@ -8,44 +7,32 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
     [Parameter] public List<TItem> Items { get; set; } = new();
     [Parameter] public RenderFragment<TItem> SlideTemplate { get; set; } = default!;
     [Parameter] public int VisibleCount { get; set; } = 5;
-    [Parameter] public int SlideStep { get; set; } = 1;
-    [Parameter] public int AutoplayMs { get; set; } = 4000;
+    [Parameter] public int AutoplayMs { get; set; } = 5000;
 
-    private int _index = 0;
-    private System.Timers.Timer? _timer;
+    private int _page = 0;
+    private Timer? _timer;
+    private int MaxPage => Math.Max(0, (int)Math.Ceiling(Items.Count / (double)VisibleCount) - 1);
+    private int TotalPages => (int)Math.Ceiling(Items.Count / (double)VisibleCount);
+    private bool IsLastPage => _page >= TotalPages - 1;
+
+    private string TrackStyle =>
+    $"transform: translateX(-{_page * (VisibleCount * 175)}px);";
+
+
 
     protected override void OnInitialized()
     {
         if (AutoplayMs > 0)
         {
-            _timer = new System.Timers.Timer(AutoplayMs);
-            _timer.Elapsed += (_, _) => InvokeAsync(Next);
-            _timer.Start();
+            _timer = new Timer(_ => InvokeAsync(Next), null, AutoplayMs, AutoplayMs);
         }
     }
 
-    private double SlideWidth => 100.0 / VisibleCount;
+    private void Next() => _page = Math.Min(_page + 1, TotalPages - 1);
+    private void Prev() => _page = Math.Max(_page - 1, 0);
 
-    private string TrackStyle =>
-        $"transform: translateX(-{_index * SlideWidth}%); " +
-        $"width: {Items.Count * SlideWidth}%;";
-
-    private void Next()
-    {
-        if (_index + VisibleCount >= Items.Count)
-            return;
-
-        _index = Math.Min(_index + SlideStep, Items.Count - VisibleCount);
-        StateHasChanged();
-    }
-
-    private void Prev()
-    {
-        _index = Math.Max(_index - SlideStep, 0);
-        StateHasChanged();
-    }
-
-    private void Pause() => _timer?.Stop();
-    private void Resume() => _timer?.Start();
+    private void Pause() => _timer?.Change(Timeout.Infinite, Timeout.Infinite);
+    private void Resume() => _timer?.Change(AutoplayMs, AutoplayMs);
     public void Dispose() => _timer?.Dispose();
+
 }
