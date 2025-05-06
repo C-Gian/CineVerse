@@ -8,6 +8,7 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
     [Parameter] public RenderFragment<TItem> SlideTemplate { get; set; } = default!;
     [Parameter] public int VisibleCount { get; set; } = 5;
     [Parameter] public int AutoplayMs { get; set; } = 5000;
+    [Parameter] public string SectionName { get; set; }
 
     private int _page = 0;
     private Timer? _timer;
@@ -16,7 +17,7 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
     private bool IsLastPage => _page >= TotalPages - 1;
 
     private string TrackStyle =>
-    $"transform: translateX(-{_page * (VisibleCount * 175)}px);";
+    $"transform: translateX(-{_page * (VisibleCount * 300 + 80)}px);";
 
 
 
@@ -28,7 +29,10 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
         }
     }
 
-    private void Next() => _page = Math.Min(_page + 1, TotalPages - 1);
+    private void Next()
+    {
+        _page = _page < TotalPages - 1 ? ++_page : 0;
+    }
     private void Prev() => _page = Math.Max(_page - 1, 0);
 
     private void Pause() => _timer?.Change(Timeout.Infinite, Timeout.Infinite);

@@ -1,52 +1,111 @@
 ﻿@typeparam TItem
 
-<div class="carousel-wrapper" @onmouseenter="Pause" @onmouseleave="Resume">
-    <button class="nav left" @onclick="Prev">‹</button>
+<div class="carousel-container">
+	<div class="carousel-info">
+		<h1 class="section-title">@SectionName</h1>
+		<div>
+			<button class="nav left" @onclick="Prev">
+				<span>‹</span>
+			</button>
+			<button class="nav right" @onclick="Next">
+				<span>›</span>
+			</button>
+		</div>
+	</div>
 
-    <div class="carousel-viewport">
-        <div class="carousel-track" style="@TrackStyle">
-            @foreach (var item in Items)
-            {
-                <div class="carousel-slide">
-                    @SlideTemplate(item)
-                </div>
-            }
-        </div>
-    </div>
-
-    <button class="nav right" @onclick="Next">›</button>
+	<div class="carousel-wrapper" @onmouseenter="Pause" @onmouseleave="Resume">
+		<div class="carousel-viewport">
+			<div class="carousel-track" style="@TrackStyle">
+				@foreach (var item in Items)
+				{
+					<div class="carousel-slide">
+						@SlideTemplate(item)
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 </div>
 
 
 
 
 <style>
-    .carousel-wrapper {
-        position: relative;
-        overflow: hidden;
-        padding: 1rem 2rem;
-        width: 100%;
-        max-width: 1200px;
-        margin: auto;
-    }
+	.carousel-container {
+		display: flex;
+		flex-direction: column;
+	}
 
-    .carousel-viewport {
-        overflow: hidden;
-        width: 100%;
-    }
+	.carousel-info {
+		display: flex;
+		margin: 1rem 2.5rem .75rem;
+		gap: 20px;
+	}
 
-    .carousel-track {
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-        will-change: transform;
-    }
+		.carousel-info > div {
+			display: flex;
+			vertical-align: middle;
+			gap: 10px;
+			margin-top: 2px;
+		}
 
-    .carousel-slide {
-        flex: 0 0 175px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 0.5rem;
-    }
+	.carousel-wrapper {
+		position: relative;
+		overflow: hidden;
+		padding: 0.2rem 2rem;
+		width: 100%;
+		margin: auto;
+	}
+
+	.carousel-viewport {
+		overflow: hidden;
+		width: 100%;
+	}
+
+	.carousel-track {
+		display: flex;
+		transition: transform 0.5s ease-in-out;
+		will-change: transform;
+	}
+
+	.carousel-slide {
+		flex: 0 0 175px;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		padding: 0.5rem;
+	}
+
+	.nav {
+		background: rgba(255, 255, 255, 0.06);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		color: #fff;
+		font-size: 1.75rem;
+		width: 36px;
+		height: 36px;
+		border-radius: 20%;
+		cursor: pointer;
+		z-index: 10;
+		transition: background 0.3s ease, border 0.3s ease, transform 0.2s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		backdrop-filter: blur(4px);
+	}
+
+		.nav:hover {
+			background: rgba(255, 255, 255, 0.12);
+			border-color: rgba(255, 255, 255, 0.25);
+		}
+
+		.nav:disabled {
+			opacity: 0.3;
+			cursor: default;
+		}
+
+		.nav span {
+			position: relative;
+			top: -1px;
+		}
 
 </style>

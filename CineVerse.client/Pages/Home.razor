@@ -3,17 +3,18 @@
 @using CineVerse.client.Models;
 
 
-<h2 class="section-title">Now Playing</h2>
-<Carousel TItem="Movie" Items="NowPlayingMovies" VisibleCount="5" AutoplayMs="5000">
+<Carousel TItem="Movie" Items="NowPlayingMovies" VisibleCount="5" AutoplayMs="5000" SectionName="Now Playing">
     <SlideTemplate Context="movie">
-        <MovieCard Movie="movie" />
+        <div style="width: 300px; height: 100%;">
+            <MovieCard Movie="movie" />
+        </div>
     </SlideTemplate>
 </Carousel>
 
 <style>
 
     .section-title {
-        font-size: 1.3rem;
+        font-size: 1.7rem;
         font-weight: 600;
         color: #fff;
         margin: 1rem 2.5rem .75rem;
