@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMudServices();
 
+builder.Services.AddSingleton<AppState>();
+
 builder.Services.AddSingleton(AppTheme.Dark);
 
 builder.Services.AddScoped<IMovieService, MovieService>();

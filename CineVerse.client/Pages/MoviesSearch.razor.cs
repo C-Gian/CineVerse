@@ -8,18 +8,19 @@ namespace CineVerse.client.Pages;
 public partial class MoviesSearch
 {
     #region Properties
+
+    [Inject] public IMovieService MovieService { get; set; }
+
+    [Inject] public IGenreService GenreService { get; set; }
+    [Inject] public AppState AppState { get; set; }
+
     public List<Movie> Movies { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
 
-    [Inject]
-    public IMovieService MovieService { get; set; }
-
-    [Inject]
-    public IGenreService GenreService { get; set; }
-
     #endregion
+
 
     #region Fields
 
@@ -28,6 +29,7 @@ public partial class MoviesSearch
     private readonly SemaphoreSlim _gate = new(1, 1);
 
     #endregion
+
 
     protected override async Task OnInitializedAsync()
     {

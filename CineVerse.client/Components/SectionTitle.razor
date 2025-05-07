@@ -2,7 +2,7 @@
 	@{
 		if (IsLink)
 		{
-			<a class="section-title-link" href="/">@SectionName <span class="arrow">›</span></a>
+			<a class="section-title-link" href="@Link" @onclick="SectionClicked">@SectionName <span class="arrow">›</span></a>
 		} else
 		{
 			<h1 class="section-title">@SectionName</h1>

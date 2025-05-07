@@ -1,8 +1,6 @@
 ﻿using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
-using static MudBlazor.CategoryTypes;
-
 namespace CineVerse.client.Pages;
 
 public partial class Home
@@ -92,8 +90,16 @@ public partial class Home
             {
                 var movieResponse = await MovieService.GetUpcomingMovies(pageNumber++) ?? new MoviesApiResponse();
 
-                UpcomingMovies.AddRange(movieResponse.Results.Where(x => DateTime.Parse(x.ReleaseDate) >= DateTime.UtcNow));
+                foreach (var item in movieResponse.Results)
+                {
+                    if (!UpcomingMovies.Select(x => x.Id).Contains(item.Id) && DateTime.Parse(item.ReleaseDate) >= DateTime.UtcNow)
+                    {
+                        UpcomingMovies.Add(item);
+                    }
+                }
             }
+
+            UpcomingMovies.Sort((x, y) => DateTime.Parse(x.ReleaseDate).CompareTo(DateTime.Parse(y.ReleaseDate)));
         }
         catch (Exception ex)
         {
