@@ -6,19 +6,21 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
 {
     [Parameter] public List<TItem> Items { get; set; } = new();
     [Parameter] public RenderFragment<TItem> SlideTemplate { get; set; } = default!;
-    [Parameter] public int VisibleCount { get; set; } = 5;
+    [Parameter] public int VisibleCount { get; set; }
     [Parameter] public int AutoplayMs { get; set; } = 5000;
     [Parameter] public string SectionName { get; set; }
+    [Parameter] public int CardWidth { get; set; }
+    [Parameter] public int Margin { get; set; }
+    private int TotalPages => (int)Math.Ceiling(Items.Count / (double)VisibleCount);
+    private string TrackStyle => $"transform: translateX(-{_page * (VisibleCount * CardWidth + Margin)}px);";
+
+
+    #region Fields
 
     private int _page = 0;
     private Timer? _timer;
-    private int MaxPage => Math.Max(0, (int)Math.Ceiling(Items.Count / (double)VisibleCount) - 1);
-    private int TotalPages => (int)Math.Ceiling(Items.Count / (double)VisibleCount);
-    private bool IsLastPage => _page >= TotalPages - 1;
 
-    private string TrackStyle =>
-    $"transform: translateX(-{_page * (VisibleCount * 300 + 80)}px);";
-
+    #endregion
 
 
     protected override void OnInitialized()
@@ -29,14 +31,24 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
         }
     }
 
-    private void Next()
-    {
-        _page = _page < TotalPages - 1 ? ++_page : 0;
+    private void Next() {
+        ResetTimer();
+        _page = _page < TotalPages - 1 ? ++_page : 0; 
     }
-    private void Prev() => _page = Math.Max(_page - 1, 0);
-
+    private void Prev()
+    {
+        ResetTimer();
+        _page = Math.Max(_page - 1, 0);
+    }
     private void Pause() => _timer?.Change(Timeout.Infinite, Timeout.Infinite);
     private void Resume() => _timer?.Change(AutoplayMs, AutoplayMs);
-    public void Dispose() => _timer?.Dispose();
 
+    private void ResetTimer()
+    {
+        if (_timer is not null && AutoplayMs > 0)
+        {
+            _timer.Change(AutoplayMs, AutoplayMs);
+        }
+    }
+    public void Dispose() => _timer?.Dispose();
 }

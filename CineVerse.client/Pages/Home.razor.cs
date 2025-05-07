@@ -20,15 +20,20 @@ public partial class Home
     #endregion
 
 
+    #region Fields
+
+    private readonly SemaphoreSlim _gate = new(1, 1);
+
+    #endregion
+
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         IsLoading = true;
         await LoadNowPlayingMoviesAsync(1);
-        await LoadNowPlayingMoviesAsync(2);
         await LoadPopularMoviesAsync(1);
         await LoadUpcomingMoviesAsync(1);
-        await LoadUpcomingMoviesAsync(2);
         IsLoading = false;
     }
 
@@ -39,8 +44,10 @@ public partial class Home
             NowPlayingMovies = [];
 
             var movieResponse = await MovieService.GetNowPlayingMovies(pageNumber) ?? new MoviesApiResponse();
+            var movieResponse2 = await MovieService.GetNowPlayingMovies(pageNumber+1) ?? new MoviesApiResponse();
 
             NowPlayingMovies.AddRange(movieResponse.Results);
+            NowPlayingMovies.AddRange(movieResponse2.Results);
         }
         catch (Exception ex)
         {
@@ -50,20 +57,30 @@ public partial class Home
 
     private async Task LoadPopularMoviesAsync(int pageNumber)
     {
+        await _gate.WaitAsync();
+
         try
         {
             PopularMovies = [];
 
-            var movieResponse = await MovieService.GetPopularMovies(pageNumber) ?? new MoviesApiResponse();
+            var movieResponse = await MovieService.GetPopularMovies((pageNumber * 2) - 1) ?? new MoviesApiResponse();
+            var movieResponse2 = await MovieService.GetPopularMovies(pageNumber * 2) ?? new MoviesApiResponse();
 
             PopularMovies.AddRange(movieResponse.Results);
+            PopularMovies.AddRange(movieResponse2.Results);
+
+            CurrentPage = pageNumber;
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
+        finally
+        {
+            _gate.Release();
+        }
     }
-
+    
     private async Task LoadUpcomingMoviesAsync(int pageNumber)
     {
         try
@@ -71,8 +88,10 @@ public partial class Home
             UpcomingMovies = [];
 
             var movieResponse = await MovieService.GetUpcomingMovies(pageNumber) ?? new MoviesApiResponse();
+            var movieResponse2 = await MovieService.GetUpcomingMovies(pageNumber+1) ?? new MoviesApiResponse();
 
             UpcomingMovies.AddRange(movieResponse.Results);
+            UpcomingMovies.AddRange(movieResponse2.Results);
         }
         catch (Exception ex)
         {
