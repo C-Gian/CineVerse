@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Pages;
 
-public partial class AllMovies
+public partial class MoviesSearch
 {
     #region Properties
     public List<Movie> Movies { get; set; } = new();

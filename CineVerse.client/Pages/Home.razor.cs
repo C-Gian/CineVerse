@@ -12,6 +12,7 @@ public partial class Home
     public List<Movie> PopularMovies { get; set; } = new();
     public List<Movie> UpcomingMovies { get; set; } = new();
     public bool IsLoading { get; set; } = false;
+    public int CurrentPage { get; set; } = 1;
 
     [Inject]
     public IMovieService MovieService { get; set; }
@@ -24,8 +25,10 @@ public partial class Home
         await base.OnInitializedAsync();
         IsLoading = true;
         await LoadNowPlayingMoviesAsync(1);
+        await LoadNowPlayingMoviesAsync(2);
         await LoadPopularMoviesAsync(1);
         await LoadUpcomingMoviesAsync(1);
+        await LoadUpcomingMoviesAsync(2);
         IsLoading = false;
     }
 

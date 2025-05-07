@@ -2,8 +2,9 @@
 
 <div class="carousel-container">
 	<div class="carousel-info">
-		<h1 class="section-title">@SectionName</h1>
-		<div>
+		<SectionTitle SectionName="@SectionName" IsLink="true" />
+
+		<div class="carousel-info-buttons">
 			<button class="nav left" @onclick="Prev">
 				<span>‹</span>
 			</button>
@@ -38,21 +39,20 @@
 
 	.carousel-info {
 		display: flex;
-		margin: 1rem 2.5rem .75rem;
+		justify-content: space-between;
 		gap: 20px;
+		align-items: center;
 	}
 
-		.carousel-info > div {
-			display: flex;
-			vertical-align: middle;
-			gap: 10px;
-			margin-top: 2px;
-		}
+	.carousel-info-buttons {
+		display: flex;
+		align-self: flex-start;
+		gap: 10px;
+	}
 
 	.carousel-wrapper {
 		position: relative;
 		overflow: hidden;
-		padding: 0.2rem 2rem;
 		width: 100%;
 		margin: auto;
 	}
