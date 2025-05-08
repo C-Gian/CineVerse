@@ -3,14 +3,6 @@
 @using CineVerse.client.Models;
 
 <div class="home-container">
-	@* <Carousel TItem="Movie" Items="NowPlayingMovies" VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
-        <SlideTemplate Context="movie">
-            <div style="width: 300px; height: 100%;">
-                <MovieCard Movie="movie" />
-            </div>
-        </SlideTemplate>
-    </Carousel> *@
-
 	@{
 		if (UpcomingMovies.Any())
 		{
@@ -18,24 +10,60 @@
 				<SectionTitle SectionName="Upcoming Movies" IsLink="true" Link="/movies/list" />
 				<SplitSlider Movies="UpcomingMovies" MaxVisible="7" AutoplayMs="5000" />
 			</div>
-		} else
+		}
+		else
 		{
 			<MudProgressCircular Size="Size.Large" Class="m-6" />
 		}
 	}
 
-	@* <div>
-        <SectionTitle SectionName="Popular Movies" IsLink="false" />
-        <MovieGrid Movies="PopularMovies" PageChanged="LoadPopularMoviesAsync" CurrentPage="CurrentPage" />
-    </div> *@
+	@{
+		if (PopularMovies.Any())
+		{
+			<Carousel TItem="Movie" Items="PopularMovies" VisibleCount="7" AutoplayMs="5000" SectionName="Popular" CardWidth="200" Margin="100">
+				<SlideTemplate Context="movie">
+					<div style="width: 200px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</Carousel>
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
 
-	@* <Carousel TItem="Movie" Items="UpcomingMovies" VisibleCount="7" AutoplayMs="5000" SectionName="Upcoming" CardWidth="200" Margin="100">
-		<SlideTemplate Context="movie">
-			<div style="width: 200px; height: 100%;">
-				<MovieCard Movie="movie" />
+	@{
+		if (AppState.Genres.Any())
+		{
+			<div>
+				<SectionTitle SectionName="Genres" IsLink="false" />
+				<GenreGrid Movies="PopularMovies" />
 			</div>
-		</SlideTemplate>
-	</Carousel> *@
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
+
+	@{
+		if (NowPlayingMovies.Any())
+		{
+			<Carousel TItem="Movie" Items="NowPlayingMovies" VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
+				<SlideTemplate Context="movie">
+					<div style="width: 300px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</Carousel>
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
 </div>
 
 <style>

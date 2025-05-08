@@ -6,7 +6,8 @@ public class Genre
     public string Name { get; set; } = null!;
 
     public Genre() { }
-    public Genre(int id, string name) { 
+    public Genre(int id, string name)
+    {
         Id = id;
         Name = name;
     }
