@@ -1,4 +1,144 @@
 ﻿@page "/movie/{MovieId:int}"
 
 
-<h1>@MovieId</h1>
+@if (Movie is null)
+{
+	<div class="movie-loading">Loading...</div>
+}
+else
+{
+	<div class="movie-detail-page">
+
+		<!-- BACKDROP HEADER SECTION -->
+		<div class="detail-header" style="background-image: url('@BackdropUrl(Movie.BackdropPath)')">
+			<div class="detail-header-overlay">
+
+				<img class="poster" src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title" />
+
+				<div class="header-info">
+					<h1>@Movie.Title</h1>
+					<h4>@Movie.OriginalTitle</h4>
+
+					<div class="meta-line">
+						<span class="rating">⭐ @Movie.VoteAverage</span>
+						<span>• @Movie.ReleaseDate</span>
+						<span>• @Movie.OriginalLanguage.ToUpper()</span>
+						<span>• @Movie.VoteCount votes</span>
+					</div>
+
+					<GenreTags Genres="@GenreNames" Width="100%" />
+				</div>
+			</div>
+		</div>
+
+		<!-- CONTENT SECTION -->
+		<div class="detail-content">
+			<h2>Overview</h2>
+			<p>@Movie.Overview</p>
+
+			<div class="info-table">
+				<div><strong>ID:</strong> @Movie.Id</div>
+				<div><strong>Adult:</strong> @(Movie.Adult ? "Yes" : "No")</div>
+				<div><strong>Video:</strong> @(Movie.Video ? "Yes" : "No")</div>
+				<div><strong>Popularity:</strong> @Movie.Popularity</div>
+			</div>
+		</div>
+
+	</div>
+}
+
+<style>
+	.movie-detail-page {
+		display: flex;
+		flex-direction: column;
+		color: #ffffff;
+		background-color: #0e0e16;
+	}
+
+	.detail-header {
+		position: relative;
+		height: 400px;
+		background-size: cover;
+		background-position: center;
+	}
+
+	.detail-header-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(4px);
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		padding: 2rem 3rem;
+	}
+
+	.poster {
+		width: 185px;
+		border-radius: 12px;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+		flex-shrink: 0;
+	}
+
+	.header-info {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.75rem;
+	}
+
+		.header-info h1 {
+			font-size: 2rem;
+			margin: 0;
+			font-weight: 700;
+		}
+
+		.header-info h4 {
+			font-size: 1.1rem;
+			color: #aaa;
+			margin: 0;
+		}
+
+	.meta-line {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		font-size: 0.95rem;
+		color: #ccc;
+	}
+
+	.rating {
+		color: #FFD700;
+		font-weight: 600;
+	}
+
+	.detail-content {
+		padding: 2rem 3rem;
+		background: #1a1d2b;
+		border-top: 1px solid rgba(255,255,255,0.05);
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+		.detail-content h2 {
+			font-size: 1.4rem;
+			margin-bottom: 0.5rem;
+		}
+
+		.detail-content p {
+			line-height: 1.6;
+			font-size: 1rem;
+			color: #ddd;
+			max-width: 700px;
+		}
+
+	.info-table {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1rem;
+		font-size: 0.95rem;
+		color: #aaa;
+	}
+
+</style>
