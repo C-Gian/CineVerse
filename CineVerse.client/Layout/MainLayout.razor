@@ -29,7 +29,7 @@
 
         <!-- DRAWER -->
         <nav class="drawer @( _drawerOpen ? "open" : "closed")"
-        style="--drawer-w:72px;">
+             style="--drawer-w:72px; padding: 0 1rem;">
             <ul class="nav-list">
                 <li>
                     <a href="/" class="nav-link @(CurrentUrl=="/" ? "active":null)">
@@ -58,7 +58,7 @@
         display: flex;
         align-items: center;
         gap: .75rem;
-        padding: .65rem .9rem;
+        padding: .65rem 1rem;
         color: #AAB0C0;
         text-decoration: none;
         font-size: .95rem;
@@ -67,12 +67,12 @@
     }
 
         .nav-link:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.5);
             color: #ffffff;
         }
 
         .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1) !important;
             color: white;
         }
 
