@@ -4,12 +4,15 @@
 
 <div class="home-container">
 	@{
-		if (UpcomingMovies.Any())
+		if (NowPlayingMovies.Any())
 		{
-			<div>
-				<SectionTitle SectionName="Upcoming Movies" IsLink="true" Link="/movies/list" />
-				<SplitSlider Movies="UpcomingMovies" MaxVisible="7" AutoplayMs="5000" />
-			</div>
+			<Carousel TItem="Movie" Items="NowPlayingMovies" VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
+				<SlideTemplate Context="movie">
+					<div style="width: 300px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</Carousel>
 		}
 		else
 		{
@@ -18,15 +21,12 @@
 	}
 
 	@{
-		if (PopularMovies.Any())
+		if (UpcomingMovies.Any())
 		{
-			<Carousel TItem="Movie" Items="PopularMovies" VisibleCount="7" AutoplayMs="5000" SectionName="Popular" CardWidth="200" Margin="100">
-				<SlideTemplate Context="movie">
-					<div style="width: 200px; height: 100%;">
-						<MovieCard Movie="movie" />
-					</div>
-				</SlideTemplate>
-			</Carousel>
+			<div>
+				<SectionTitle SectionName="Upcoming Movies" IsLink="true" Link="/movies/list" />
+				<SplitSlider Movies="UpcomingMovies" MaxVisible="7" AutoplayMs="5000" />
+			</div>
 		}
 		else
 		{
@@ -49,11 +49,11 @@
 	}
 
 	@{
-		if (NowPlayingMovies.Any())
+		if (PopularMovies.Any())
 		{
-			<Carousel TItem="Movie" Items="NowPlayingMovies" VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
+			<Carousel TItem="Movie" Items="PopularMovies" VisibleCount="7" AutoplayMs="5000" SectionName="Popular" CardWidth="200" Margin="100">
 				<SlideTemplate Context="movie">
-					<div style="width: 300px; height: 100%;">
+					<div style="width: 200px; height: 100%;">
 						<MovieCard Movie="movie" />
 					</div>
 				</SlideTemplate>
