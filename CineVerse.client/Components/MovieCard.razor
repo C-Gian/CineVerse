@@ -1,6 +1,6 @@
 ﻿@inherits ComponentBase
 
-<div class="movie-card-container">
+<div class="movie-card-container" @onclick="NavigateToDetails">
 	<div class="movie-card-image">
 		<img src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title poster" />
 	</div>

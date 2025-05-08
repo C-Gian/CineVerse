@@ -2,6 +2,7 @@
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CineVerse.api.Services;
 
@@ -62,5 +63,15 @@ public class MovieService : IMovieService
                    ?? throw new ApplicationException("Empty TMDB response");
 
         return result.Results;
+    }
+
+    public async Task<MovieResultResponse> GetMovieDetail(int movieId, CancellationToken ct)
+    {
+        var url = $"movie/{movieId}?api_key={_apiKey}";
+
+        var result = await _http.GetFromJsonAsync<MovieResultResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
     }
 }

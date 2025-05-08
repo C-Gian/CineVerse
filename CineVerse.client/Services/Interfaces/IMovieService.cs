@@ -8,4 +8,5 @@ public interface IMovieService
     public Task<MoviesApiResponse> GetPopularMovies(int page = 1, CancellationToken ct = default);
     public Task<MoviesApiResponse> GetUpcomingMovies(int page = 1, CancellationToken ct = default);
     public Task<List<Movie>> SearchMovie(string query, int page = 1, CancellationToken ct = default);
+    public Task<MovieResultResponse> GetMovieDetail(int movieId = 1, CancellationToken ct = default);
 }
