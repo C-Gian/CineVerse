@@ -7,14 +7,21 @@ public partial class Home
 {
     #region Properties
 
-    public List<Movie> NowPlayingMovies { get; set; } = new();
-    public List<Movie> PopularMovies { get; set; } = new();
-    public List<Movie> UpcomingMovies { get; set; } = new();
-    public bool IsLoading { get; set; } = false;
-    public int CurrentPage { get; set; } = 1;
+    [Inject]
+    public AppState AppState { get; set; }
 
     [Inject]
     public IMovieService MovieService { get; set; }
+
+    [Inject]
+    public IGenreService GenreService { get; set; }
+
+    public List<Movie> NowPlayingMovies { get; set; } = new();
+    public List<Movie> PopularMovies { get; set; } = new();
+    public List<Movie> UpcomingMovies { get; set; } = new();
+    public List<Genre> Genres { get; set; } = new();
+    public bool IsLoading { get; set; } = false;
+    public int CurrentPage { get; set; } = 1;
 
     #endregion
 
@@ -30,6 +37,7 @@ public partial class Home
     {
         await base.OnInitializedAsync();
         IsLoading = true;
+        AppState.Genres = await LoadGenresAsync();
         await LoadNowPlayingMoviesAsync(1);
         await LoadPopularMoviesAsync(1);
         await LoadUpcomingMoviesAsync(1);
@@ -105,5 +113,10 @@ public partial class Home
         {
             Console.WriteLine(ex.Message);
         }
+    }
+
+    private async Task<List<Genre>> LoadGenresAsync()
+    {
+        return await GenreService.GetGenres() ?? new List<Genre>();
     }
 }

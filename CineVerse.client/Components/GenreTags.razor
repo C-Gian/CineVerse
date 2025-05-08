@@ -1,0 +1,33 @@
+﻿<div class="genre-tags" style="max-width:@Width">
+    @foreach (var genre in Genres)
+    {
+        <span class="genre-chip">@genre</span>
+    }
+</div>
+
+<style>
+    .genre-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .genre-chip {
+        padding: 0.25rem 0.75rem;
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 300;
+        backdrop-filter: blur(4px);
+        white-space: nowrap;
+        transition: background 0.25s;
+    }
+
+        .genre-chip:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            cursor: default;
+        }
+</style>
