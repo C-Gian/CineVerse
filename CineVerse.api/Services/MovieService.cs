@@ -65,11 +65,11 @@ public class MovieService : IMovieService
         return result.Results;
     }
 
-    public async Task<MovieResultResponse> GetMovieDetail(int movieId, CancellationToken ct)
+    public async Task<MovieDetailResponse> GetMovieDetail(int movieId, CancellationToken ct)
     {
         var url = $"movie/{movieId}?api_key={_apiKey}";
 
-        var result = await _http.GetFromJsonAsync<MovieResultResponse>(url, ct)
+        var result = await _http.GetFromJsonAsync<MovieDetailResponse>(url, ct)
                    ?? throw new ApplicationException("Empty TMDB response");
 
         return result;

@@ -15,7 +15,7 @@
 		}
 	</div>
 
-	<div class="slider-preview">
+	<div class="slider-preview" @onclick="NavigateToDetails">
 		@if (Selected is not null)
 		{
 			<div class="preview-img" style="background-image:url('@BackdropUrl(Selected.BackdropPath)')"></div>

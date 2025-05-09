@@ -1,4 +1,5 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.Components;
+using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 
@@ -14,7 +15,7 @@ public partial class MovieDetail
     [Inject] public NavigationManager NavigationManager { get; set; }
     [Parameter] public int MovieId { get; set; }
 
-    public MovieResultResponse Movie { get; set; }
+    public MovieDetailResponse Movie { get; set; }
 
     private List<string> GenreNames = new();
 
@@ -23,17 +24,7 @@ public partial class MovieDetail
 
     protected override async Task OnInitializedAsync()
     {
-        Movie = await GetMovieDetail(MovieId);
-        GenreNames = Movie?.GenreIds?
-            .Select(id => AppState.Genres.FirstOrDefault(g => g.Id == id)?.Name)
-            .Where(name => !string.IsNullOrWhiteSpace(name))
-            .ToList() ?? new();
-    }
-
-    private async Task<MovieResultResponse> GetMovieDetail(int movieId)
-    {
-        var movie = await MovieService.GetMovieDetail(movieId);
-        return movie;
+        Movie = await MovieService.GetMovieDetail(MovieId);
     }
 
     private string PosterUrl(string? path) =>

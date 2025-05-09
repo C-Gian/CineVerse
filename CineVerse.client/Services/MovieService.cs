@@ -6,11 +6,11 @@ namespace CineVerse.client.Services;
 
 public class MovieService(RestClient rest) : IMovieService
 {
-    public async Task<MovieResultResponse> GetMovieDetail(int movieId = 1, CancellationToken ct = default)
+    public async Task<MovieDetailResponse> GetMovieDetail(int movieId = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/detail").AddQueryParameter("movieId", movieId);
 
-        var res = await rest.ExecuteGetAsync<MovieResultResponse>(req, ct);
+        var res = await rest.ExecuteGetAsync<MovieDetailResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");

@@ -23,7 +23,7 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("detail")]
-    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<MovieDetailResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetMovieDetail(movieId, ct);

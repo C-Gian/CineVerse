@@ -6,6 +6,7 @@ namespace CineVerse.client.Components;
 public partial class SplitSlider : ComponentBase
 {
     [Inject] public AppState AppState { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
     [Parameter] public List<Movie> Movies { get; set; } = new();
     [Parameter] public int MaxVisible { get; set; } = 5;
     [Parameter] public int AutoplayMs { get; set; } = 5000;
@@ -52,4 +53,9 @@ public partial class SplitSlider : ComponentBase
     private static string BackdropUrl(string? path, string size = "w780") =>
         string.IsNullOrWhiteSpace(path) ? "/placeholder.png" : $"https://image.tmdb.org/t/p/{size}{path}";
 
+    public void NavigateToDetails()
+    {
+        var url = $"/movie/{Selected.Id}";
+        NavigationManager.NavigateTo(url);
+    }
 }
