@@ -17,5 +17,6 @@ public interface IMovieService
     public Task<DetailWatchProvidersResponse> GetProvidersMovieDetail(int movieId, CancellationToken ct);
 
     public Task<DetailCastApiResponse> GetCastMovieDetail(int movieId, CancellationToken ct);
+    public Task<DetailVideoResponse> GetVideoMovieDetail(int movieId, CancellationToken ct);
 
 }

@@ -20,6 +20,7 @@ public partial class MovieDetail
     public MoviesApiResponse MovieRecommendations { get; set; }
     public DetailWatchProvidersResponse MovieWatchProviders { get; set; }
     public DetailCastApiResponse MovieCast { get; set; }
+    public DetailVideoResponse MovieVideos { get; set; }
 
     #endregion
 
@@ -31,6 +32,7 @@ public partial class MovieDetail
         MovieRecommendations = await MovieService.GetRecommendationsMovieDetail(MovieId);
         MovieWatchProviders = await MovieService.GetProvidersMovieDetail(MovieId);
         MovieCast = await MovieService.GetCastMovieDetail(MovieId);
+        MovieVideos = await MovieService.GetVideoMovieDetail(MovieId);
     }
 
     private string PosterUrl(string? path) =>

@@ -114,4 +114,14 @@ public class MovieService : IMovieService
 
         return result;
     }
+
+    public async Task<DetailVideoResponse> GetVideoMovieDetail(int movieId, CancellationToken ct)
+    {
+        var url = $"movie/{movieId}/videos?api_key={_apiKey}";
+
+        var result = await _http.GetFromJsonAsync<DetailVideoResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
+    }
 }

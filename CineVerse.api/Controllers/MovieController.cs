@@ -22,6 +22,14 @@ public class MovieController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet("videos")]
+    [ProducesResponseType(typeof(IEnumerable<DetailVideoResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetVideoMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
+    {
+        var movie = await _movieService.GetVideoMovieDetail(movieId, ct);
+        return Ok(movie);
+    }
+
     [HttpGet("images")]
     [ProducesResponseType(typeof(IEnumerable<DetailImagesResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetImagesMovieDetail([FromQuery] int movieId, CancellationToken ct = default)

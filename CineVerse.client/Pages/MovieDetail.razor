@@ -1,5 +1,6 @@
 ﻿@page "/movie/{MovieId:int}"
 @using CineVerse.client.Components
+@using CineVerse.client.ApiResponses;
 
 @if (Movie is null)
 {
@@ -9,73 +10,83 @@ else
 {
 	<div class="movie-detail-page">
 
-		<!-- BACKDROP HEADER SECTION -->
-		<div class="detail-header" style="background-image: url('@BackdropUrl(Movie.BackdropPath)')">
-			<div class="detail-header-overlay">
+		<div>
+			<div class="detail-header" style="background-image: url('@BackdropUrl(Movie.BackdropPath)')">
+				<div class="detail-header-overlay">
 
-				<img class="poster" src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title" />
+					<img class="poster" src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title" />
 
-				<div class="header-info">
-					<h1>@Movie.Title</h1>
-					<h4>@Movie.OriginalTitle</h4>
+					<div class="header-info">
+						<h1>@Movie.Title</h1>
+						<h4>@Movie.OriginalTitle</h4>
 
-					<div class="meta-line">
-						<span class="rating">⭐ @Movie.VoteAverage</span>
-						<span>• @Movie.ReleaseDate</span>
-						<span>• @Movie.OriginalLanguage.ToUpper()</span>
-						<span>• @Movie.VoteCount votes</span>
+						<div class="meta-line">
+							<span class="rating">⭐ @Movie.VoteAverage</span>
+							<span>• @Movie.ReleaseDate</span>
+							<span>• @Movie.OriginalLanguage.ToUpper()</span>
+							<span>• @Movie.VoteCount votes</span>
+						</div>
+
+						<GenreTags Genres="@Movie.Genres.Select(x => x.Name).ToList()" Width="100%" />
+
+						@if (!string.IsNullOrWhiteSpace(Movie.Tagline))
+						{
+							<p class="tagline">“@Movie.Tagline”</p>
+						}
+
+						@if (!string.IsNullOrWhiteSpace(Movie.Homepage))
+						{
+							<a class="homepage-link" href="@Movie.Homepage" target="_blank">Visit Official Site ↗</a>
+						}
 					</div>
+				</div>
+			</div>
 
-					<GenreTags Genres="@Movie.Genres.Select(x => x.Name).ToList()" Width="100%" />
+			<div class="detail-content">
+				<h2>Overview</h2>
+				<p>@Movie.Overview</p>
 
-					@if (!string.IsNullOrWhiteSpace(Movie.Tagline))
+				<div class="info-table">
+					<div>
+						<strong>ID:</strong> @Movie.Id
+					</div>
+					<div>
+						<strong>Adult:</strong> @(Movie.Adult ? "Yes" : "No")
+					</div>
+					<div>
+						<strong>Video:</strong> @(Movie.Video ? "Yes" : "No")
+					</div>
+					<div>
+						<strong>Popularity:</strong> @Movie.Popularity
+					</div>
+					<div>
+						<strong>Status:</strong> @Movie.Status
+					</div>
+					<div>
+						<strong>Runtime:</strong> @(Movie.Runtime?.ToString() + " min")
+					</div>
+					<div>
+						<strong>Revenue:</strong> @($"{Movie.Revenue:n0}")
+					</div>
+					<div>
+						<strong>Budget:</strong> @($"{Movie.Budget:n0}")
+					</div>
+					@if (!string.IsNullOrWhiteSpace(Movie.ImdbId))
 					{
-						<p class="tagline">“@Movie.Tagline”</p>
-					}
-
-					@if (!string.IsNullOrWhiteSpace(Movie.Homepage))
-					{
-						<a class="homepage-link" href="@Movie.Homepage" target="_blank">Visit Official Site ↗</a>
+						<div><strong>IMDB:</strong> <a href="https://www.imdb.com/title/@Movie.ImdbId" target="_blank">@Movie.ImdbId</a></div>
 					}
 				</div>
 			</div>
 		</div>
 
-		<!-- CONTENT SECTION -->
-		<div class="detail-content">
-			<h2>Overview</h2>
-			<p>@Movie.Overview</p>
-
-			<div class="info-table">
-				<div>
-					<strong>ID:</strong> @Movie.Id
-				</div>
-				<div>
-					<strong>Adult:</strong> @(Movie.Adult ? "Yes" : "No")
-				</div>
-				<div>
-					<strong>Video:</strong> @(Movie.Video ? "Yes" : "No")
-				</div>
-				<div>
-					<strong>Popularity:</strong> @Movie.Popularity
-				</div>
-				<div>
-					<strong>Status:</strong> @Movie.Status
-				</div>
-				<div>
-					<strong>Runtime:</strong> @(Movie.Runtime?.ToString() + " min")
-				</div>
-				 <div>
-					<strong>Revenue:</strong> @($"{Movie.Revenue:n0}")
-				</div>
-				<div>
-					<strong>Budget:</strong> @($"{Movie.Budget:n0}")
-				</div>
-				@if (!string.IsNullOrWhiteSpace(Movie.ImdbId))
-				{
-					<div><strong>IMDB:</strong> <a href="https://www.imdb.com/title/@Movie.ImdbId" target="_blank">@Movie.ImdbId</a></div>
-				}
-			</div>
+		<div style="margin: 20px;">
+			<Carousel TItem="MovieResultResponse" Items="MovieRecommendations.Results" VisibleCount="7" AutoplayMs="5000" SectionName="Similar Movies" CardWidth="200" Margin="100" IsLink="false">
+				<SlideTemplate Context="movie">
+					<div style="width: 200px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</Carousel>
 		</div>
 	</div>
 }
@@ -83,6 +94,7 @@ else
 <style>
 	.movie-detail-page {
 		display: flex;
+		gap: 100px;
 		flex-direction: column;
 		color: #ffffff;
 		background-color: #0e0e16;
