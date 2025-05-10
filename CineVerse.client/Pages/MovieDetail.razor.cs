@@ -16,8 +16,10 @@ public partial class MovieDetail
     [Parameter] public int MovieId { get; set; }
 
     public MovieDetailResponse Movie { get; set; }
-
-    private List<string> GenreNames = new();
+    public DetailImagesResponse MovieImages { get; set; }
+    public MoviesApiResponse MovieRecommendations { get; set; }
+    public DetailWatchProvidersResponse MovieWatchProviders { get; set; }
+    public DetailCastApiResponse MovieCast { get; set; }
 
     #endregion
 
@@ -25,6 +27,10 @@ public partial class MovieDetail
     protected override async Task OnInitializedAsync()
     {
         Movie = await MovieService.GetMovieDetail(MovieId);
+        MovieImages = await MovieService.GetImagesMovieDetail(MovieId);
+        MovieRecommendations = await MovieService.GetRecommendationsMovieDetail(MovieId);
+        MovieWatchProviders = await MovieService.GetProvidersMovieDetail(MovieId);
+        MovieCast = await MovieService.GetCastMovieDetail(MovieId);
     }
 
     private string PosterUrl(string? path) =>
