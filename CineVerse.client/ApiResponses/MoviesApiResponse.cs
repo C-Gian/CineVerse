@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using CineVerse.client.Models;
 
-namespace CineVerse.client;
+namespace CineVerse.client.ApiResponses;
 
 public class MoviesApiResponse
 {
@@ -9,7 +8,7 @@ public class MoviesApiResponse
     public int Page { get; set; }
 
     [JsonPropertyName("results")]
-    public List<Movie> Results { get; set; } = [];
+    public List<MovieResultResponse> Results { get; set; } = [];
 
     [JsonPropertyName("total_pages")]
     public int TotalPages { get; set; }

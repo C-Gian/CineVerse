@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -14,7 +14,7 @@ public partial class MoviesSearch
     [Inject] public IGenreService GenreService { get; set; }
     [Inject] public AppState AppState { get; set; }
 
-    public List<Movie> Movies { get; set; } = new();
+    public List<MovieResultResponse> Movies { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }

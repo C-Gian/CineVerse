@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using Microsoft.AspNetCore.Components;
 
 namespace CineVerse.client.Components;
@@ -11,7 +11,7 @@ public partial class MovieCard
     public NavigationManager NavigationManager { get; set; }
 
     [Parameter]
-    public Movie Movie { get; set; } = default!;
+    public MovieResultResponse Movie { get; set; } = default!;
 
     #endregion
 

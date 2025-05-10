@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using Microsoft.AspNetCore.Components;
 
 namespace CineVerse.client.Components;
@@ -7,11 +7,11 @@ public partial class SplitSlider : ComponentBase
 {
     [Inject] public AppState AppState { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
-    [Parameter] public List<Movie> Movies { get; set; } = new();
+    [Parameter] public List<MovieResultResponse> Movies { get; set; } = new();
     [Parameter] public int MaxVisible { get; set; } = 5;
     [Parameter] public int AutoplayMs { get; set; } = 5000;
 
-    private Movie? Selected;
+    private MovieResultResponse? Selected;
     private int _index = 0;
     private Timer? _timer;
 
@@ -32,7 +32,7 @@ public partial class SplitSlider : ComponentBase
         }, null, AutoplayMs, AutoplayMs);
     }
 
-    private void Select(Movie movie)
+    private void Select(MovieResultResponse movie)
     {
         Selected = movie;
         _index = Movies.IndexOf(movie);

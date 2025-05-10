@@ -1,5 +1,4 @@
-﻿@using CineVerse.client.Models
-
+﻿
 <div class="upcoming-slider" @onmouseenter="Pause" @onmouseleave="Resume">
 	<div class="slider-list">
 		@foreach (var movie in Movies.Take(MaxVisible))

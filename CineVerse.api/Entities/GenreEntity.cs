@@ -1,4 +1,4 @@
-﻿namespace CineVerse.api.Models;
+﻿namespace CineVerse.api.Entities;
 
 public class GenreEntity
 {

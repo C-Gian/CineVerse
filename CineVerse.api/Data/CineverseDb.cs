@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CineVerse.api.Models; 
+using CineVerse.api.Entities;
 
 namespace CineVerse.api.Data;
 

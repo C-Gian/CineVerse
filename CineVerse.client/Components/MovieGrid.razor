@@ -1,4 +1,4 @@
-﻿@using CineVerse.client.Models
+﻿@using CineVerse.client.ApiResponses
 
 <div class="poster-grid">
 	@foreach (var movie in Movies)
@@ -7,7 +7,7 @@
     }
 </div>
 
-<Pager TItem="Movie" Items="Movies" PageChanged="PageChanged" CurrentPage="CurrentPage"></Pager>
+<Pager TItem="MovieResultResponse" Items="Movies" PageChanged="PageChanged" CurrentPage="CurrentPage"></Pager>
 
 
 <style>

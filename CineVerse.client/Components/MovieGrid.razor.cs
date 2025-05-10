@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using Microsoft.AspNetCore.Components;
 
 namespace CineVerse.client.Components;
@@ -6,7 +6,7 @@ namespace CineVerse.client.Components;
 public partial class MovieGrid
 {
     [Parameter]
-    public List<Movie> Movies { get; set; } = new();
+    public List<MovieResultResponse> Movies { get; set; } = new();
 
     [Parameter] 
     public EventCallback<int> PageChanged { get; set; }

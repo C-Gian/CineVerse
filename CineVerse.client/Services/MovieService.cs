@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using CineVerse.client.Services.Interfaces;
 using RestSharp;
 
@@ -54,11 +54,11 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
-    public async Task<List<Movie>> SearchMovie(string query, int page = 1, CancellationToken ct = default)
+    public async Task<List<MovieResultResponse>> SearchMovie(string query, int page = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/search").AddQueryParameter("query", query).AddQueryParameter("page", page.ToString());
 
-        var res = await rest.ExecuteGetAsync<List<Movie>>(req, ct);
+        var res = await rest.ExecuteGetAsync<List<MovieResultResponse>>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");

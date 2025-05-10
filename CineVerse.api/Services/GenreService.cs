@@ -1,6 +1,6 @@
 ﻿using CineVerse.api.ApiResponses;
 using CineVerse.api.Data;
-using CineVerse.api.Models;
+using CineVerse.api.Entities;
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;

@@ -1,5 +1,5 @@
-﻿using CineVerse.client.Components;
-using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
+using CineVerse.client.Components;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 

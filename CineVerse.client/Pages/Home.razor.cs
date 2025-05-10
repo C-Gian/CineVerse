@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 namespace CineVerse.client.Pages;
@@ -16,9 +16,9 @@ public partial class Home
     [Inject]
     public IGenreService GenreService { get; set; }
 
-    public List<Movie> NowPlayingMovies { get; set; } = new();
-    public List<Movie> PopularMovies { get; set; } = new();
-    public List<Movie> UpcomingMovies { get; set; } = new();
+    public List<MovieResultResponse> NowPlayingMovies { get; set; } = new();
+    public List<MovieResultResponse> PopularMovies { get; set; } = new();
+    public List<MovieResultResponse> UpcomingMovies { get; set; } = new();
     public List<Genre> Genres { get; set; } = new();
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; } = 1;

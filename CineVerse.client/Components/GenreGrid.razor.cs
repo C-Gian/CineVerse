@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using Microsoft.AspNetCore.Components;
 
 namespace CineVerse.client.Components;
@@ -7,7 +7,7 @@ public partial class GenreGrid
 {
     [Inject] public AppState AppState { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
-    [Parameter] public List<Movie> Movies { get; set; } = new();
+    [Parameter] public List<MovieResultResponse> Movies { get; set; } = new();
 
 
     private Random _rand = new();

@@ -74,4 +74,44 @@ public class MovieService : IMovieService
 
         return result;
     }
+
+    public async Task<DetailImagesResponse> GetImagesMovieDetail(int movieId, CancellationToken ct)
+    {
+        var url = $"movie/{movieId}/images?api_key={_apiKey}";
+
+        var result = await _http.GetFromJsonAsync<DetailImagesResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
+    }
+
+    public async Task<MovieResponse> GetRecommendationsMovieDetail(int movieId, CancellationToken ct)
+    {
+        var url = $"movie/{movieId}/recommendations?api_key={_apiKey}";
+
+        var result = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
+    }
+
+    public async Task<DetailWatchProvidersResponse> GetProvidersMovieDetail(int movieId, CancellationToken ct)
+    {
+        var url = $"movie/{movieId}/watch/providers?api_key={_apiKey}";
+
+        var result = await _http.GetFromJsonAsync<DetailWatchProvidersResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
+    }
+
+    public async Task<DetailCastApiResponse> GetCastMovieDetail(int movieId, CancellationToken ct)
+    {
+        var url = $"movie/{movieId}/credits?api_key={_apiKey}";
+
+        var result = await _http.GetFromJsonAsync<DetailCastApiResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
+    }
 }
