@@ -22,6 +22,10 @@ public partial class MovieDetail
     public DetailCastApiResponse MovieCast { get; set; }
     public DetailVideoResponse MovieVideos { get; set; }
 
+    private List<ProviderOption> FlatrateProviders = new();
+    private List<ProviderOption> BuyProviders = new();
+    private List<ProviderOption> RentProviders = new();
+
     #endregion
 
 
@@ -31,6 +35,12 @@ public partial class MovieDetail
         MovieImages = await MovieService.GetImagesMovieDetail(MovieId);
         MovieRecommendations = await MovieService.GetRecommendationsMovieDetail(MovieId);
         MovieWatchProviders = await MovieService.GetProvidersMovieDetail(MovieId);
+        if (MovieWatchProviders?.Results.TryGetValue("US", out var region) == true)
+        {
+            FlatrateProviders = region.Flatrate ?? new();
+            BuyProviders = region.Buy ?? new();
+            RentProviders = region.Rent ?? new();
+        }
         MovieCast = await MovieService.GetCastMovieDetail(MovieId);
         MovieVideos = await MovieService.GetVideoMovieDetail(MovieId);
     }
@@ -46,4 +56,10 @@ public partial class MovieDetail
     private string ProfileUrl(string? path) =>
         string.IsNullOrWhiteSpace(path) ? "/avatar.png" :
         $"https://image.tmdb.org/t/p/w185{path}";
+
+    private string LogoUrl(string? path) =>
+    string.IsNullOrWhiteSpace(path)
+        ? "Images/provider-placeholder.png"
+        : $"https://image.tmdb.org/t/p/w45{path}";
+
 }

@@ -38,6 +38,56 @@ else
 							<h3>Overview</h3>
 							<p class="overview-text">@Movie.Overview</p>
 						</div>
+
+						@if (FlatrateProviders.Any() || RentProviders.Any() || BuyProviders.Any())
+						{
+							<div class="section">
+								<h2>Available On</h2>
+
+								@if (FlatrateProviders.Any())
+								{
+									<h3>Streaming</h3>
+									<div class="provider-list">
+										@foreach (var p in FlatrateProviders)
+										{
+											<div class="provider-card">
+												<img src="@LogoUrl(p.LogoPath)" alt="@p.ProviderName" />
+												<span>@p.ProviderName</span>
+											</div>
+										}
+									</div>
+								}
+
+								@if (RentProviders.Any())
+								{
+									<h3>Rent</h3>
+									<div class="provider-list">
+										@foreach (var p in RentProviders)
+										{
+											<div class="provider-card">
+												<img src="@LogoUrl(p.LogoPath)" alt="@p.ProviderName" />
+												<span>@p.ProviderName</span>
+											</div>
+										}
+									</div>
+								}
+
+								@if (BuyProviders.Any())
+								{
+									<h3>Buy</h3>
+									<div class="provider-list">
+										@foreach (var p in BuyProviders)
+										{
+											<div class="provider-card">
+												<img src="@LogoUrl(p.LogoPath)" alt="@p.ProviderName" />
+												<span>@p.ProviderName</span>
+											</div>
+										}
+									</div>
+								}
+							</div>
+						}
+
 					</div>
 
 					<div class="header-right">
@@ -288,4 +338,32 @@ else
 		color: #FFD700;
 		font-weight: 400;
 	}
+
+	.provider-list {
+		display: flex;
+		gap: 1.5rem;
+		align-items: center;
+		flex-wrap: wrap;
+		padding-top: 0.5rem;
+	}
+
+	.provider-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		width: 80px;
+		text-align: center;
+		color: #ccc;
+		font-size: 0.85rem;
+	}
+
+		.provider-card img {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			object-fit: cover;
+			background-color: transparent;
+		}
+
 </style>
