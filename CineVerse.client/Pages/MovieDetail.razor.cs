@@ -41,5 +41,9 @@ public partial class MovieDetail
 
     private string BackdropUrl(string? path) =>
         string.IsNullOrWhiteSpace(path) ? "/placeholder.png" :
-        $"https://image.tmdb.org/t/p/w1280{path}";
+        $"https://image.tmdb.org/t/p/w780{path}";
+
+    private string ProfileUrl(string? path) =>
+        string.IsNullOrWhiteSpace(path) ? "/avatar.png" :
+        $"https://image.tmdb.org/t/p/w185{path}";
 }
