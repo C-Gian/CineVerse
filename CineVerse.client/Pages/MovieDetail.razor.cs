@@ -26,6 +26,26 @@ public partial class MovieDetail
     private List<ProviderOption> BuyProviders = new();
     private List<ProviderOption> RentProviders = new();
 
+    private readonly Dictionary<string, string> CustomProviderIcons = new()
+    {
+        ["Netflix"] = "https://img.icons8.com/color/96/netflix.png",
+        ["Amazon Video"] = "https://img.icons8.com/color/96/amazon-prime-video.png",
+        ["Disney Plus"] = "https://img.icons8.com/color/96/disney-plus.png",
+        ["YouTube"] = "https://img.icons8.com/color/96/youtube-play.png",
+        ["Apple TV"] = "https://img.icons8.com/color/96/apple-tv.png",
+        ["HBO Max"] = "https://img.icons8.com/color/96/hbo-max.png",
+        ["Hulu"] = "https://img.icons8.com/color/96/hulu.png",
+        ["Paramount+"] = "https://img.icons8.com/color/96/paramount-plus.png",
+        ["Google Play Movies"] = "https://img.icons8.com/?size=100&id=ORTeHm645Suq&format=png&color=000000",
+        ["Now"] = "https://img.icons8.com/?size=100&id=ORTeHm645Suq&format=png&color=000000",
+        ["Infinity"] = "https://img.icons8.com/?size=100&id=ORTeHm645Suq&format=png&color=000000",
+        ["TIMVISION"] = "https://img.icons8.com/?size=100&id=113667&format=png&color=000000",
+        ["Discovery"] = "https://img.icons8.com/?size=100&id=ORTeHm645Suq&format=png&color=000000",
+        ["RaiPlay"] = "https://brandfetch.com/raiplay.it?view=library&library=default&collection=logos&asset=ids3e9Y_IS&utm_source=https%253A%252F%252Fbrandfetch.com%252Fraiplay.it&utm_medium=copyAction&utm_campaign=brandPageReferral",
+        ["DAZN"] = "https://img.icons8.com/?size=100&id=SaafwCmpQYiO&format=png&color=000000",
+    };
+
+
     #endregion
 
 
@@ -57,9 +77,14 @@ public partial class MovieDetail
         string.IsNullOrWhiteSpace(path) ? "/avatar.png" :
         $"https://image.tmdb.org/t/p/w185{path}";
 
-    private string LogoUrl(string? path) =>
-    string.IsNullOrWhiteSpace(path)
-        ? "Images/provider-placeholder.png"
-        : $"https://image.tmdb.org/t/p/w45{path}";
+    private string LogoUrl(string? path, string providerName)
+    {
+        if (CustomProviderIcons.TryGetValue(providerName, out var customUrl))
+            return customUrl;
+
+        return string.IsNullOrWhiteSpace(path)
+            ? "Images/provider-placeholder.png"
+            : $"https://image.tmdb.org/t/p/w45{path}";
+    }
 
 }

@@ -41,53 +41,20 @@ else
 
 						@if (FlatrateProviders.Any() || RentProviders.Any() || BuyProviders.Any())
 						{
-							<div class="section">
-								<h2>Available On</h2>
+							var providers = new List<List<ProviderOption>>() { FlatrateProviders, RentProviders, BuyProviders }.OrderByDescending(list => list?.Count ?? 0).FirstOrDefault() ?? new();
 
-								@if (FlatrateProviders.Any())
-								{
-									<h3>Streaming</h3>
-									<div class="provider-list">
-										@foreach (var p in FlatrateProviders)
-										{
-											<div class="provider-card">
-												<img src="@LogoUrl(p.LogoPath)" alt="@p.ProviderName" />
-												<span>@p.ProviderName</span>
-											</div>
-										}
-									</div>
-								}
-
-								@if (RentProviders.Any())
-								{
-									<h3>Rent</h3>
-									<div class="provider-list">
-										@foreach (var p in RentProviders)
-										{
-											<div class="provider-card">
-												<img src="@LogoUrl(p.LogoPath)" alt="@p.ProviderName" />
-												<span>@p.ProviderName</span>
-											</div>
-										}
-									</div>
-								}
-
-								@if (BuyProviders.Any())
-								{
-									<h3>Buy</h3>
-									<div class="provider-list">
-										@foreach (var p in BuyProviders)
-										{
-											<div class="provider-card">
-												<img src="@LogoUrl(p.LogoPath)" alt="@p.ProviderName" />
-												<span>@p.ProviderName</span>
-											</div>
-										}
-									</div>
-								}
+							<div class="providers-section">
+								<h3>Available On:</h3>
+								<div class="provider-list">
+									@foreach (var p in providers)
+									{
+										<div class="provider-card" title="@p.ProviderName">
+											<img src="@LogoUrl(p.LogoPath, p.ProviderName)" alt="@p.ProviderName" class="provider-logo" />
+										</div>
+									}
+								</div>
 							</div>
 						}
-
 					</div>
 
 					<div class="header-right">
@@ -339,12 +306,17 @@ else
 		font-weight: 400;
 	}
 
+	.providers-section {
+		display: flex;
+		align-items: center;
+		gap: 50px;
+	}
+
 	.provider-list {
 		display: flex;
-		gap: 1.5rem;
+		gap: 1rem;
 		align-items: center;
 		flex-wrap: wrap;
-		padding-top: 0.5rem;
 	}
 
 	.provider-card {
@@ -352,15 +324,14 @@ else
 		flex-direction: column;
 		align-items: center;
 		gap: 0.25rem;
-		width: 80px;
 		text-align: center;
 		color: #ccc;
 		font-size: 0.85rem;
 	}
 
 		.provider-card img {
-			width: 60px;
-			height: 60px;
+			width: 35px;
+			height: 35px;
 			border-radius: 50%;
 			object-fit: cover;
 			background-color: transparent;
