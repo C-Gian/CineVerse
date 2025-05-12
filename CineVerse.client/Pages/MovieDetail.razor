@@ -16,35 +16,37 @@ else
 			<div class="header-overlay">
 				<div class="header-content">
 					<div class="header-left">
-						<div style="display: flex; flex-direction: column; gap: 0.3rem;">
-							<h1>@Movie.Title</h1>
-							<div style="display: flex; flex-direction: column; gap: 0.5rem;">
-								<div class="meta-info">
-									<span>@Movie.ReleaseDate</span>
-									<span>|</span>
-									<span>@Movie.OriginalLanguage.ToUpper()</span>
-									<span>|</span>
-									<span>@(Movie.Runtime?.ToString() + " min")</span>
-									<span>|</span>
-									<span class="rating">⭐ @Movie.VoteAverage</span>
-									<span>@Movie.VoteCount votes</span>
-								</div>
 
-								<GenreTags Genres="@Movie.Genres.Select(g => g.Name).ToList()" Width="100%" />
+						<div style="display: flex; flex-direction: column; gap: 1.5rem;">
+							<div style="display: flex; flex-direction: column; gap: 0.3rem;">
+								<h1>@Movie.Title</h1>
+								<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+									<div class="meta-info">
+										<span>@Movie.ReleaseDate</span>
+										<span>|</span>
+										<span>@Movie.OriginalLanguage.ToUpper()</span>
+										<span>|</span>
+										<span>@(Movie.Runtime?.ToString() + " min")</span>
+										<span>|</span>
+										<span class="rating">⭐ @Movie.VoteAverage</span>
+										<span>@Movie.VoteCount votes</span>
+									</div>
+
+									<GenreTags Genres="@Movie.Genres.Select(g => g.Name).ToList()" Width="100%" />
+								</div>
+							</div>
+
+							<div style="display: flex; flex-direction: column;">
+								<h3>Overview</h3>
+								<p class="overview-text">@Movie.Overview</p>
 							</div>
 						</div>
-
-						<div style="display: flex; flex-direction: column;">
-							<h3>Overview</h3>
-							<p class="overview-text">@Movie.Overview</p>
-						</div>
-
 						@if (FlatrateProviders.Any() || RentProviders.Any() || BuyProviders.Any())
 						{
 							var providers = new List<List<ProviderOption>>() { FlatrateProviders, RentProviders, BuyProviders }.OrderByDescending(list => list?.Count ?? 0).FirstOrDefault() ?? new();
 
 							<div class="providers-section">
-								<h3>Available On:</h3>
+								<h3 style="font-size: 1rem;">Available On:</h3>
 								<div class="provider-list">
 									@foreach (var p in providers)
 									{
@@ -149,7 +151,7 @@ else
 	.header-left {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 5rem;
 		max-width: 60%;
 	}
 
@@ -181,7 +183,7 @@ else
 			font-size: 1.3rem;
 			margin-bottom: 1rem;
 		}
-	
+
 	.media-grid {
 		display: grid;
 		grid-template-columns: repeat(5, 1fr);
@@ -330,8 +332,8 @@ else
 	}
 
 		.provider-card img {
-			width: 35px;
-			height: 35px;
+			width: 30px;
+			height: 30px;
 			border-radius: 50%;
 			object-fit: cover;
 			background-color: transparent;
