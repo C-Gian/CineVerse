@@ -1,6 +1,7 @@
 ﻿using CineVerse.api.ApiResponses;
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
+using CineVerse.Client.Models;
 using Microsoft.Extensions.Options;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -124,4 +125,20 @@ public class MovieService : IMovieService
 
         return result;
     }
+
+    public async Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct)
+    {
+        var baseUrl = "discover/movie";
+        var queryString = string.Join("&", queryParams
+            .Where(kv => !string.IsNullOrWhiteSpace(kv.Value))
+            .Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
+
+        var url = $"{baseUrl}?api_key={_apiKey}&language=en-US&{queryString}";
+
+        var result = await _http.GetFromJsonAsync<DiscoverApiResponse>(url, ct)
+            ?? throw new ApplicationException("Empty discover response");
+
+        return result;
+    }
+
 }

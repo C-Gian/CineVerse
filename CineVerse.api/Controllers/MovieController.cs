@@ -1,5 +1,6 @@
 using CineVerse.api.ApiResponses;
 using CineVerse.api.Services.Interfaces;
+using CineVerse.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineVerse.api.Controllers;
@@ -20,6 +21,14 @@ public class MovieController : ControllerBase
     {
         _movieService = movieService;
         _logger = logger;
+    }
+
+    [HttpGet("discover")]
+    [ProducesResponseType(typeof(IEnumerable<DiscoverApiResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetVideoMovieDetail([FromQuery] Dictionary<string, string> queryParams, CancellationToken ct = default)
+    {
+        var movies = await _movieService.DiscoverMoviesAsync(queryParams, ct);
+        return Ok(movies);
     }
 
     [HttpGet("videos")]

@@ -20,4 +20,6 @@ public interface IMovieService
 
     public Task<DetailVideoResponse> GetVideoMovieDetail(int movieId, CancellationToken ct = default);
 
+    public Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct = default);
+
 }
