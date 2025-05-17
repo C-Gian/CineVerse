@@ -5,47 +5,60 @@
 
 @if (IsLoading)
 {
-	<MudProgressCircular Size="Size.Large" Class="m-6" />
+    <MudProgressCircular Size="Size.Large" Class="m-6" />
 }
 else
 {
     <div class="search-panel">
 
-        <div class="search-box">
-            <span class="icon">🔍</span>
-            <input type="text"
-                   placeholder="Search for a movie…"
-                   @bind="_query"
-                   @onkeydown="HandleKeyDown" />
+        <div class="search-container">
+            <div class="search-box">
+                <span class="icon">🔍</span>
+                <input type="text"
+                       placeholder="Search for a movie…"
+                       @bind="_query"
+                       @onkeydown="HandleKeyDown" />
+            </div>
+
+            <button class="search-btn" @onclick="() => LoadMoviesAsync(1)">
+                SEARCH
+            </button>
         </div>
 
-        <button class="search-btn" @onclick="() => LoadMoviesAsync(1)">
-            SEARCH
-        </button>
-
+        <MultiSelectComponent Label="Genres" Elements="Genres" OnApply="UpdateGenres" />
+        
     </div>
 
 
-	@if (Movies.Any())
-	{
-		<MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="CurrentPage" />
-	} else
-	{
-		<h1>NO MOVIES</h1>
-	}
+    @if (Movies.Any())
+    {
+        <MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="CurrentPage" />
+    }
+    else
+    {
+        <h1>NO MOVIES</h1>
+    }
 }
 
 
 <style>
     .search-panel {
+        position: relative;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
         margin: 50px;
         padding: 24px;
-        display: flex;
         gap: 20px;
         align-items: center;
         border-radius: 18px;
         background: rgba(13,17,31,1);
         backdrop-filter: blur(12px);
+    }
+
+    .search-container {
+        display: flex;
+        width: 100%;
     }
 
     .search-box {
@@ -66,15 +79,14 @@ else
         .search-box input {
             width: 100%;
             height: 56px;
-            padding: 0 18px 0 48px; 
+            padding: 0 18px 0 48px;
             border: none;
             border-radius: 12px;
             background: rgba(200,200,200,0.02);
             color: #fff;
             font-size: 1rem;
             outline: none !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.30),
-            0 0 0 1px rgba(255,255,255,0.01) inset; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.01) inset;
         }
 
             .search-box input::placeholder {
@@ -103,4 +115,4 @@ else
             background: #4b39c4;
             border-color: #7a68ff;
         }
-</style>
+</style> 

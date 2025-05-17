@@ -2,6 +2,8 @@
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using MudBlazor;
+using System.Globalization;
 
 namespace CineVerse.client.Pages;
 
@@ -28,6 +30,8 @@ public partial class MoviesSearch
 
     private readonly SemaphoreSlim _gate = new(1, 1);
 
+    private List<int> SelectedGenres = new();
+
     #endregion
 
 
@@ -36,6 +40,7 @@ public partial class MoviesSearch
         await base.OnInitializedAsync();
         IsLoading = true;
         await LoadMoviesAsync(1);
+        await LoadGenresAsync();
         IsLoading = false;
     }
 
@@ -59,9 +64,9 @@ public partial class MoviesSearch
         {
             Console.WriteLine(ex.Message);
         }
-        finally 
-        { 
-            _gate.Release(); 
+        finally
+        {
+            _gate.Release();
         }
     }
 
@@ -82,4 +87,10 @@ public partial class MoviesSearch
             await SearchAsync();
         }
     }
+
+    private void UpdateGenres(List<int> genres)
+    {
+        SelectedGenres = genres;
+    }
+
 }

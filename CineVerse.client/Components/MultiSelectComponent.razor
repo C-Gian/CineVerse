@@ -1,0 +1,143 @@
+﻿<div class="multiselect-dropdown" @onclick:stopPropagation>
+    <div class="dropdown-toggle" @onclick="ToggleDropdown">
+        <span class="label">@Label</span>
+        <span class="count">@SelectedElements.Count</span>
+        <span class="arrow">▾</span>
+    </div>
+
+    <div class="dropdown-menu @(IsOpen ? "show" : "hide")">
+        <div class="dropdown-options">
+            @foreach (var element in Elements)
+            {
+                <label class="option-item">
+                    <input type="checkbox"
+                           checked="@SelectedElements.Contains(element.Id)"
+                           @onchange="() => ToggleElement(element.Id)" />
+                    <span>@element.Name</span>
+                </label>
+            }
+        </div>
+        <div class="dropdown-footer">
+            <button class="clear-btn" @onclick="ClearAll">Clear All</button>
+            <button class="apply-btn" @onclick="Apply">Apply</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .multiselect-dropdown {
+        position: relative;
+        font-family: sans-serif;
+        user-select: none;
+    }
+
+    .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255,255,255,0.06);
+        border-radius: 32px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .label {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .count {
+        background: #444;
+        padding: 0 8px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+    }
+
+    .arrow {
+        font-size: 0.9rem;
+        opacity: 0.6;
+    }
+
+    .dropdown-menu {
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: opacity 0.15s ease, transform 0.25s ease;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 8px;
+        z-index: 9999;
+        background: #1a1d2b;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        padding: 1rem;
+        width: 300px;
+    }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-menu.hide {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+
+    .dropdown-options {
+        max-height: 240px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+    }
+
+    .option-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        color: #eee;
+        padding: 6px 0;
+    }
+
+        .option-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+
+    .dropdown-footer {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 0.75rem;
+    }
+
+    .clear-btn,
+    .apply-btn {
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.85rem;
+        border: none;
+    }
+
+    .clear-btn {
+        background: none;
+        color: #5f8fff;
+    }
+
+    .apply-btn {
+        background: #5f8fff;
+        color: white;
+    }
+</style>
