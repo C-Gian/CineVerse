@@ -1,39 +1,53 @@
-﻿<div class="textbox-container">
-    <span class="textbox-title">@Title</span>
-    
-    <input class="textbox-input"
+﻿<div class="textbox-wrapper">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="textbox-label">@Label</label>
+    }
+    <input @bind="Value"
+           @bind:event="oninput"
+           class="textbox"
+           type="@InputType"
            placeholder="@Placeholder"
-           type="@Type"
-           @bind="Value"
            min="@Min"
-           max="@Max" />
+           max="@Max"
+           step="@Step"
+           @onkeydown="OnKeyDown" />
 </div>
 
 <style>
-    .textbox-input {
-        width: 100px;
-        padding: 0.5rem;
+    .textbox-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .textbox-label {
+        font-size: 0.85rem;
+        color: #ccc;
+        font-weight: 500;
+        padding-left: 4px;
+    }
+
+    .textbox {
+        width: 100%;
+        height: 42px;
+        padding: 0 12px;
         border-radius: 8px;
         background: rgba(255,255,255,0.05);
         border: 1px solid rgba(255,255,255,0.08);
         color: #fff;
         font-size: 0.95rem;
-        text-align: center;
+        outline: none;
+        transition: border 0.2s ease;
+        font-family: inherit;
     }
 
-    .textbox-error {
-        color: #ff5e5e;
-        font-size: 0.85rem;
-    }
+        .textbox::placeholder {
+            color: #888;
+        }
 
-    .textbox-title {
-        color: white;
-    }
-
-    .textbox-container {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        width: 100%;
-    }
+        .textbox:focus {
+            border-color: #7459ff;
+        }
 </style>
