@@ -1,0 +1,39 @@
+﻿<div class="textbox-container">
+    <span class="textbox-title">@Title</span>
+    
+    <input class="textbox-input"
+           placeholder="@Placeholder"
+           type="@Type"
+           @bind="Value"
+           min="@Min"
+           max="@Max" />
+</div>
+
+<style>
+    .textbox-input {
+        width: 100px;
+        padding: 0.5rem;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 0.95rem;
+        text-align: center;
+    }
+
+    .textbox-error {
+        color: #ff5e5e;
+        font-size: 0.85rem;
+    }
+
+    .textbox-title {
+        color: white;
+    }
+
+    .textbox-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+    }
+</style>

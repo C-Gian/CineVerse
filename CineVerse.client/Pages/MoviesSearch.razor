@@ -25,7 +25,11 @@ else
             </button>
         </div>
 
-        <MultiSelectComponent Label="Genres" Elements="Genres" OnApply="UpdateGenres" />
+       <div class="filters-container">
+            <MultiSelectComponent Label="Genres" Elements="Genres" OnApply="UpdateGenres" />
+
+            
+       </div>
         
     </div>
 
@@ -42,6 +46,28 @@ else
 
 
 <style>
+
+    .filters-container {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+
+    .year-filter-item {
+        display: flex;
+        flex-direction: column;
+        color: white;
+    }
+
+    .year-filter-container {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-content: center;
+        align-items: center;
+    }
+
     .search-panel {
         position: relative;
         z-index: 9999;
@@ -115,4 +141,5 @@ else
             background: #4b39c4;
             border-color: #7a68ff;
         }
+    
 </style> 
