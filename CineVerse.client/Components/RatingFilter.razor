@@ -1,0 +1,196 @@
+﻿<div class="rating-rating-dropdown" @onclick:stopPropagation>
+    <div class="rating-dropdown-toggle" @onclick="ToggleDropdown" @onclick:stopPropagation>
+        <span class="rating-label">RATING</span>
+        <span class="rating-value">@RatingLabel</span>
+        <span class="rating-arrow">▾</span>
+    </div>
+
+    <div class="rating-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
+        <div class="rating-radio-columns">
+            <div class="rating-radio-column">
+                <div class="rating-column-label">Less than</div>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    var value = i;
+                    <label class="rating-radio-item">
+                        <input type="radio"
+                               name="less-than"
+                               value="@value"
+                               checked="@(SelectedLess == value)"
+                               @onchange="@(() => SelectLess(value))" />
+                        <span>@value</span>
+                    </label>
+                }
+                <button class="rating-clear" @onclick="() => SelectLess(null)">Clear</button>
+            </div>
+            <div class="rating-radio-column">
+                <div class="rating-column-label">Greater than</div>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    var value = i;
+                    <label class="rating-radio-item">
+                        <input type="radio"
+                               name="greater-than"
+                               value="@value"
+                               checked="@(SelectedGreater == value)"
+                               @onchange="@(() => SelectGreater(value))" />
+                        <span>@value</span>
+                    </label>
+                }
+                <button class="rating-clear" @onclick="() => SelectGreater(null)">Clear</button>
+            </div>
+        </div>
+        <div class="rating-dropdown-footer">
+            <button class="rating-apply" @onclick="Apply">Apply</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    rating-dropdown {
+        position: relative;
+        font-family: sans-serif;
+        user-select: none;
+    }
+
+    .rating-dropdown-toggle {
+        display: flex;
+        align-items: center;
+        background: rgba(255,255,255,0.06);
+        border-radius: 32px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .rating-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .rating-value {
+        font-size: 0.9rem;
+        background: #444;
+        padding: 0 8px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border-radius: 6px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .rating-arrow {
+        font-size: 0.9rem;
+        opacity: 0.6;
+    }
+
+    .rating-dropdown-menu {
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: opacity 0.15s ease, transform 0.25s ease;
+        position: absolute;
+        margin-top: 8px;
+        z-index: 9999;
+        background: #1a1d2b;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        padding: 1rem;
+        width: 300px;
+    }
+
+        .rating-dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .rating-dropdown-menu.hide {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+    .rating-radio-columns {
+        display: flex;
+        gap: 2rem;
+        justify-content: space-between;
+    }
+
+    .rating-radio-column {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        flex: 1;
+    }
+
+    .rating-column-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #aaa;
+        margin-bottom: 0.3rem;
+    }
+
+    .rating-radio-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: #eee;
+        font-size: 0.9rem;
+    }
+
+        .rating-radio-item input[type="radio"] {
+            accent-color: #5f8fff;
+        }
+
+    .rating-dropdown-footer {
+        display: flex;
+        wdith: 100%;
+        justify-content: center;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 0.75rem;
+    }
+
+    .rating-clear,
+    .rating-apply {
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.85rem;
+        border: none;
+    }
+
+    .rating-clear {
+        background: transparent;
+        border: 1px solid rgba(95, 143, 255, 0.4);
+        color: #5f8fff;
+        font-size: 0.8rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 600;
+    }
+
+        .rating-clear:hover {
+            background: rgba(95, 143, 255, 0.1);
+            border-color: #5f8fff;
+        }
+
+    .rating-apply {
+        background: #5f8fff;
+        border: none;
+        color: white;
+        font-size: 0.8rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.25s ease;
+    }
+
+        .rating-apply:hover {
+            background: #7a9aff;
+        }
+</style>

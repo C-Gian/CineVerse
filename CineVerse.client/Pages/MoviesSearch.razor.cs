@@ -2,8 +2,6 @@
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using MudBlazor;
-using System.Globalization;
 
 namespace CineVerse.client.Pages;
 
@@ -23,6 +21,12 @@ public partial class MoviesSearch
     public string? FromYear { get; set; } = string.Empty;
     public string? ToYear { get; set; } = string.Empty;
 
+    public List<int> SelectedGenres { get; set; } = [];
+
+    public int? RatingLess { get; set; }
+
+    public int? RatingGreater { get; set; }
+
     #endregion
 
 
@@ -31,8 +35,6 @@ public partial class MoviesSearch
     private string _query = string.Empty;
 
     private readonly SemaphoreSlim _gate = new(1, 1);
-
-    private List<int> SelectedGenres = [];
 
     #endregion
 
@@ -97,9 +99,16 @@ public partial class MoviesSearch
 
     private void ValidateFromYearRange(FocusEventArgs e)
     {
-        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out _) && from < 1985)
+        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out _))
         {
-            FromYear = "1985";
+            if (from < 1985)
+            {
+                FromYear = "1985";
+            }
+            if (from > DateTime.Now.Year)
+            {
+                FromYear = DateTime.Now.Year.ToString();
+            }
         }
     }
 
@@ -118,4 +127,10 @@ public partial class MoviesSearch
         }
     }
 
+    private Task HandleRatingChanged((int? less, int? greater) values)
+    {
+        RatingLess = values.less;
+        RatingGreater = values.greater;
+        return Task.CompletedTask;
+    }
 }
