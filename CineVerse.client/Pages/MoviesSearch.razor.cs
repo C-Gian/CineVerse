@@ -16,10 +16,12 @@ public partial class MoviesSearch
     [Inject] public IGenreService GenreService { get; set; }
     [Inject] public AppState AppState { get; set; }
 
-    public List<MovieResultResponse> Movies { get; set; } = new();
-    public List<Genre> Genres { get; set; } = new();
+    public List<MovieResultResponse> Movies { get; set; } = [];
+    public List<Genre> Genres { get; set; } = [];
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
+    public string? FromYear { get; set; } = string.Empty;
+    public string? ToYear { get; set; } = string.Empty;
 
     #endregion
 
@@ -30,7 +32,7 @@ public partial class MoviesSearch
 
     private readonly SemaphoreSlim _gate = new(1, 1);
 
-    private List<int> SelectedGenres = new();
+    private List<int> SelectedGenres = [];
 
     #endregion
 
@@ -72,7 +74,7 @@ public partial class MoviesSearch
 
     private async Task LoadGenresAsync()
     {
-        Genres = await GenreService.GetGenres() ?? new List<Genre>();
+        Genres = await GenreService.GetGenres() ?? [];
     }
 
     private async Task SearchAsync()
@@ -91,6 +93,29 @@ public partial class MoviesSearch
     private void UpdateGenres(List<int> genres)
     {
         SelectedGenres = genres;
+    }
+
+    private void ValidateFromYearRange(FocusEventArgs e)
+    {
+        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out _) && from < 1985)
+        {
+            FromYear = "1985";
+        }
+    }
+
+    private void ValidateToYearRange(FocusEventArgs e)
+    {
+        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out var to))
+        {
+            if (to < from)
+            {
+                ToYear = from.ToString();
+            }
+            if (to > DateTime.Now.Year)
+            {
+                ToYear = DateTime.Now.Year.ToString();
+            }
+        }
     }
 
 }

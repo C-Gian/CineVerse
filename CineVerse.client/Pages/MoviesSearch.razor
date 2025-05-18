@@ -28,8 +28,18 @@ else
        <div class="filters-container">
             <MultiSelectComponent Label="Genres" Elements="Genres" OnApply="UpdateGenres" />
 
-            <TextboxComponent Value="Year" ValueChanged="number" Placeholder="" InputType="" Step="" OnKeyDown="" Min="1900" Max="2100" Step="1" />
-            <TextboxComponent Value="Year" ValueChanged="number" Placeholder="" InputType="" Step="" OnKeyDown="" Min="1900" Max="2100" Step="1" />
+            <TextboxComponent Label="From Year"
+                              InputType="number"
+                              Placeholder="e.g. 2000"
+                              @bind-Value="FromYear"
+                              OnBlur="ValidateFromYearRange" />
+
+            <TextboxComponent Label="To Year"
+                              InputType="number"
+                              Placeholder="e.g. 2024"
+                              @bind-Value="ToYear"
+                              OnBlur="ValidateToYearRange" />
+
        </div>
         
     </div>
