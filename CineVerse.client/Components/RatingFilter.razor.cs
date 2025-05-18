@@ -6,6 +6,7 @@ namespace CineVerse.client.Components;
 public partial class RatingFilter
 {
     [Parameter] public EventCallback<(int? less, int? greater)> OnRatingChanged { get; set; }
+    [Parameter] public string Label { get; set; } = "Rating";
     public bool IsOpen { get; set; } = false;
 
     private ElementReference myDivRef;
@@ -35,6 +36,12 @@ public partial class RatingFilter
 
     private void SelectGreater(int? value)
     {
+        SelectedGreater = value;
+    }
+
+    private void ResetRating(int? value)
+    {
+        SelectedLess = value;
         SelectedGreater = value;
     }
 

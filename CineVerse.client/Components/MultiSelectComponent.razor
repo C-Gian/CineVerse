@@ -1,39 +1,61 @@
-﻿<div class="multiselect-dropdown" @onclick:stopPropagation>
-    <div class="dropdown-toggle" @onclick="ToggleDropdown">
-        <span class="label">@Label</span>
-        <span class="count">@SelectedElements.Count</span>
-        <span class="arrow">▾</span>
-    </div>
+﻿<div class="multiselect-wrapper" @onclick:stopPropagation>
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="textbox-label">@Label</label>
+    }
 
-    <div class="dropdown-menu @(IsOpen ? "show" : "hide")">
-        <div class="dropdown-options">
-            @foreach (var element in Elements)
-            {
-                <label class="option-item">
-                    <input type="checkbox"
-                           checked="@SelectedElements.Contains(element.Id)"
-                           @onchange="() => ToggleElement(element.Id)" />
-                    <span>@element.Name</span>
-                </label>
-            }
+    <div class="multiselect-dropdown">
+        <div class="dropdown-toggle" @onclick="ToggleDropdown">
+            <span class="label">Selected</span>
+            <span class="count">@SelectedElements.Count</span>
+            <span class="arrow">▾</span>
         </div>
-        <div class="dropdown-footer">
-            <button class="clear-btn" @onclick="ClearAll">Clear All</button>
-            <button class="apply-btn" @onclick="Apply">Apply</button>
+
+        <div class="dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
+            <div class="dropdown-options">
+                @foreach (var element in Elements)
+                {
+                    <label class="option-item">
+                        <input type="checkbox"
+                               checked="@SelectedElements.Contains(element.Id)"
+                               @onchange="() => ToggleElement(element.Id)" />
+                        <span>@element.Name</span>
+                    </label>
+                }
+            </div>
+            <div class="dropdown-footer">
+                <button class="clear-btn" @onclick="ClearAll">Clear All</button>
+                <button class="apply-btn" @onclick="Apply">Apply</button>
+            </div>
         </div>
-    </div>
+   </div>
 </div>
 
 <style>
+
+    .multiselect-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .textbox-label {
+        font-size: 0.85rem;
+        color: #ccc;
+        font-weight: 500;
+        padding-left: 4px;
+    }
+
     .dropdown-toggle {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         background: rgba(255,255,255,0.06);
-        border-radius: 32px;
+        border-radius: 8px;
         padding: 0.5rem 1rem;
         cursor: pointer;
         color: #fff;
+        height: 100%;
     }
 
     .label {
@@ -48,7 +70,6 @@
         transition: opacity 0.15s ease, transform 0.25s ease;
         position: absolute;
         top: 100%;
-        right: 0;
         margin-top: 8px;
         z-index: 9999;
         background: #1a1d2b;
@@ -74,12 +95,16 @@
         position: relative;
         font-family: sans-serif;
         user-select: none;
+        height: 42px;
     }
 
     .count {
         background: #444;
-        padding: 0 8px;
-        border-radius: 8px;
+        padding-left: 8px;
+        padding-right: 9px;
+        padding-top: 1px;
+        padding-bottom: 0px;
+        border-radius: 5px;
         font-size: 0.8rem;
     }
 
@@ -135,7 +160,6 @@
         border: 1px solid rgba(95, 143, 255, 0.4);
         color: #5f8fff;
         font-size: 0.8rem;
-        padding: 0.3rem 0.75rem;
         border-radius: 6px;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -152,7 +176,6 @@
         border: none;
         color: white;
         font-size: 0.8rem;
-        padding: 0.35rem 0.85rem;
         border-radius: 6px;
         font-weight: 600;
         cursor: pointer;

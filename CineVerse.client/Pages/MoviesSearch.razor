@@ -28,6 +28,8 @@ else
        <div class="filters-container">
             <MultiSelectComponent Label="Genres" Elements="Genres" OnApply="UpdateGenres" />
 
+            <RatingFilter OnRatingChanged="HandleRatingChanged" />
+
             <TextboxComponent Label="From Year"
                               InputType="number"
                               Placeholder="e.g. 2000"
@@ -39,8 +41,6 @@ else
                               Placeholder="e.g. 2024"
                               @bind-Value="ToYear"
                               OnBlur="ValidateToYearRange" />
-
-            <RatingFilter OnRatingChanged="HandleRatingChanged" />
 
        </div>
         
@@ -63,7 +63,7 @@ else
     .filters-container {
         display: flex;
         gap: 20px;
-        align-items: center;
+        align-items: end;
     }
 
 
@@ -78,7 +78,6 @@ else
         flex-direction: row;
         gap: 20px;
         align-content: center;
-        align-items: center;
     }
 
     .search-panel {
@@ -89,7 +88,6 @@ else
         margin: 50px;
         padding: 24px;
         gap: 20px;
-        align-items: center;
         border-radius: 18px;
         background: rgba(13,17,31,1);
         backdrop-filter: blur(12px);
