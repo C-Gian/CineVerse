@@ -29,25 +29,22 @@ public partial class RatingFilter
         await myDivRef.FocusAsync();
     }
 
-    private void SelectLess(int? value)
+    private async Task SelectLess(int? value)
     {
         SelectedLess = value;
+        await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
     }
 
-    private void SelectGreater(int? value)
+    private async Task SelectGreater(int? value)
     {
         SelectedGreater = value;
+        await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
     }
 
-    private void ResetRating(int? value)
+    private async Task ResetRating(int? value)
     {
         SelectedLess = value;
         SelectedGreater = value;
-    }
-
-    private async Task Apply()
-    {
-        IsOpen = false;
         await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
     }
 

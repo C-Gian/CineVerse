@@ -21,22 +21,22 @@ public partial class MultiSelectComponent
         await myDivRef.FocusAsync();
     }
 
-    private void ToggleElement(int genreId)
+    private async Task ToggleElement(int genreId)
     {
         if (SelectedElements.Contains(genreId))
+        {
             SelectedElements.Remove(genreId);
+        }
         else
+        {
             SelectedElements.Add(genreId);
+        }
+        await OnApply.InvokeAsync(SelectedElements);
     }
 
-    private void ClearAll()
+    private async Task ClearAll()
     {
         SelectedElements.Clear();
-    }
-
-    private async Task Apply()
-    {
-        IsOpen = false;
         await OnApply.InvokeAsync(SelectedElements);
     }
 
