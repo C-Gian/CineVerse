@@ -38,6 +38,16 @@ public partial class MoviesSearch
 
     #endregion
 
+    private List<int> IncludedGenres = new();
+    private List<int> ExcludedGenres = new();
+
+    private Task HandleGenreChange((List<int> include, List<int> exclude) values)
+    {
+        IncludedGenres = values.include;
+        ExcludedGenres = values.exclude;
+        return Task.CompletedTask;
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
