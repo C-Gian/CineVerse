@@ -1,5 +1,6 @@
 ﻿using CineVerse.client.ApiResponses;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Components;
 
@@ -11,10 +12,16 @@ public partial class GenresFilterComponent
     private List<int> IncludedGenres = new();
     private List<int> ExcludedGenres = new();
     private bool IsOpen = false;
+    private ElementReference myDivRef;
+    private string LabelText =>
+        IncludedGenres.Count == 0 && ExcludedGenres.Count == 0
+            ? ""
+            : $"{IncludedGenres.Count} in | {ExcludedGenres.Count} ex";
 
-    private void ToggleDropdown()
+    private async Task ToggleDropdown()
     {
         IsOpen = !IsOpen;
+        await myDivRef.FocusAsync();
     }
 
     private async Task ToggleGenre(int genreId, bool include)
@@ -43,8 +50,21 @@ public partial class GenresFilterComponent
         await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
     }
 
-    private string LabelText =>
-        IncludedGenres.Count == 0 && ExcludedGenres.Count == 0
-            ? ""
-            : $"{IncludedGenres.Count} inc / {ExcludedGenres.Count} exc";
+    async Task LostFocus(FocusEventArgs args)
+    {
+        IsOpen = false;
+        await Task.Delay(100);
+    }
+
+    void GainedFocus(FocusEventArgs args)
+    {
+        if (!IsOpen) IsOpen = true;
+    }
+
+    private async Task ClearAll()
+    {
+        IncludedGenres = new();
+        ExcludedGenres = new();
+        await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
+    }
 }

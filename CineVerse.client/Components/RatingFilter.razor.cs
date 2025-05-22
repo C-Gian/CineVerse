@@ -8,6 +8,7 @@ public partial class RatingFilter
     [Parameter] public EventCallback<(int? less, int? greater)> OnRatingChanged { get; set; }
     [Parameter] public string Label { get; set; } = "Rating";
     public bool IsOpen { get; set; } = false;
+    public bool ClosedFromLostFocus { get; set; } = false;
 
     private ElementReference myDivRef;
     private int? SelectedLess;
@@ -21,12 +22,6 @@ public partial class RatingFilter
             if (SelectedLess is null && SelectedGreater is not null) return $"> {SelectedGreater}";
             return $"< {SelectedLess} | > {SelectedGreater}";
         }
-    }
-
-    private async Task ToggleDropdown()
-    {
-        IsOpen = !IsOpen;
-        await myDivRef.FocusAsync();
     }
 
     private async Task SelectLess(int? value)
@@ -48,15 +43,31 @@ public partial class RatingFilter
         await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
     }
 
-    async Task LostFocus(FocusEventArgs args)
+    async Task TogglePointer()
+    {
+        if (IsOpen)
         {
-            IsOpen = false;
-            await Task.Delay(100);
+            IsOpen = false; 
+            return;
         }
 
-    void GainedFocus(FocusEventArgs args)
+        IsOpen = true;                  
+        await myDivRef.FocusAsync();    
+    }
+
+    async Task LostFocus(FocusEventArgs _)
     {
-        if (!IsOpen) IsOpen = true;
+        IsOpen = false;
+        await Task.Delay(100);          
+    }
+
+    async Task GainedFocus(FocusEventArgs _)
+    {
+        if (!IsOpen)
+        {
+            IsOpen = true;
+            await myDivRef.FocusAsync();
+        }
     }
 }
 

@@ -98,13 +98,13 @@ else
 
 		<!-- RECOMMENDATIONS -->
 		<div style="padding: 2rem 3rem; margin-top: 50px;">
-			<Carousel TItem="MovieResultResponse" Items="MovieRecommendations.Results" VisibleCount="7" AutoplayMs="5000" SectionName="Similar Movies" CardWidth="200" Margin="100" IsLink="false">
+			<CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="MovieRecommendations.Results" VisibleCount="7" AutoplayMs="5000" SectionName="Similar Movies" CardWidth="200" Margin="100" IsLink="false">
 				<SlideTemplate Context="movie">
 					<div style="width: 200px; height: 100%;">
 						<MovieCard Movie="movie" />
 					</div>
 				</SlideTemplate>
-			</Carousel>
+			</CineVerse.client.Components.Carousel>
 		</div>
 	</div>
 }

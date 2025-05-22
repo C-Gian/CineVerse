@@ -4,11 +4,13 @@
         <label class="textbox-label">@Label</label>
     }
 
-    <div class="rating-dropdown">
-        <div class="rating-dropdown-toggle" @onclick="ToggleDropdown" @onclick:stopPropagation>
+    <div class="rating-dropdown" >
+        <div class="rating-dropdown-toggle"
+             @onpointerdown="TogglePointer"
+             @onpointerdown:stopPropagation="true">
             <span class="rating-label">@((SelectedLess == null && SelectedGreater == null) ? "No Range" : "Range")</span>
             <span class="rating-value">@RatingLabel</span>
-            <span class="rating-arrow">▾</span>
+            <span class="rating-arrow @(IsOpen ? "up" : null)">▾</span>
         </div>
 
         <div class="rating-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
@@ -96,9 +98,16 @@
     }
 
     .rating-arrow {
-        font-size: 0.9rem;
-        opacity: 0.6;
+        font-size: 1.5rem;
+        line-height: 0;
+        opacity: .6;
+        display: inline-block;
+        transition: transform .25s ease;
     }
+
+        .rating-arrow.up {
+            transform: rotate(-180deg);
+        }
 
     .rating-dropdown-menu {
         opacity: 0;
