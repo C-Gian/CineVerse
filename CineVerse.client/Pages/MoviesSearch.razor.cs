@@ -27,6 +27,8 @@ public partial class MoviesSearch
 
     public int? RatingGreater { get; set; }
 
+    public bool IncludeAdult { get; set; } = true;
+
     #endregion
 
 
@@ -47,7 +49,6 @@ public partial class MoviesSearch
         ExcludedGenres = values.exclude;
         return Task.CompletedTask;
     }
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,11 +101,6 @@ public partial class MoviesSearch
         {
             await SearchAsync();
         }
-    }
-
-    private void UpdateGenres(List<int> genres)
-    {
-        SelectedGenres = genres;
     }
 
     private void ValidateFromYearRange(FocusEventArgs e)

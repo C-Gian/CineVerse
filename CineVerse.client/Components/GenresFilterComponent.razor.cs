@@ -11,18 +11,12 @@ public partial class GenresFilterComponent
 
     private List<int> IncludedGenres = new();
     private List<int> ExcludedGenres = new();
-    private bool IsOpen = false;
+    public bool IsOpen { get; set; } = false;
     private ElementReference myDivRef;
     private string LabelText =>
         IncludedGenres.Count == 0 && ExcludedGenres.Count == 0
             ? ""
             : $"{IncludedGenres.Count} in | {ExcludedGenres.Count} ex";
-
-    private async Task ToggleDropdown()
-    {
-        IsOpen = !IsOpen;
-        await myDivRef.FocusAsync();
-    }
 
     private async Task ToggleGenre(int genreId, bool include)
     {
@@ -50,15 +44,31 @@ public partial class GenresFilterComponent
         await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
     }
 
-    async Task LostFocus(FocusEventArgs args)
+    async Task TogglePointer()
+    {
+        if (IsOpen)
+        {
+            IsOpen = false;
+            return;
+        }
+
+        IsOpen = true;
+        await myDivRef.FocusAsync();
+    }
+
+    async Task LostFocus(FocusEventArgs _)
     {
         IsOpen = false;
         await Task.Delay(100);
     }
 
-    void GainedFocus(FocusEventArgs args)
+    async Task GainedFocus(FocusEventArgs _)
     {
-        if (!IsOpen) IsOpen = true;
+        if (!IsOpen)
+        {
+            IsOpen = true;
+            await myDivRef.FocusAsync();
+        }
     }
 
     private async Task ClearAll()

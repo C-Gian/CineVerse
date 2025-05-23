@@ -2,8 +2,10 @@
     <label class="textbox-label">Genres</label>
 
     <div class="genre-table-dropdown">
-        <div class="genre-dropdown-toggle" @onclick="ToggleDropdown" @onclick:stopPropagation>
-            <span class="label">Genres</span>
+        <div class="genre-dropdown-toggle" 
+            @onpointerdown="TogglePointer"
+             @onpointerdown:stopPropagation="true">
+            <span class="genre-label">Genres</span>
             <span class="genre-value">@LabelText</span>
             <span class="genre-arrow @(IsOpen ? "up" : null)">▾</span>
         </div>
@@ -121,15 +123,16 @@
     .genre-dropdown-toggle {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
         background: rgba(255,255,255,0.06);
         border-radius: 8px;
         padding: 0.5rem 1rem;
         cursor: pointer;
         color: #fff;
+        height: 100%;
+        gap: 0.5rem;
     }
 
-    .label {
+    .genre-label {
         font-weight: 600;
         font-size: 0.95rem;
     }
