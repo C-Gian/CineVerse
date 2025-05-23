@@ -1,7 +1,9 @@
 ﻿using CineVerse.client.ApiResponses;
+using CineVerse.client.Components;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Net.Mail;
 
 namespace CineVerse.client.Pages;
 
@@ -29,6 +31,10 @@ public partial class MoviesSearch
 
     public bool IncludeAdult { get; set; } = true;
 
+    public List<GeneralWatchProvider> WatchProviders { get; set; }
+
+    public List<int> SelectedProviderIds { get; set; } = [];
+
     #endregion
 
 
@@ -54,6 +60,12 @@ public partial class MoviesSearch
     {
         await base.OnInitializedAsync();
         IsLoading = true;
+        var allProviders = await MovieService.GetGeneralWatchProviders("it-IT", "IT");
+
+        WatchProviders = allProviders.Results
+            .Where(p => p.DisplayPriorities?.TryGetValue("IT", out var pr) == true && pr < 20)                
+            .OrderBy(p => p.DisplayPriorities!["IT"])       
+            .ToList();
         await LoadMoviesAsync(1);
         await LoadGenresAsync();
         IsLoading = false;

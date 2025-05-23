@@ -141,4 +141,13 @@ public class MovieService : IMovieService
         return result;
     }
 
+    public async Task<GeneralWatchProvidersResponse> GetGeneralWatchProviders(string language, string region, CancellationToken ct)
+    {
+        var url = $"watch/providers/movie?api_key={_apiKey}&language={language}&region={region}";
+
+        var result = await _http.GetFromJsonAsync<GeneralWatchProvidersResponse>(url, ct)
+                   ?? throw new ApplicationException("Empty TMDB response");
+
+        return result;
+    }
 }

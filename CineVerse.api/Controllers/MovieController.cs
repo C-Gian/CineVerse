@@ -23,9 +23,17 @@ public class MovieController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet("general_providers")]
+    [ProducesResponseType(typeof(GeneralWatchProvidersResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetGeneralWatchProviders([FromQuery] string language, [FromQuery] string region, CancellationToken ct = default)
+    {
+        var providers = await _movieService.GetGeneralWatchProviders(language, region, ct);
+        return Ok(providers);
+    }
+
     [HttpGet("discover")]
     [ProducesResponseType(typeof(IEnumerable<DiscoverApiResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetVideoMovieDetail([FromQuery] Dictionary<string, string> queryParams, CancellationToken ct = default)
+    public async Task<IActionResult> DiscoverMovies([FromQuery] Dictionary<string, string> queryParams, CancellationToken ct = default)
     {
         var movies = await _movieService.DiscoverMoviesAsync(queryParams, ct);
         return Ok(movies);

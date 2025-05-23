@@ -2,6 +2,7 @@
 @page "/movies/list"
 
 @using CineVerse.client.Components
+@using CineVerse.client.ApiResponses
 
 @if (IsLoading)
 {
@@ -42,6 +43,14 @@ else
                               Placeholder="e.g. 2024"
                               @bind-Value="ToYear"
                               OnBlur="ValidateToYearRange" />
+
+            <MultiSelectComponent TItem=GeneralWatchProvider TValue=int
+                Label="Providers"
+                Items="WatchProviders"
+                TextSelector="p => p.ProviderName"
+                ValueSelector="p => p.ProviderId"
+                @bind-SelectedValues="SelectedProviderIds" />
+
 
             <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
 

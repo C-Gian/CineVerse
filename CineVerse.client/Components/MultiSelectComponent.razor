@@ -1,33 +1,47 @@
-﻿<div class="multiselect-wrapper" @onclick:stopPropagation>
+﻿@typeparam TItem
+@typeparam TValue
+
+
+<div class="multiselect-wrapper" @onclick:stopPropagation>
     @if (!string.IsNullOrWhiteSpace(Label))
     {
         <label class="textbox-label">@Label</label>
     }
 
     <div class="multiselect-dropdown">
-        <div class="dropdown-toggle" @onclick="ToggleDropdown">
-            <span class="label">Selected</span>
-            <span class="count">@SelectedElements.Count</span>
-            <span class="arrow">▾</span>
+        <!-- toggle -->
+        <div class="dropdown-toggle"
+             @onpointerdown="TogglePointer"
+             @onpointerdown:stopPropagation="true">
+            <span class="label">@ToggleText</span>
+            <span class="count">@SelectedValues.Count</span>
+            <span class="arrow @(IsOpen ? "up" : null)">▾</span>
         </div>
 
-        <div class="dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
+        <!-- menu -->
+        <div class="dropdown-menu @(IsOpen ? "show" : "hide")"
+             tabindex="-1"
+             @onfocusout="LostFocus"
+             @onfocusin="GainedFocus"
+             @ref="MenuRef">
             <div class="dropdown-options">
-                @foreach (var element in Elements)
+                @foreach (var elem in Items)
                 {
+                    var key = ValueSelector(elem);
                     <label class="option-item">
                         <input type="checkbox"
-                               checked="@SelectedElements.Contains(element.Id)"
-                               @onchange="() => ToggleElement(element.Id)" />
-                        <span>@element.Name</span>
+                               checked="@SelectedValues.Contains(key)"
+                               @onchange="@(() => Toggle(key))" />
+                        <span>@TextSelector(elem)</span>
                     </label>
                 }
             </div>
+
             <div class="dropdown-footer">
-                <button class="clear-btn" @onclick="ClearAll">Clear All</button>
+                <button class="clear-btn" @onclick="ClearAll">Clear</button>
             </div>
         </div>
-   </div>
+    </div>
 </div>
 
 <style>

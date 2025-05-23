@@ -37,6 +37,18 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
+    public async Task<GeneralWatchProvidersResponse> GetGeneralWatchProviders(string language, string region, CancellationToken ct = default)
+    {
+        var req = new RestRequest("/api/movie/general_providers").AddQueryParameter("language", language).AddQueryParameter("region", region);
+
+        var res = await rest.ExecuteGetAsync<GeneralWatchProvidersResponse>(req, ct);
+
+        if (!res.IsSuccessful || res.Data is null)
+            throw new ApplicationException($"API error ({res.StatusCode})");
+
+        return res.Data;
+    }
+
     public async Task<DetailImagesResponse> GetImagesMovieDetail(int movieId, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/images").AddQueryParameter("movieId", movieId);

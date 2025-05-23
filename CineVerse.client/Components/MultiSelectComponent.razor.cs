@@ -4,50 +4,64 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Components;
 
-public partial class MultiSelectComponent
+public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 {
-    [Parameter] public string Label { get; set; } = "Genres";
-    [Parameter] public List<Genre> Elements { get; set; } = new();
-    [Parameter] public EventCallback<List<int>> OnApply { get; set; }
+    [Parameter] public string? Label { get; set; }
 
-    private List<int> SelectedElements = new();
-    private bool IsOpen = false;
-    private ElementReference myDivRef;
+    [Parameter] public IEnumerable<TItem> Items { get; set; } = Enumerable.Empty<TItem>();
 
+    [Parameter] public Func<TItem, string> TextSelector { get; set; } = default!;
 
-    private async Task ToggleDropdown()
+    [Parameter] public Func<TItem, TValue> ValueSelector { get; set; } = default!;
+
+    [Parameter] public List<TValue> SelectedValues { get; set; } = new();
+    [Parameter] public EventCallback<List<TValue>> SelectedValuesChanged { get; set; }
+
+    public bool IsOpen { get; set; } = false;
+    ElementReference MenuRef;
+
+    string ToggleText => SelectedValues.Count == 0 ? "Nessuna" : "Selezionate";
+
+    async Task Toggle(TValue id)
     {
-        IsOpen = !IsOpen;
-        await myDivRef.FocusAsync();
-    }
-
-    private async Task ToggleElement(int genreId)
-    {
-        if (SelectedElements.Contains(genreId))
-        {
-            SelectedElements.Remove(genreId);
-        }
+        if (SelectedValues.Contains(id))
+            SelectedValues.Remove(id);
         else
-        {
-            SelectedElements.Add(genreId);
-        }
-        await OnApply.InvokeAsync(SelectedElements);
+            SelectedValues.Add(id);
+
+        await SelectedValuesChanged.InvokeAsync(SelectedValues);
     }
 
-    private async Task ClearAll()
+    async Task ClearAll()
     {
-        SelectedElements.Clear();
-        await OnApply.InvokeAsync(SelectedElements);
+        SelectedValues.Clear();
+        await SelectedValuesChanged.InvokeAsync(SelectedValues);
     }
 
-    async Task LostFocus(FocusEventArgs args)
+    async Task TogglePointer()
+    {
+        if (IsOpen)
+        {
+            IsOpen = false;
+            return;
+        }
+
+        IsOpen = true;
+        await MenuRef.FocusAsync();
+    }
+
+    async Task LostFocus(FocusEventArgs _)
     {
         IsOpen = false;
         await Task.Delay(100);
     }
 
-    void GainedFocus(FocusEventArgs args)
+    async Task GainedFocus(FocusEventArgs _)
     {
-        if (!IsOpen) IsOpen = true;
+        if (!IsOpen)
+        {
+            IsOpen = true;
+            await MenuRef.FocusAsync();
+        }
     }
 }
