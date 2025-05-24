@@ -114,43 +114,52 @@ public partial class MoviesSearch
         }
     }
 
-    private void ValidateFromYearRange(FocusEventArgs e)
+    private bool ValidateFromYearRange(string? v)
     {
-        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out _))
+        if (string.IsNullOrEmpty(v))
         {
-            if (from < 1985)
-            {
-                FromYear = "1985";
-            }
-            if (from > DateTime.Now.Year)
-            {
-                FromYear = DateTime.Now.Year.ToString();
-            }
+            return true;
         }
+        if (!int.TryParse(FromYear, out var from))
+        {
+            return false;
+        }
+        return true;
     }
 
-    private void ValidateToYearRange(FocusEventArgs e)
+    private bool ValidateToYearRange(string? v)
     {
-        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out var to))
+        if (string.IsNullOrEmpty(v))
         {
-            if (to < from)
-            {
-                ToYear = from.ToString();
-            }
-            if (to > DateTime.Now.Year)
-            {
-                ToYear = DateTime.Now.Year.ToString();
-            }
+            return true;
         }
+        if (!int.TryParse(FromYear, out var from) || !int.TryParse(ToYear, out var to))
+        {
+            return false;
+        }
+        if (to < from)
+        {
+            return false;
+        }
+        if (to > DateTime.Now.Year)
+        {
+            ToYear = DateTime.Now.Year.ToString();
+        }
+        return true;
     }
 
-    private void ValidateRegion(string element)
+    private bool ValidateRegion(string? v)
     {
+        if (string.IsNullOrEmpty(v))
+        {
+            return true;
+        }
         var codedCountries = Countries.Select(c => c.Code).ToList();
-        if (!codedCountries.Contains(element))
+        if (!codedCountries.Contains(v))
         {
-            var testo = 0;
+            return false;
         }
+        return true;
     }
 
     private Task HandleRatingChanged((int? less, int? greater) values)

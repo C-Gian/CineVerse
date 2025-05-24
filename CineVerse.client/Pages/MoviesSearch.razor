@@ -28,52 +28,70 @@ else
 
         <div class="filters-container">
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <GenresFilterComponent Genres="Genres" OnGenreChanged="HandleGenreChange"></GenresFilterComponent>
+            <!-- GENRES -->
+            <TitleWrapperComponent Label="Genres"
+                                   TooltipText="Pick one or more genres; the search will match any of the selected genres.">
+                <GenresFilterComponent Genres="Genres"
+                                       OnGenreChanged="HandleGenreChange" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+            <!-- RATING -->
+            <TitleWrapperComponent Label="Rating"
+                                   TooltipText="Filter by TMDB vote average. Specify the minimum and/or maximum rating (0 to 10).">
                 <RatingFilter OnRatingChanged="HandleRatingChanged" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+            <!-- RELEASE YEAR FROM -->
+            <TitleWrapperComponent Label="Release Year From"
+                                   TooltipText="Include movies released on or after the year you specify (e.g. 2000).">
                 <TextboxComponent InputType="number"
                                   Placeholder="e.g. 2000"
                                   @bind-Value="FromYear"
-                                  OnBlur="ValidateFromYearRange" />
+                                  Check="ValidateFromYearRange" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+            <!-- RELEASE YEAR TO -->
+            <TitleWrapperComponent Label="Release Year To"
+                                   TooltipText="Include movies released on or before the year you specify (e.g. 2024).">
                 <TextboxComponent InputType="number"
                                   Placeholder="e.g. 2024"
                                   @bind-Value="ToYear"
-                                  OnBlur="ValidateToYearRange" />
+                                  Check="ValidateToYearRange" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <MultiSelectComponent TItem=GeneralWatchProvider TValue=int
+            <!-- STREAMING PROVIDERS -->
+            <TitleWrapperComponent Label="Providers"
+                                   TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
+                <MultiSelectComponent TItem="GeneralWatchProvider" TValue="int"
                                       Items="WatchProviders"
                                       TextSelector="p => p.ProviderName"
                                       ValueSelector="p => p.ProviderId"
                                       @bind-SelectedValues="SelectedProviderIds" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
+            <!-- ADULT CONTENT -->
+            <TitleWrapperComponent Label="Adult Content"
+                                   TooltipText="Toggle ON to include titles marked as adult / explicit in the results.">
+                <ToggleSwitch Label="Include Explicit Content"
+                              @bind-Checked="IncludeAdult" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+            <!-- RELEASE DATE REGION -->
+            <TitleWrapperComponent Label="Region"
+                                   TooltipText="country code that localises cinema/physical release dates">
                 <TextboxComponent InputType="text"
-                                  Placeholder="US"
+                                  Placeholder="e.g. US"
                                   @bind-Value="Region"
-                                  OnBlur="@(() => ValidateRegion(Region))" />
+                                  Check="@(_ => ValidateRegion(Region))" />
             </TitleWrapperComponent>
 
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+            <!-- WATCH REGION -->
+            <TitleWrapperComponent Label="Watch Region"
+                                   TooltipText="country code used to resolve streaming availability and provider lists">
                 <TextboxComponent InputType="text"
-                                  Placeholder="US"
+                                  Placeholder="e.g. US"
                                   @bind-Value="WatchRegion"
-                                  OnBlur="@(() => ValidateRegion(WatchRegion))" />
+                                  Check="@(_ => ValidateRegion(WatchRegion))" />
             </TitleWrapperComponent>
 
         </div>

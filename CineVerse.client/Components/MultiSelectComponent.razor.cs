@@ -17,6 +17,8 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     public bool IsOpen { get; set; } = false;
     private string ToggleText => SelectedValues.Count == 0 ? "No Selection" : "Selected";
+    private string SelectedLabel =>
+        SelectedValues.Count == 0 ? "" : $"{SelectedValues.Count}";
 
     #endregion
 

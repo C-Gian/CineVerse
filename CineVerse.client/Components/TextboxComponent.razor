@@ -1,11 +1,11 @@
 ﻿<div class="textbox-wrapper">
     <input value="@Value"
            @oninput="HandleInput"
-           class="textbox"
+           class="textbox @(IsInvalid ? "invalid" : null)"
            type="@InputType"
            placeholder="@Placeholder"
            @onkeydown="OnKeyDown"
-           @onblur="HandleBlur" />
+           @onblur="Validate" />
 </div>
 
 <style>
@@ -47,4 +47,9 @@
         .textbox:focus {
             border-color: #7459ff;
         }
+
+        .textbox.invalid {
+            border: 1px solid #ff4d4d;
+        }
+
 </style>

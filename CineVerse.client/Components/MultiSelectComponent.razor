@@ -6,7 +6,7 @@
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
         <span class="multiselect-label">@ToggleText</span>
-        <span class="multiselect-count">@SelectedValues.Count</span>
+        <span class="multiselect-count">@SelectedLabel</span>
         <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
 

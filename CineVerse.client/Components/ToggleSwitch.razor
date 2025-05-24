@@ -1,5 +1,5 @@
 ﻿<div class="toggle-switch" @onpointerdown="Toggle" tabindex="0">
-    <label class="textbox-label">@Label</label>
+    <label class="toggle-label">@Label</label>
     <span class="toggle-ui @(Checked ? "on" : "off")"></span>
 </div>
 
@@ -9,11 +9,13 @@
         align-items: center;
         gap: .5rem;
         cursor: pointer;
-        user-select: none
+        user-select: none;
+        height: 42px;
     }
 
     .toggle-label {
-        font-size: .875rem
+        font-size: .875rem;
+        color: white;
     }
 
     .toggle-ui {
