@@ -41,22 +41,35 @@ else
 								<p class="overview-text">@Movie.Overview</p>
 							</div>
 						</div>
-						@if (FlatrateProviders.Any() || RentProviders.Any() || BuyProviders.Any())
-						{
-							var providers = new List<List<ProviderOption>>() { FlatrateProviders, RentProviders, BuyProviders }.OrderByDescending(list => list?.Count ?? 0).FirstOrDefault() ?? new();
 
-							<div class="providers-section">
-								<h3 style="font-size: 1rem;">Available On:</h3>
-								<div class="provider-list">
-									@foreach (var p in providers)
+						<div class="providers-container">
+							@{
+								var providerOptions = new List<(string Name, List<ProviderOption> Providers)>
+												{
+												("Flatrate", FlatrateProviders),
+												("Rent", RentProviders),
+												("Buy", BuyProviders)
+												};
+
+								foreach (var providerList in providerOptions)
+								{
+									@if (providerList.Providers.Any())
 									{
-										<div class="provider-card" title="@p.ProviderName">
-											<img src="@LogoUrl(p.LogoPath, p.ProviderName)" alt="@p.ProviderName" class="provider-logo" />
+										<div class="providers-section">
+											<span style="font-size: 1rem;">@providerList.Name:</span>
+											<div class="provider-list">
+												@foreach (var p in providerList.Providers)
+												{
+													<div class="provider-card" title="@p.ProviderName">
+														<img src="@LogoUrl(p.LogoPath, p.ProviderName)" alt="@p.ProviderName" class="provider-logo" />
+													</div>
+												}
+											</div>
 										</div>
 									}
-								</div>
-							</div>
-						}
+								}
+							}
+						</div>
 					</div>
 
 					<div class="header-right">
@@ -308,10 +321,22 @@ else
 		font-weight: 400;
 	}
 
+	.providers-container {
+		display: inline-flex;
+		align-items: center;
+		vertical-align: middle;
+		align-items: center;
+		gap: 3rem;
+		width: fit-content;
+		padding: 1rem 1rem;
+		border-radius: 12px;
+		backdrop-filter: blur(20px);
+	}
+
 	.providers-section {
 		display: flex;
 		align-items: center;
-		gap: 50px;
+		gap: 10px;
 	}
 
 	.provider-list {

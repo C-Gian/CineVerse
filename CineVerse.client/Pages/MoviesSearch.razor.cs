@@ -1,39 +1,30 @@
 ﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Components;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System.Net.Mail;
 
 namespace CineVerse.client.Pages;
 
 public partial class MoviesSearch
 {
     #region Properties
-
     [Inject] public IMovieService MovieService { get; set; }
-
     [Inject] public IGenreService GenreService { get; set; }
     [Inject] public AppState AppState { get; set; }
-
     public List<MovieResultResponse> Movies { get; set; } = [];
     public List<Genre> Genres { get; set; } = [];
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
     public string? FromYear { get; set; } = string.Empty;
     public string? ToYear { get; set; } = string.Empty;
-
     public List<int> SelectedGenres { get; set; } = [];
-
     public int? RatingLess { get; set; }
-
     public int? RatingGreater { get; set; }
-
     public bool IncludeAdult { get; set; } = true;
-
     public List<GeneralWatchProvider> WatchProviders { get; set; }
-
     public List<int> SelectedProviderIds { get; set; } = [];
+    public List<int> IncludedGenres { get; set; }  = new();
+    public List<int> ExcludedGenres { get; set; }  = new();
 
     #endregion
 
@@ -46,8 +37,17 @@ public partial class MoviesSearch
 
     #endregion
 
-    private List<int> IncludedGenres = new();
-    private List<int> ExcludedGenres = new();
+
+    #region Const
+
+    const string LANGUAGE = "it-IT";
+    const string REGION = "IT";
+    const int MAX_PRIORITY = 20;
+
+    #endregion
+
+
+    #region Methods
 
     private Task HandleGenreChange((List<int> include, List<int> exclude) values)
     {
@@ -60,11 +60,11 @@ public partial class MoviesSearch
     {
         await base.OnInitializedAsync();
         IsLoading = true;
-        var allProviders = await MovieService.GetGeneralWatchProviders("it-IT", "IT");
+        var allProviders = await MovieService.GetGeneralWatchProviders(LANGUAGE, REGION);
 
         WatchProviders = allProviders.Results
-            .Where(p => p.DisplayPriorities?.TryGetValue("IT", out var pr) == true && pr < 20)                
-            .OrderBy(p => p.DisplayPriorities!["IT"])       
+            .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)                
+            .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
         await LoadMoviesAsync(1);
         await LoadGenresAsync();
@@ -151,4 +151,6 @@ public partial class MoviesSearch
         RatingGreater = values.greater;
         return Task.CompletedTask;
     }
+
+    #endregion
 }

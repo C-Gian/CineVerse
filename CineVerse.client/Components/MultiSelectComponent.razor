@@ -5,38 +5,38 @@
 <div class="multiselect-wrapper" @onclick:stopPropagation>
     @if (!string.IsNullOrWhiteSpace(Label))
     {
-        <label class="textbox-label">@Label</label>
+        <label class="multiselect-textbox-label">@Label</label>
     }
 
     <div class="multiselect-dropdown">
-        <div class="dropdown-toggle"
+        <div class="multiselect-dropdown-toggle"
              @onpointerdown="TogglePointer"
              @onpointerdown:stopPropagation="true">
-            <span class="label">@ToggleText</span>
-            <span class="count">@SelectedValues.Count</span>
-            <span class="arrow @(IsOpen ? "up" : null)">▾</span>
+            <span class="multiselect-label">@ToggleText</span>
+            <span class="multiselect-count">@SelectedValues.Count</span>
+            <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
         </div>
 
-        <div class="dropdown-menu @(IsOpen ? "show" : "hide")"
+        <div class="multiselect-dropdown-menu @(IsOpen ? "show" : "hide")"
              tabindex="-1"
              @onfocusout="LostFocus"
              @onfocusin="GainedFocus"
              @ref="MenuRef">
-            <div class="dropdown-options">
+            <div class="multiselect-dropdown-options">
                 @foreach (var elem in Items)
                 {
                     var key = ValueSelector(elem);
-                    <label class="option-item">
+                    <label class="multiselect-option-item">
                         <input type="checkbox"
                                checked="@SelectedValues.Contains(key)"
                                @onchange="@(() => Toggle(key))" />
                         <span>@TextSelector(elem)</span>
-                    </label> 
+                    </label>
                 }
             </div>
 
-            <div class="dropdown-footer">
-                <button class="clear-btn" @onclick="ClearAll">Clear</button>
+            <div class="multiselect-dropdown-footer">
+                <button class="multiselect-clear-btn" @onclick="ClearAll">Clear</button>
             </div>
         </div>
     </div>
@@ -50,14 +50,14 @@
         gap: 0.25rem;
     }
 
-    .textbox-label {
+    .multiselect-textbox-label {
         font-size: 0.85rem;
         color: #ccc;
         font-weight: 500;
         padding-left: 4px;
     }
 
-    .dropdown-toggle {
+    .multiselect-dropdown-toggle {
         display: flex;
         align-items: center;
         background: rgba(255,255,255,0.06);
@@ -69,12 +69,12 @@
         gap: 0.5rem;
     }
 
-    .label {
+    .multiselect-label {
         font-weight: 600;
         font-size: 0.85rem;
     }
 
-    .dropdown-menu {
+    .multiselect-dropdown-menu {
         position: absolute;
         display: flex;
         flex-direction: column;
@@ -94,13 +94,13 @@
         padding: 1rem;
     }
 
-        .dropdown-menu.show {
+        .multiselect-dropdown-menu.show {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
 
-        .dropdown-menu.hide {
+        .multiselect-dropdown-menu.hide {
             opacity: 0;
             transform: translateY(-10px);
             pointer-events: none;
@@ -113,7 +113,7 @@
         height: 42px;
     }
 
-    .count {
+    .multiselect-count {
         background: #444;
         padding-left: 8px;
         padding-right: 9px;
@@ -123,12 +123,19 @@
         font-size: 0.8rem;
     }
 
-    .arrow {
-        font-size: 0.9rem;
-        opacity: 0.6;
+    .multiselect-arrow {
+        font-size: 1.5rem;
+        line-height: 0;
+        opacity: .6;
+        display: inline-block;
+        transition: transform .25s ease;
     }
 
-    .dropdown-options {
+        .multiselect-arrow.up {
+            transform: rotate(-180deg);
+        }
+
+    .multiselect-dropdown-options {
         max-height: 340px;
         overflow-y: auto;
         display: flex;
@@ -137,7 +144,7 @@
         padding-bottom: 1rem;
     }
 
-    .option-item {
+    .multiselect-option-item {
         display: flex;
         align-items: center;
         gap: 0.75rem;
@@ -146,7 +153,7 @@
         padding: 6px 0;
     }
 
-        .option-item input[type="checkbox"] {
+        .multiselect-option-item input[type="checkbox"] {
             accent-color: #5f8fff;
             width: 18px;
             height: 18px;
@@ -154,14 +161,14 @@
         }
 
 
-    .dropdown-footer {
+    .multiselect-dropdown-footer {
         display: flex;
         justify-content: space-between;
         border-top: 1px solid rgba(255,255,255,0.1);
         padding-top: 0.75rem;
     }
 
-    .clear-btn {
+    .multiselect-clear-btn {
         width: 100%;
         padding: 0.4rem 0.8rem;
         border-radius: 6px;
@@ -176,8 +183,8 @@
         font-weight: 600;
     }
 
-    .clear-btn:hover {
-        background: rgba(95, 143, 255, 0.1);
-        border-color: #5f8fff;
-    }
+        .multiselect-clear-btn:hover {
+            background: rgba(95, 143, 255, 0.1);
+            border-color: #5f8fff;
+        }
 </style>
