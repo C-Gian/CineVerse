@@ -14,7 +14,7 @@ else
 
         <div class="search-container">
             <div class="search-box">
-                <span class="icon">🔍</span>
+                <Icon Name="IconName.Search" class="icon" />
                 <input type="text"
                        placeholder="Search for a movie…"
                        @bind="_query"
@@ -54,6 +54,11 @@ else
 
             <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
 
+            <TextboxComponent Label="Region"
+                              InputType="number"
+                              Placeholder="US"
+                              @bind-Value="Region"
+                              OnBlur="ValidateRegion" />
        </div>
         
     </div>

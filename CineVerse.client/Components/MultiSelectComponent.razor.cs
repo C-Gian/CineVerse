@@ -20,7 +20,7 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
     public bool IsOpen { get; set; } = false;
     ElementReference MenuRef;
 
-    string ToggleText => SelectedValues.Count == 0 ? "Nessuna" : "Selezionate";
+    private string ToggleText => SelectedValues.Count == 0 ? "No Selection" : "Selected";
 
     async Task Toggle(TValue id)
     {

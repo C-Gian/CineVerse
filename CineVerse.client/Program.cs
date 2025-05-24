@@ -18,6 +18,7 @@ builder.Services.AddSingleton(AppTheme.Dark);
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection("Api"));
 

@@ -22,8 +22,8 @@ public class GenreService(RestClient rest) : IGenreService
     }
 }
 
-public sealed class GenreEnvelope
-{
-    [JsonPropertyName("genres")]
-    public List<Genre> Genres { get; set; } = [];
-}
+//public sealed class GenreEnvelope
+//{
+//    [JsonPropertyName("genres")]
+//    public List<Genre> Genres { get; set; } = [];
+//}

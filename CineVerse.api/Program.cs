@@ -22,6 +22,7 @@ builder.Services.AddHttpClient("tmdb", (sp, client) =>
 
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
 
 
 builder.Services.AddDbContext<CineverseDb>(opt =>

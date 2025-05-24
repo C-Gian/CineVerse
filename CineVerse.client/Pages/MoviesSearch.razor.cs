@@ -10,13 +10,16 @@ public partial class MoviesSearch
     #region Properties
     [Inject] public IMovieService MovieService { get; set; }
     [Inject] public IGenreService GenreService { get; set; }
+    [Inject] public ICountryService CountryService { get; set; }
     [Inject] public AppState AppState { get; set; }
     public List<MovieResultResponse> Movies { get; set; } = [];
     public List<Genre> Genres { get; set; } = [];
+    public List<CountryApiResponse> Countries { get; set; } = [];
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
     public string? FromYear { get; set; } = string.Empty;
     public string? ToYear { get; set; } = string.Empty;
+    public string? Region { get; set; } = string.Empty;
     public List<int> SelectedGenres { get; set; } = [];
     public int? RatingLess { get; set; }
     public int? RatingGreater { get; set; }
@@ -49,23 +52,18 @@ public partial class MoviesSearch
 
     #region Methods
 
-    private Task HandleGenreChange((List<int> include, List<int> exclude) values)
-    {
-        IncludedGenres = values.include;
-        ExcludedGenres = values.exclude;
-        return Task.CompletedTask;
-    }
+    
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         IsLoading = true;
         var allProviders = await MovieService.GetGeneralWatchProviders(LANGUAGE, REGION);
-
         WatchProviders = allProviders.Results
             .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)                
             .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
+        Countries = await CountryService.GetCountriesAsync();
         await LoadMoviesAsync(1);
         await LoadGenresAsync();
         IsLoading = false;
@@ -145,10 +143,25 @@ public partial class MoviesSearch
         }
     }
 
+    private void ValidateRegion(FocusEventArgs e)
+    {
+        //if ()
+        //{
+
+        //}
+    }
+
     private Task HandleRatingChanged((int? less, int? greater) values)
     {
         RatingLess = values.less;
         RatingGreater = values.greater;
+        return Task.CompletedTask;
+    }
+
+    private Task HandleGenreChange((List<int> include, List<int> exclude) values)
+    {
+        IncludedGenres = values.include;
+        ExcludedGenres = values.exclude;
         return Task.CompletedTask;
     }
 

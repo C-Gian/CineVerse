@@ -18,6 +18,8 @@ public partial class GenresFilterComponent
             ? ""
             : $"{IncludedGenres.Count} in | {ExcludedGenres.Count} ex";
 
+    private string ToggleText => (IncludedGenres.Count == 0 && ExcludedGenres.Count == 0) ? "No Selection" : "Selected";
+
     private async Task ToggleGenre(int genreId, bool include)
     {
         if (include)

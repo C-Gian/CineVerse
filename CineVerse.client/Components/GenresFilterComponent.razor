@@ -5,7 +5,7 @@
         <div class="genre-dropdown-toggle" 
             @onpointerdown="TogglePointer"
              @onpointerdown:stopPropagation="true">
-            <span class="genre-label">Genres</span>
+            <span class="genre-label">@ToggleText</span>
             <span class="genre-value">@LabelText</span>
             <span class="genre-arrow @(IsOpen ? "up" : null)">▾</span>
         </div>
