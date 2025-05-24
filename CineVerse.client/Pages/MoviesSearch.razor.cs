@@ -20,6 +20,7 @@ public partial class MoviesSearch
     public string? FromYear { get; set; } = string.Empty;
     public string? ToYear { get; set; } = string.Empty;
     public string? Region { get; set; } = string.Empty;
+    public string? WatchRegion { get; set; } = string.Empty;
     public List<int> SelectedGenres { get; set; } = [];
     public int? RatingLess { get; set; }
     public int? RatingGreater { get; set; }
@@ -143,12 +144,13 @@ public partial class MoviesSearch
         }
     }
 
-    private void ValidateRegion(FocusEventArgs e)
+    private void ValidateRegion(string element)
     {
-        //if ()
-        //{
-
-        //}
+        var codedCountries = Countries.Select(c => c.Code).ToList();
+        if (!codedCountries.Contains(element))
+        {
+            var testo = 0;
+        }
     }
 
     private Task HandleRatingChanged((int? less, int? greater) values)

@@ -4,12 +4,12 @@ namespace CineVerse.client.ApiResponses;
 
 public class CountryApiResponse
 {
-    [JsonPropertyName("iso_3166_1")]
+    [JsonPropertyName("Code")]
     public string Code { get; set; } = "";
 
-    [JsonPropertyName("english_name")]
+    [JsonPropertyName("EnglishName")]
     public string EnglishName { get; set; } = "";
 
-    [JsonPropertyName("native_name")]
+    [JsonPropertyName("NativeName")]
     public string NativeName { get; set; } = "";
 }

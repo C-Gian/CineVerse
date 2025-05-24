@@ -55,10 +55,16 @@ else
             <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
 
             <TextboxComponent Label="Region"
-                              InputType="number"
+                              InputType="text"
                               Placeholder="US"
                               @bind-Value="Region"
-                              OnBlur="ValidateRegion" />
+                              OnBlur="@(() => ValidateRegion(Region))" />
+
+            <TextboxComponent Label="Watch Region"
+                              InputType="text"
+                              Placeholder="US"
+                              @bind-Value="WatchRegion"
+                              OnBlur="@(() => ValidateRegion(WatchRegion))" />
        </div>
         
     </div>
