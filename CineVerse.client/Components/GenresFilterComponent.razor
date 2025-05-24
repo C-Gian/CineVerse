@@ -11,7 +11,7 @@
         </div>
 
         <div class="genre-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
-            <div class="dropdown-options">
+            <div class="genre-dropdown-options">
                 <div class="genre-table-header">
                     <span>Genre</span>
                     <div class="d-inline-flex align-items-center gap-1">
@@ -42,8 +42,8 @@
                 }
             </div>
 
-            <div class="dropdown-footer">
-                <button class="clear-btn" @onclick="ClearAll">Clear All</button>
+            <div class="genre-dropdown-footer">
+                <button class="genre-clear-btn" @onclick="ClearAll">Clear All</button>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@
             pointer-events: none;
         }
 
-    .dropdown-options {
+    .genre-dropdown-options {
         max-height: 400px;
         overflow-y: auto;
         display: flex;
@@ -107,18 +107,6 @@
     .genre-filtre-item-checkbox {
         margin-left: 30px;
     }
-
-    .icon-inline {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-        .icon-inline svg {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
 
     .genre-dropdown-toggle {
         display: flex;
@@ -198,14 +186,14 @@
         cursor: pointer;
     }
 
-    .dropdown-footer {
+    .genre-dropdown-footer {
         display: flex;
         justify-content: space-between;
         border-top: 1px solid rgba(255,255,255,0.1);
         padding-top: 0.75rem;
     }
 
-    .clear-btn {
+    .genre-clear-btn {
         width: 100%;
         padding: 0.4rem 0.8rem;
         border-radius: 6px;
@@ -220,7 +208,7 @@
         font-weight: 600;
     }
 
-        .clear-btn:hover {
+    .genre-clear-btn:hover {
             background: rgba(95, 143, 255, 0.1);
             border-color: #5f8fff;
         }

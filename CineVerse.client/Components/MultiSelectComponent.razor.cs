@@ -24,11 +24,15 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     async Task Toggle(TValue id)
     {
+        Console.WriteLine("Toggle called");
         if (SelectedValues.Contains(id))
+        {
             SelectedValues.Remove(id);
+        }
         else
+        {
             SelectedValues.Add(id);
-
+        }
         await SelectedValuesChanged.InvokeAsync(SelectedValues);
     }
 
@@ -40,8 +44,10 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     async Task TogglePointer()
     {
+        Console.WriteLine("TogglePointer called");
         if (IsOpen)
         {
+            Console.WriteLine("TogglePointer called2");
             IsOpen = false;
             return;
         }
@@ -52,14 +58,17 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     async Task LostFocus(FocusEventArgs _)
     {
+        Console.WriteLine("LostFocus");
         IsOpen = false;
         await Task.Delay(100);
     }
 
     async Task GainedFocus(FocusEventArgs _)
     {
+        Console.WriteLine("GainedFocus");
         if (!IsOpen)
         {
+            Console.WriteLine("GainedFocus2");
             IsOpen = true;
             await MenuRef.FocusAsync();
         }
