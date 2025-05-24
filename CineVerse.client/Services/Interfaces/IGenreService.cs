@@ -1,4 +1,4 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 
 namespace CineVerse.client.Services.Interfaces;
 

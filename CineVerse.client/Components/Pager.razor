@@ -1,0 +1,183 @@
+﻿@typeparam TItem
+@using System.Linq
+@using CineVerse.client.Services.Interfaces
+
+<div class="pager">
+	<div class="pagination-controls">
+
+		<button class="nav-btn" @onclick="FirstPage" disabled="@IsFirstPageDisabled">FirstPage</button>
+
+		<button class="nav-btn" @onclick="PreviousPage" disabled="@IsPreviousDisabled">Previous</button>
+
+		@foreach (var pageNumber in PageWindow)
+		{
+			<button @onclick="() => GoToPage(pageNumber)"
+					class="page-btn @(CurrentPage == pageNumber ? "active" : null)"
+					disabled="@(CurrentPage == pageNumber)">
+				@pageNumber
+			</button>
+		}
+
+		<button class="nav-btn" @onclick="NextPage" disabled="@IsNextDisabled">Next</button>
+
+		<button class="nav-btn" @onclick="LastPage" disabled="@IsLastPageDisabled">Last Page</button>
+	</div>
+</div>
+
+@code {
+
+	#region Properties
+
+	[Parameter]
+	public IEnumerable<TItem> Items { get; set; }
+
+	[Parameter]
+	public EventCallback<int> PageChanged { get; set; }
+
+	[Parameter]
+	public int CurrentPage { get; set; }
+
+	#endregion
+
+	#region Fields
+
+	private int PageSize { get; set; } = 40;
+	private int TotalPages { get; set; } = 500;
+	private List<TItem> PaginatedData => Items.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+	private bool IsFirstPageDisabled => CurrentPage == 1;
+	private bool IsPreviousDisabled => CurrentPage == 1;
+	private bool IsNextDisabled => CurrentPage == TotalPages;
+	private bool IsLastPageDisabled => CurrentPage == TotalPages;
+	private const int MaxButtons = 10;
+	private int _current => Math.Clamp(CurrentPage, 1, TotalPages);
+
+	#endregion
+
+	private void FirstPage()
+	{
+		CurrentPage = 1;
+
+		PageChanged.InvokeAsync(CurrentPage);
+	}
+
+	private void NextPage()
+	{
+		if (CurrentPage < TotalPages)
+		{
+			CurrentPage++;
+		}
+		PageChanged.InvokeAsync(CurrentPage);
+	}
+
+	private void PreviousPage()
+	{
+		if (CurrentPage > 1)
+		{
+			CurrentPage--;
+		}
+
+		PageChanged.InvokeAsync(CurrentPage);
+	}
+
+	private void LastPage()
+	{
+		CurrentPage = TotalPages;
+
+		PageChanged.InvokeAsync(CurrentPage);
+	}
+
+	private void GoToPage(int pageNumber)
+	{
+		CurrentPage = pageNumber;
+
+		PageChanged.InvokeAsync(pageNumber);
+	}
+
+	private IEnumerable<int> PageWindow
+	{
+		get
+		{
+			if (TotalPages <= MaxButtons)
+				return Enumerable.Range(1, TotalPages);
+
+			int half = MaxButtons / 2;
+			int start = _current - half;
+			int end = _current + half - 1;
+
+			if (start < 1) { end += 1 - start; start = 1; }
+			if (end > TotalPages) { start -= end - TotalPages; end = TotalPages; }
+
+			start = Math.Max(1, start);
+			return Enumerable.Range(start, MaxButtons);
+		}
+	}
+}
+
+<style>
+	.pager {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: .55rem;
+		margin: 2rem 0;
+		flex-wrap: wrap;
+	}
+
+	.nav-btn {
+		margin-left: 10px;
+		margin-right: 10px;
+		min-width: 66px;
+		padding: .45rem .9rem;
+		font-size: .85rem;
+		font-weight: 600;
+		border-radius: 7px;
+		border: 1px solid rgba(255,255,255,.08);
+		background: rgba(255,255,255,.03);
+		color: #AAB0C0;
+		cursor: pointer;
+		transition: background .25s, border .25s, color .25s;
+	}
+
+		.nav-btn:hover:not(:disabled) {
+			background: rgba(255,255,255,.06);
+			border-color: rgba(255,255,255,.12);
+			color: #fff;
+		}
+
+		.nav-btn:disabled {
+			opacity: .35;
+			cursor: default;
+		}
+
+	.page-btn {
+		margin-left: 2px;
+		margin-right: 2px;
+		width: 40px;
+		height: 40px;
+		font-size: .9rem;
+		border-radius: 10px;
+		border: 1px solid rgba(255,255,255,.06);
+		background: rgba(255,255,255,.03);
+		color: #AAB0C0;
+		cursor: pointer;
+		transition: background .25s, color .25s, transform .2s;
+	}
+
+		.page-btn:hover:not(:disabled) {
+			transform: translateY(-3px);
+			background: rgba(255,255,255,.07);
+			color: #fff;
+		}
+
+		.page-btn.active {
+			background: #7459ff;
+			border-color: #7459ff;
+			color: #fff;
+		}
+
+			.page-btn.active:disabled {
+				opacity: 1;
+				cursor: default;
+			}
+
+</style>

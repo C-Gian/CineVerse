@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using CineVerse.client.Models;
+using CineVerse.client.ApiResponses;
 using CineVerse.client.Services.Interfaces;
 using RestSharp;
 
@@ -22,8 +22,8 @@ public class GenreService(RestClient rest) : IGenreService
     }
 }
 
-public sealed class GenreEnvelope
-{
-    [JsonPropertyName("genres")]
-    public List<Genre> Genres { get; set; } = [];
-}
+//public sealed class GenreEnvelope
+//{
+//    [JsonPropertyName("genres")]
+//    public List<Genre> Genres { get; set; } = [];
+//}

@@ -1,0 +1,367 @@
+﻿@page "/movie/{MovieId:int}"
+
+@using CineVerse.client.Components
+@using CineVerse.client.ApiResponses
+
+@if (Movie is null)
+{
+	<div class="movie-loading">Loading...</div>
+}
+else
+{
+	<div class="detail-layout">
+
+		<!-- HEADER -->
+		<div class="header-section" style="background-image: url('@BackdropUrl(Movie.BackdropPath)')">
+			<div class="header-overlay">
+				<div class="header-content">
+					<div class="header-left">
+
+						<div style="display: flex; flex-direction: column; gap: 1.5rem;">
+							<div style="display: flex; flex-direction: column; gap: 0.3rem;">
+								<h1>@Movie.Title</h1>
+								<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+									<div class="meta-info">
+										<span>@Movie.ReleaseDate</span>
+										<span>|</span>
+										<span>@Movie.OriginalLanguage.ToUpper()</span>
+										<span>|</span>
+										<span>@(Movie.Runtime?.ToString() + " min")</span>
+										<span>|</span>
+										<span class="rating">⭐ @Movie.VoteAverage</span>
+										<span>@Movie.VoteCount votes</span>
+									</div>
+
+									<GenreTags Genres="@Movie.Genres.Select(g => g.Name).ToList()" Width="100%" />
+								</div>
+							</div>
+
+							<div style="display: flex; flex-direction: column;">
+								<h3>Overview</h3>
+								<p class="overview-text">@Movie.Overview</p>
+							</div>
+						</div>
+
+						<div class="providers-container">
+							@{
+								var providerOptions = new List<(string Name, List<ProviderOption> Providers)>
+												{
+												("Flatrate", FlatrateProviders),
+												("Rent", RentProviders),
+												("Buy", BuyProviders)
+												};
+
+								foreach (var providerList in providerOptions)
+								{
+									@if (providerList.Providers.Any())
+									{
+										<div class="providers-section">
+											<span style="font-size: 1rem;">@providerList.Name:</span>
+											<div class="provider-list">
+												@foreach (var p in providerList.Providers)
+												{
+													<div class="provider-card" title="@p.ProviderName">
+														<img src="@LogoUrl(p.LogoPath, p.ProviderName)" alt="@p.ProviderName" class="provider-logo" />
+													</div>
+												}
+											</div>
+										</div>
+									}
+								}
+							}
+						</div>
+					</div>
+
+					<div class="header-right">
+						<img class="poster" src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- CAST -->
+		<div class="section">
+			<h2>Top Billed Cast</h2>
+			<div class="cast-list">
+				@foreach (var cast in MovieCast.Cast.Take(10))
+				{
+					<div class="cast-card">
+						<img src="@(string.IsNullOrWhiteSpace(cast.ProfilePath) ? "Images/cast-placeholder.jpg" : $"https://image.tmdb.org/t/p/w185{cast.ProfilePath}")" alt="@cast.Name" />
+						<div class="cast-name">@cast.Name</div>
+						<div class="cast-role">@cast.Character</div>
+					</div>
+				}
+			</div>
+		</div>
+
+
+		<!-- IMAGES -->
+		<div class="section">
+			<h2>Media</h2>
+			<div class="media-grid">
+				@foreach (var (img, i) in MovieImages.Backdrops.Take(9).Select((img, i) => (img, i)))
+				{
+					<div class="media-cell cell-@i">
+						<img src="@BackdropUrl(img.FilePath)" alt="Still" />
+					</div>
+				}
+			</div>
+		</div>
+
+
+		<!-- RECOMMENDATIONS -->
+		<div style="padding: 2rem 3rem; margin-top: 50px;">
+			<CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="MovieRecommendations.Results" VisibleCount="7" AutoplayMs="5000" SectionName="Similar Movies" CardWidth="200" Margin="100" IsLink="false">
+				<SlideTemplate Context="movie">
+					<div style="width: 200px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</CineVerse.client.Components.Carousel>
+		</div>
+	</div>
+}
+
+<style>
+	.detail-layout {
+		display: flex;
+		flex-direction: column;
+		color: #fff;
+		background-color: #0e0e16;
+	}
+
+	.header-section {
+		position: relative;
+		height: fit-content;
+		background-size: cover;
+		background-position: center;
+		display: flex;
+		align-items: flex-end;
+	}
+
+	.header-overlay {
+		background: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(6px);
+		height: 100%;
+		width: 100%;
+		padding: 2rem 3rem;
+	}
+
+	.header-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 2rem;
+	}
+
+	.poster {
+		width: 250px;
+		border-radius: 12px;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+		flex-shrink: 0;
+	}
+
+	.header-left {
+		display: flex;
+		flex-direction: column;
+		gap: 5rem;
+		max-width: 60%;
+	}
+
+		.header-left h1 {
+			font-size: 2.5rem;
+			font-weight: 700;
+			margin: 0;
+		}
+
+	.meta-info {
+		font-size: 0.85rem;
+		color: #bbb;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.overview-text {
+		font-size: 1rem;
+		line-height: 1.6;
+		color: #ddd;
+	}
+
+	.section {
+		padding: 2rem 3rem;
+	}
+
+		.section h2 {
+			font-size: 1.3rem;
+			margin-bottom: 1rem;
+		}
+
+	.media-grid {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		grid-template-rows: repeat(2, 140px);
+		gap: 1rem;
+		grid-auto-flow: dense;
+	}
+
+	.media-cell {
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+		.media-cell img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 12px;
+		}
+
+	.cell-0 {
+		grid-column: span 2;
+		grid-row: span 2;
+	}
+
+	.cell-1 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+
+	.cell-2 {
+		grid-column: span 2;
+		grid-row: span 1;
+	}
+
+	.cell-3 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+
+	.cell-4 {
+		grid-column: span 1;
+		grid-row: span 2;
+	}
+
+	.cell-5 {
+		grid-column: span 2;
+		grid-row: span 1;
+	}
+
+	.cell-6 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+
+	.cell-7 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+
+	.cell-8 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+
+	.cell-9 {
+		grid-column: span 1;
+		grid-row: span 1;
+	}
+
+	.cast-list {
+		display: flex;
+		gap: 3rem;
+		overflow-x: auto;
+		padding-bottom: 0.5rem;
+	}
+
+	.cast-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100px;
+		text-align: center;
+		color: #ccc;
+		gap: 0.25rem;
+	}
+
+		.cast-card img {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-bottom: 0.5rem;
+		}
+
+	.cast-name {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: #fff;
+	}
+
+	.cast-role {
+		font-size: 0.75rem;
+		color: #aaa;
+	}
+
+	.image-gallery {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+	}
+
+		.image-gallery img {
+			width: 100%;
+			height: 140px;
+			object-fit: cover;
+			border-radius: 10px;
+		}
+
+	.rating {
+		color: #FFD700;
+		font-weight: 400;
+	}
+
+	.providers-container {
+		display: inline-flex;
+		align-items: center;
+		vertical-align: middle;
+		align-items: center;
+		gap: 3rem;
+		width: fit-content;
+		padding: 1rem 1rem;
+		border-radius: 12px;
+		backdrop-filter: blur(20px);
+	}
+
+	.providers-section {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.provider-list {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.provider-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+		text-align: center;
+		color: #ccc;
+		font-size: 0.85rem;
+	}
+
+		.provider-card img {
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			object-fit: cover;
+			background-color: transparent;
+		}
+
+</style>

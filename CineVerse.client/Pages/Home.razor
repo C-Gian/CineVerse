@@ -1,19 +1,77 @@
-﻿@page "/"
+﻿@using CineVerse.client.ApiResponses;
 
-@if (IsLoading)
-{
-    <MudProgressCircular Size="Size.Large" Class="m-6" />
-} else
-{
-    <MudGrid Spacing="@Spacing" Justify="Justify.Center">
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-    </MudGrid>
-}
+@page "/"
+@using CineVerse.client.Components;
+
+<div class="home-container">
+	@{
+		if (NowPlayingMovies.Any())
+		{
+			<CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="NowPlayingMovies" IsLink=true VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
+				<SlideTemplate Context="movie">
+					<div style="width: 300px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</CineVerse.client.Components.Carousel>
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
+
+	@{
+		if (UpcomingMovies.Any())
+		{
+			<div>
+				<SectionTitle SectionName="Upcoming Movies" IsLink="true" Link="/movies/list" />
+				<SplitSlider Movies="UpcomingMovies" MaxVisible="7" AutoplayMs="5000" />
+			</div>
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
+
+	@{
+		if (AppState.Genres.Any())
+		{
+			<div>
+				<SectionTitle SectionName="Genres" IsLink="false" />
+				<GenreGrid Movies="PopularMovies" />
+			</div>
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
+
+	@{
+		if (PopularMovies.Any())
+		{
+			<CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="PopularMovies" IsLink=true VisibleCount="7" AutoplayMs="5000" SectionName="Popular" CardWidth="200" Margin="100">
+				<SlideTemplate Context="movie">
+					<div style="width: 200px; height: 100%;">
+						<MovieCard Movie="movie" />
+					</div>
+				</SlideTemplate>
+			</CineVerse.client.Components.Carousel>
+		}
+		else
+		{
+			<MudProgressCircular Size="Size.Large" Class="m-6" />
+		}
+	}
+</div>
+
+<style>
+	.home-container {
+		display: flex;
+		flex-direction: column;
+		gap: 100px;
+		margin: 50px;
+	}
+</style>

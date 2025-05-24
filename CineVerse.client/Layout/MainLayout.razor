@@ -1,28 +1,98 @@
 ﻿@inherits LayoutComponentBase
+@inject MudTheme Theme
 
-<MudThemeProvider />
+<MudThemeProvider Theme="Theme" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<div class="page">
-	<div class="sidebar">
-		<NavMenu />
-	</div>
+<div class="layout-root">
 
-	<main>
-		<div class="top-row px-4">
-			<a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-		</div>
+    <!-- ▸ APP BAR ------------------------------------------------------>
+    <div class="appbar">
+        <button class="icon-btn" @onclick="ToggleDrawer">
+            <i class="material-icons">menu</i>
+        </button>
 
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
+        <div class="logo-area">
+            <img src="/cineverse-icon.png" width="38" />
+            <span class="logo-text">CINEVERSE</span>
+        </div>
+
+        <div class="flex-spacer"></div>
+
+        <img class="avatar" src="https://i.pravatar.cc/40" />
+    </div>
+
+    <!-- ▸ MAIN --------------------------------------------------------->
+    <div class="main-area">
+
+        <!-- DRAWER -->
+        <nav class="drawer @( _drawerOpen ? "open" : "closed")"
+             style="--drawer-w:72px; padding: 0 1rem;">
+            <ul class="nav-list">
+                <li>
+                    <a href="/" class="nav-link @(CurrentUrl=="/" ? "active":null)">
+                        <i class="material-icons">home</i>
+                        <span class="nav-text">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/movies/search" class="nav-link @(CurrentUrl=="/movies/search" ? "active":null)">
+                        <i class="material-icons">movie</i>
+                        <span class="nav-text">All Movies</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- BODY -->
+        <main class="content-area">
+            @Body
+        </main>
+    </div>
 </div>
 
-<div id="blazor-error-ui">
-	An unhandled error has occurred.
-	<a href="" class="reload">Reload</a>
-	<a class="dismiss">🗙</a>
-</div>
+<style>
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        padding: .65rem 1rem;
+        color: #AAB0C0;
+        text-decoration: none;
+        font-size: .95rem;
+        border-radius: 10px;
+        transition: background 0.25s, color 0.25s;
+    }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.5);
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: white;
+        }
+
+    .drawer.closed .nav-text {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .drawer.open .nav-text {
+        opacity: 1;
+    }
+
+</style>
+
+@code {
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+    private string CurrentUrl => "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Split('?')[0];
+
+
+    private bool _drawerOpen = true;
+}

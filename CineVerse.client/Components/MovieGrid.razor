@@ -1,0 +1,21 @@
+﻿@using CineVerse.client.ApiResponses
+
+<div class="poster-grid">
+	@foreach (var movie in Movies)
+    {
+		<MovieCard Movie="movie" />
+    }
+</div>
+
+<Pager TItem="MovieResultResponse" Items="Movies" PageChanged="PageChanged" CurrentPage="CurrentPage"></Pager>
+
+
+<style>
+	.poster-grid {
+		display: grid;
+		grid-template-columns: repeat(8, 175px);
+		gap: 1.25rem;
+		padding: 0.5rem;
+		justify-content: space-between;
+	}
+</style>

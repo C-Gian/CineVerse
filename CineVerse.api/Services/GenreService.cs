@@ -1,6 +1,6 @@
 ﻿using CineVerse.api.ApiResponses;
 using CineVerse.api.Data;
-using CineVerse.api.Models;
+using CineVerse.api.Entities;
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +31,7 @@ public class GenreService : IGenreService
 
     public async Task<List<GenreResultResponse>> GetMovieGenresFromApi(CancellationToken ct)
     {
+        Console.WriteLine("Fetching genres from TMDB API...");
         var url = $"genre/movie/list?api_key={_apiKey}";
 
         var result = await _http.GetFromJsonAsync<GenreResponse>(url, ct)

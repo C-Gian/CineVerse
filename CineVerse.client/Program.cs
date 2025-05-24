@@ -10,8 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMudServices();
 
+builder.Services.AddBlazorBootstrap();
+
+builder.Services.AddSingleton<AppState>();
+
+builder.Services.AddSingleton(AppTheme.Dark);
+
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection("Api"));
 

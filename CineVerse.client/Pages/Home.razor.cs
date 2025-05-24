@@ -1,17 +1,14 @@
-﻿using CineVerse.client.Models;
+﻿using CineVerse.client.ApiResponses;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
-
 namespace CineVerse.client.Pages;
 
 public partial class Home
 {
     #region Properties
 
-    public List<Movie> Movies { get; set; } = new();
-    public List<Genre> Genres { get; set; } = new();
-    public bool IsLoading { get; set; } = false;
-    public int Spacing { get; set; } = 6;
+    [Inject]
+    public AppState AppState { get; set; }
 
     [Inject]
     public IMovieService MovieService { get; set; }
@@ -19,27 +16,107 @@ public partial class Home
     [Inject]
     public IGenreService GenreService { get; set; }
 
+    public List<MovieResultResponse> NowPlayingMovies { get; set; } = new();
+    public List<MovieResultResponse> PopularMovies { get; set; } = new();
+    public List<MovieResultResponse> UpcomingMovies { get; set; } = new();
+    public List<Genre> Genres { get; set; } = new();
+    public bool IsLoading { get; set; } = false;
+    public int CurrentPage { get; set; } = 1;
+
     #endregion
+
+
+    #region Fields
+
+    private readonly SemaphoreSlim _gate = new(1, 1);
+
+    #endregion
+
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         IsLoading = true;
-        Movies = await LoadMoviesAsync();
-        Genres = await LoadGenresAsync();
+        AppState.Genres = await LoadGenresAsync();
+        await LoadNowPlayingMoviesAsync(1);
+        await LoadPopularMoviesAsync(1);
+        await LoadUpcomingMoviesAsync(1);
         IsLoading = false;
     }
 
-    private async Task<List<Movie>> LoadMoviesAsync()
+    private async Task LoadNowPlayingMoviesAsync(int pageNumber)
     {
-        var movies = await MovieService.GetPopularMovies(1);
-        movies ??= new List<Movie>();
-        return movies;
+        try
+        {
+            NowPlayingMovies = [];
+
+            var movieResponse = await MovieService.GetNowPlayingMovies(pageNumber) ?? new MoviesApiResponse();
+            var movieResponse2 = await MovieService.GetNowPlayingMovies(pageNumber+1) ?? new MoviesApiResponse();
+
+            NowPlayingMovies.AddRange(movieResponse.Results);
+            NowPlayingMovies.AddRange(movieResponse2.Results);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private async Task LoadPopularMoviesAsync(int pageNumber)
+    {
+        await _gate.WaitAsync();
+
+        try
+        {
+            PopularMovies = [];
+
+            var movieResponse = await MovieService.GetPopularMovies((pageNumber * 2) - 1) ?? new MoviesApiResponse();
+            var movieResponse2 = await MovieService.GetPopularMovies(pageNumber * 2) ?? new MoviesApiResponse();
+
+            PopularMovies.AddRange(movieResponse.Results);
+            PopularMovies.AddRange(movieResponse2.Results);
+
+            CurrentPage = pageNumber;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+    
+    private async Task LoadUpcomingMoviesAsync(int pageNumber)
+    {
+        try
+        {
+            UpcomingMovies = [];
+
+            while (UpcomingMovies.Count < 20)
+            {
+                var movieResponse = await MovieService.GetUpcomingMovies(pageNumber++) ?? new MoviesApiResponse();
+
+                foreach (var item in movieResponse.Results)
+                {
+                    if (!UpcomingMovies.Select(x => x.Id).Contains(item.Id) && DateTime.Parse(item.ReleaseDate) >= DateTime.UtcNow)
+                    {
+                        UpcomingMovies.Add(item);
+                    }
+                }
+            }
+
+            UpcomingMovies.Sort((x, y) => DateTime.Parse(x.ReleaseDate).CompareTo(DateTime.Parse(y.ReleaseDate)));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     private async Task<List<Genre>> LoadGenresAsync()
     {
-        var genres = await GenreService.GetGenres();
-        genres ??= new List<Genre>();
-        return genres;
+        return await GenreService.GetGenres() ?? new List<Genre>();
     }
 }

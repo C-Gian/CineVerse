@@ -1,0 +1,178 @@
+﻿@page "/movies/search"
+@page "/movies/list"
+
+@using CineVerse.client.Components
+@using CineVerse.client.ApiResponses
+
+@if (IsLoading)
+{
+    <MudProgressCircular Size="Size.Large" Class="m-6" />
+}
+else
+{
+    <div class="search-panel">
+
+        <div class="search-container">
+            <div class="search-box">
+                <Icon Name="IconName.Search" class="icon" />
+                <input type="text"
+                       placeholder="Search for a movie…"
+                       @bind="_query"
+                       @onkeydown="HandleKeyDown" />
+            </div>
+
+            <button class="search-btn" @onclick="() => LoadMoviesAsync(1)">
+                SEARCH
+            </button>
+        </div>
+
+        <div class="filters-container">
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <GenresFilterComponent Genres="Genres" OnGenreChanged="HandleGenreChange"></GenresFilterComponent>
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <RatingFilter OnRatingChanged="HandleRatingChanged" />
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="number"
+                                  Placeholder="e.g. 2000"
+                                  @bind-Value="FromYear"
+                                  OnBlur="ValidateFromYearRange" />
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="number"
+                                  Placeholder="e.g. 2024"
+                                  @bind-Value="ToYear"
+                                  OnBlur="ValidateToYearRange" />
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <MultiSelectComponent TItem=GeneralWatchProvider TValue=int
+                                      Items="WatchProviders"
+                                      TextSelector="p => p.ProviderName"
+                                      ValueSelector="p => p.ProviderId"
+                                      @bind-SelectedValues="SelectedProviderIds" />
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="text"
+                                  Placeholder="US"
+                                  @bind-Value="Region"
+                                  OnBlur="@(() => ValidateRegion(Region))" />
+            </TitleWrapperComponent>
+
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="text"
+                                  Placeholder="US"
+                                  @bind-Value="WatchRegion"
+                                  OnBlur="@(() => ValidateRegion(WatchRegion))" />
+            </TitleWrapperComponent>
+
+        </div>
+
+    </div>
+
+
+    @if (Movies.Any())
+    {
+        <MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="CurrentPage" />
+    }
+    else
+    {
+        <h1>NO MOVIES</h1>
+    }
+}
+
+
+<style>
+    .search-panel {
+        position: relative;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 50px;
+        padding: 24px;
+        gap: 20px;
+        border-radius: 18px;
+        background: rgba(13,17,31,1);
+        backdrop-filter: blur(12px);
+    }
+
+    .search-container {
+        display: flex;
+        width: 100%;
+    }
+
+    .search-box {
+        position: relative;
+        flex: 1;
+    }
+
+        .search-box .icon {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: #7a7a7a;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 56px;
+            padding: 0 18px 0 48px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(200,200,200,0.02);
+            color: #fff;
+            font-size: 1rem;
+            outline: none !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.01) inset;
+        }
+
+            .search-box input::placeholder {
+                color: #8a8da5;
+            }
+
+    .search-btn {
+        min-width: 180px;
+        height: 56px;
+        border-radius: 12px;
+        background: #2d2668;
+        border: 1px solid #2d2668;
+        color: #fff;
+        font-weight: 600;
+        letter-spacing: .4px;
+        cursor: pointer;
+        transition: background .25s, border .25s;
+    }
+
+        .search-btn:hover {
+            background: #6047e6;
+            border-color: #7a68ff;
+        }
+
+        .search-btn:active {
+            background: #4b39c4;
+            border-color: #7a68ff;
+        }
+
+    .filters-container {
+        display: flex;
+        gap: 20px;
+        align-items: end;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+</style> 

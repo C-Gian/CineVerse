@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CineVerse.api.Models; 
+﻿using CineVerse.api.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
+using System.Reflection.Emit;
 
 namespace CineVerse.api.Data;
 
@@ -8,6 +10,7 @@ public class CineverseDb : DbContext
     public CineverseDb(DbContextOptions<CineverseDb> opts) : base(opts) { }
 
     public DbSet<GenreEntity> Genres => Set<GenreEntity>();
+    public DbSet<CountryEntity> Countries => Set<CountryEntity>();
 
     #region ModelCreating
 
@@ -36,6 +39,15 @@ public class CineverseDb : DbContext
             new GenreEntity { Id = 10752, Name = "War" },
             new GenreEntity { Id = 37, Name = "Western" }
         );
+
+        mb.Entity<CountryEntity>(e =>
+        {
+            e.ToTable("Countries");
+            e.HasKey(c => c.Code);
+            e.Property(c => c.Code).HasMaxLength(2).IsRequired();
+            e.Property(c => c.EnglishName).HasMaxLength(100).IsRequired();
+            e.Property(c => c.NativeName).HasMaxLength(100).IsRequired();
+        });
     }
 
     #endregion
