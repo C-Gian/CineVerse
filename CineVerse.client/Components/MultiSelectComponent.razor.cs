@@ -1,13 +1,11 @@
-﻿using CineVerse.client.ApiResponses;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Components;
 
 public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 {
-    [Parameter] public string? Label { get; set; }
-
+    #region Properties 
     [Parameter] public IEnumerable<TItem> Items { get; set; } = Enumerable.Empty<TItem>();
 
     [Parameter] public Func<TItem, string> TextSelector { get; set; } = default!;
@@ -18,9 +16,19 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
     [Parameter] public EventCallback<List<TValue>> SelectedValuesChanged { get; set; }
 
     public bool IsOpen { get; set; } = false;
+    private string ToggleText => SelectedValues.Count == 0 ? "No Selection" : "Selected";
+
+    #endregion
+
+
+    #region Fields
+
     ElementReference MenuRef;
 
-    private string ToggleText => SelectedValues.Count == 0 ? "No Selection" : "Selected";
+    #endregion
+
+
+    #region Methods
 
     async Task Toggle(TValue id)
     {
@@ -73,4 +81,6 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
             await MenuRef.FocusAsync();
         }
     }
+
+    #endregion
 }

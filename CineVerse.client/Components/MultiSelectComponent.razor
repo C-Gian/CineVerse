@@ -1,60 +1,45 @@
 ﻿@typeparam TItem
 @typeparam TValue
 
+<div class="multiselect-dropdown" @onclick:stopPropagation>
+    <div class="multiselect-dropdown-toggle"
+         @onpointerdown="TogglePointer"
+         @onpointerdown:stopPropagation="true">
+        <span class="multiselect-label">@ToggleText</span>
+        <span class="multiselect-count">@SelectedValues.Count</span>
+        <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
+    </div>
 
-<div class="multiselect-wrapper" @onclick:stopPropagation>
-    @if (!string.IsNullOrWhiteSpace(Label))
-    {
-        <label class="multiselect-textbox-label">@Label</label>
-    }
-
-    <div class="multiselect-dropdown">
-        <div class="multiselect-dropdown-toggle"
-             @onpointerdown="TogglePointer"
-             @onpointerdown:stopPropagation="true">
-            <span class="multiselect-label">@ToggleText</span>
-            <span class="multiselect-count">@SelectedValues.Count</span>
-            <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
+    <div class="multiselect-dropdown-menu @(IsOpen ? "show" : "hide")"
+         tabindex="-1"
+         @onfocusout="LostFocus"
+         @onfocusin="GainedFocus"
+         @ref="MenuRef">
+        <div class="multiselect-dropdown-options">
+            @foreach (var elem in Items)
+            {
+                var key = ValueSelector(elem);
+                <label class="multiselect-option-item">
+                    <input type="checkbox"
+                           checked="@SelectedValues.Contains(key)"
+                           @onchange="@(() => Toggle(key))" />
+                    <span>@TextSelector(elem)</span>
+                </label>
+            }
         </div>
 
-        <div class="multiselect-dropdown-menu @(IsOpen ? "show" : "hide")"
-             tabindex="-1"
-             @onfocusout="LostFocus"
-             @onfocusin="GainedFocus"
-             @ref="MenuRef">
-            <div class="multiselect-dropdown-options">
-                @foreach (var elem in Items)
-                {
-                    var key = ValueSelector(elem);
-                    <label class="multiselect-option-item">
-                        <input type="checkbox"
-                               checked="@SelectedValues.Contains(key)"
-                               @onchange="@(() => Toggle(key))" />
-                        <span>@TextSelector(elem)</span>
-                    </label>
-                }
-            </div>
-
-            <div class="multiselect-dropdown-footer">
-                <button class="multiselect-clear-btn" @onclick="ClearAll">Clear</button>
-            </div>
+        <div class="multiselect-dropdown-footer">
+            <button class="multiselect-clear-btn" @onclick="ClearAll">Clear</button>
         </div>
     </div>
 </div>
 
 <style>
-
-    .multiselect-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .multiselect-textbox-label {
-        font-size: 0.85rem;
-        color: #ccc;
-        font-weight: 500;
-        padding-left: 4px;
+    .multiselect-dropdown {
+        position: relative;
+        font-family: sans-serif;
+        user-select: none;
+        height: 42px;
     }
 
     .multiselect-dropdown-toggle {
@@ -72,7 +57,30 @@
     .multiselect-label {
         font-weight: 600;
         font-size: 0.85rem;
+        white-space: nowrap;
     }
+
+    .multiselect-count {
+        background: #444;
+        padding-left: 8px;
+        padding-right: 9px;
+        padding-top: 1px;
+        padding-bottom: 0px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+    }
+
+    .multiselect-arrow {
+        font-size: 1.5rem;
+        line-height: 0;
+        opacity: .6;
+        display: inline-block;
+        transition: transform .25s ease;
+    }
+
+        .multiselect-arrow.up {
+            transform: rotate(-180deg);
+        }
 
     .multiselect-dropdown-menu {
         position: absolute;
@@ -104,35 +112,6 @@
             opacity: 0;
             transform: translateY(-10px);
             pointer-events: none;
-        }
-
-    .multiselect-dropdown {
-        position: relative;
-        font-family: sans-serif;
-        user-select: none;
-        height: 42px;
-    }
-
-    .multiselect-count {
-        background: #444;
-        padding-left: 8px;
-        padding-right: 9px;
-        padding-top: 1px;
-        padding-bottom: 0px;
-        border-radius: 5px;
-        font-size: 0.8rem;
-    }
-
-    .multiselect-arrow {
-        font-size: 1.5rem;
-        line-height: 0;
-        opacity: .6;
-        display: inline-block;
-        transition: transform .25s ease;
-    }
-
-        .multiselect-arrow.up {
-            transform: rotate(-180deg);
         }
 
     .multiselect-dropdown-options {

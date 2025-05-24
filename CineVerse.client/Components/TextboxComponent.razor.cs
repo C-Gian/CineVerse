@@ -6,7 +6,6 @@ namespace CineVerse.client.Components;
 public partial class TextboxComponent
 {
     [Parameter] public string Value { get; set; } = string.Empty;
-    [Parameter] public string Label { get; set; } = string.Empty;
     [Parameter] public string Placeholder { get; set; } = string.Empty;
     [Parameter] public string InputType { get; set; } = "text";
     [Parameter] public string? Min { get; set; }
@@ -15,7 +14,8 @@ public partial class TextboxComponent
     [Parameter] public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
     [Parameter] public EventCallback<FocusEventArgs> OnBlur { get; set; }
     [Parameter] public EventCallback<string> ValueChanged { get; set; }
-
+    [Parameter] public bool ShowTooltip { get; set; }
+    [Parameter] public string TooltipText { get; set; } = string.Empty;
 
     private async Task HandleBlur(FocusEventArgs e)
     {

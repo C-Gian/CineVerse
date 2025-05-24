@@ -1,8 +1,4 @@
 ﻿<div class="textbox-wrapper">
-    @if (!string.IsNullOrWhiteSpace(Label))
-    {
-        <label class="textbox-label">@Label</label>
-    }
     <input value="@Value"
            @oninput="HandleInput"
            class="textbox"
@@ -10,7 +6,6 @@
            placeholder="@Placeholder"
            @onkeydown="OnKeyDown"
            @onblur="HandleBlur" />
-
 </div>
 
 <style>
@@ -30,13 +25,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-    }
-
-    .textbox-label {
-        font-size: 0.85rem;
-        color: #ccc;
-        font-weight: 500;
-        padding-left: 4px;
     }
 
     .textbox {

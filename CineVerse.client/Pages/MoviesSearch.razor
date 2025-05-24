@@ -26,47 +26,58 @@ else
             </button>
         </div>
 
-       <div class="filters-container">
+        <div class="filters-container">
 
-            <GenresFilterComponent Genres="Genres" OnGenreChanged="HandleGenreChange"></GenresFilterComponent>
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <GenresFilterComponent Genres="Genres" OnGenreChanged="HandleGenreChange"></GenresFilterComponent>
+            </TitleWrapperComponent>
 
-            <RatingFilter OnRatingChanged="HandleRatingChanged" />
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <RatingFilter OnRatingChanged="HandleRatingChanged" />
+            </TitleWrapperComponent>
 
-            <TextboxComponent Label="From Year"
-                              InputType="number"
-                              Placeholder="e.g. 2000"
-                              @bind-Value="FromYear"
-                              OnBlur="ValidateFromYearRange" />
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="number"
+                                  Placeholder="e.g. 2000"
+                                  @bind-Value="FromYear"
+                                  OnBlur="ValidateFromYearRange" />
+            </TitleWrapperComponent>
 
-            <TextboxComponent Label="To Year"
-                              InputType="number"
-                              Placeholder="e.g. 2024"
-                              @bind-Value="ToYear"
-                              OnBlur="ValidateToYearRange" />
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="number"
+                                  Placeholder="e.g. 2024"
+                                  @bind-Value="ToYear"
+                                  OnBlur="ValidateToYearRange" />
+            </TitleWrapperComponent>
 
-            <MultiSelectComponent TItem=GeneralWatchProvider TValue=int
-                Label="Providers"
-                Items="WatchProviders"
-                TextSelector="p => p.ProviderName"
-                ValueSelector="p => p.ProviderId"
-                @bind-SelectedValues="SelectedProviderIds" />
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <MultiSelectComponent TItem=GeneralWatchProvider TValue=int
+                                      Items="WatchProviders"
+                                      TextSelector="p => p.ProviderName"
+                                      ValueSelector="p => p.ProviderId"
+                                      @bind-SelectedValues="SelectedProviderIds" />
+            </TitleWrapperComponent>
 
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
+            </TitleWrapperComponent>
 
-            <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="text"
+                                  Placeholder="US"
+                                  @bind-Value="Region"
+                                  OnBlur="@(() => ValidateRegion(Region))" />
+            </TitleWrapperComponent>
 
-            <TextboxComponent Label="Region"
-                              InputType="text"
-                              Placeholder="US"
-                              @bind-Value="Region"
-                              OnBlur="@(() => ValidateRegion(Region))" />
+            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
+                <TextboxComponent InputType="text"
+                                  Placeholder="US"
+                                  @bind-Value="WatchRegion"
+                                  OnBlur="@(() => ValidateRegion(WatchRegion))" />
+            </TitleWrapperComponent>
 
-            <TextboxComponent Label="Watch Region"
-                              InputType="text"
-                              Placeholder="US"
-                              @bind-Value="WatchRegion"
-                              OnBlur="@(() => ValidateRegion(WatchRegion))" />
-       </div>
-        
+        </div>
+
     </div>
 
 
@@ -82,32 +93,13 @@ else
 
 
 <style>
-
-    .filters-container {
-        display: flex;
-        gap: 20px;
-        align-items: end;
-    }
-
-
-    .year-filter-item {
-        display: flex;
-        flex-direction: column;
-        color: white;
-    }
-
-    .year-filter-container {
-        display: flex;
-        flex-direction: row;
-        gap: 20px;
-        align-content: center;
-    }
-
     .search-panel {
         position: relative;
         z-index: 9999;
         display: flex;
         flex-direction: column;
+        flex-wrap: wrap;
+        gap: 20px;
         margin: 50px;
         padding: 24px;
         gap: 20px;
@@ -175,5 +167,12 @@ else
             background: #4b39c4;
             border-color: #7a68ff;
         }
-    
+
+    .filters-container {
+        display: flex;
+        gap: 20px;
+        align-items: end;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
 </style> 
