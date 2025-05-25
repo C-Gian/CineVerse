@@ -8,7 +8,6 @@ public class AppState
     public SectionType SectionType { get; set; }
     public List<Genre> Genres { get; set; } = new();
 
-
     //home genres pics
     public static readonly Dictionary<string, string> GenreBackgrounds = new()
     {
@@ -33,4 +32,5 @@ public class AppState
         ["TV Movie"] = "https://image.tmdb.org/t/p/original/jXZ2tyJl44yKvh22I6ooQwU5rFM.jpg"
     };
 
+    public string Location { get; set; } = "IT";
 }

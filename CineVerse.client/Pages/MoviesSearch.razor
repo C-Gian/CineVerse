@@ -99,6 +99,16 @@ else
                                    TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
                 <SortFilterComponent @bind-SortBy="SortBy" />
             </TitleWrapperComponent>
+
+            <!-- CERTIFICATIONS -->
+            <TitleWrapperComponent Label="Certifications"
+                                   TooltipText="Pick one or more age-ratings (e.g. ‘T’, ‘VM14’) that a movie must carry in the country you’ve selected. Leave empty to ignore the certification filter.">
+                <MultiSelectComponent TItem="CertificationApiResponse" TValue="string"
+                                      Items="Certifications"
+                                      TextSelector="c => c.Certification"
+                                      ValueSelector="c => c.Certification"
+                                      @bind-SelectedValues="SelectedCertCodes" />
+            </TitleWrapperComponent>
         </div>
 
     </div>

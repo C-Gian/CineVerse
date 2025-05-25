@@ -2,6 +2,7 @@
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Diagnostics.Metrics;
 
 namespace CineVerse.client.Pages;
 
@@ -15,7 +16,7 @@ public partial class MoviesSearch
     public List<MovieResultResponse> Movies { get; set; } = [];
     public List<Genre> Genres { get; set; } = [];
     public List<CountryApiResponse> Countries { get; set; } = [];
-    public MovieCertificationsApiResponse Certifications { get; set; }
+    public List<CertificationApiResponse> Certifications { get; set; }
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
     public string? FromYear { get; set; } = string.Empty;
@@ -29,6 +30,9 @@ public partial class MoviesSearch
     public bool IncludeAdult { get; set; } = true;
     public List<GeneralWatchProvider> WatchProviders { get; set; }
     public List<int> SelectedProviderIds { get; set; } = [];
+
+    List<string> SelectedCertCodes = new(); 
+
     public List<int> IncludedGenres { get; set; }  = new();
     public List<int> ExcludedGenres { get; set; }  = new();
 
@@ -67,7 +71,8 @@ public partial class MoviesSearch
             .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
         Countries = await CountryService.GetCountriesAsync();
-        Certifications = await MovieService.GetMoviesCertifications();
+        var certifications = await MovieService.GetMoviesCertifications();
+        Certifications = certifications.Certifications[AppState.Location];
         await LoadMoviesAsync(1);
         await LoadGenresAsync();
         IsLoading = false;
