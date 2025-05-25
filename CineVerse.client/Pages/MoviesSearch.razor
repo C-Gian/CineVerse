@@ -94,6 +94,11 @@ else
                                   Check="@(_ => ValidateRegion(WatchRegion))" />
             </TitleWrapperComponent>
 
+            <!-- SORT -->
+            <TitleWrapperComponent Label="Sort by"
+                                   TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
+                <SortFilterComponent @bind-SortBy="SortBy" />
+            </TitleWrapperComponent>
         </div>
 
     </div>

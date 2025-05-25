@@ -21,6 +21,7 @@ public partial class MoviesSearch
     public string? ToYear { get; set; } = string.Empty;
     public string? Region { get; set; } = string.Empty;
     public string? WatchRegion { get; set; } = string.Empty;
+    public string? SortBy { get; set; } = "popularity.desc";
     public List<int> SelectedGenres { get; set; } = [];
     public int? RatingLess { get; set; }
     public int? RatingGreater { get; set; }

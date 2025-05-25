@@ -1,0 +1,125 @@
+﻿<div class="sort-dropdown">
+    <div class="sort-dropdown-toggle"
+         @onpointerdown="TogglePointer"
+         @onpointerdown:stopPropagation="true">
+        @Options.First(o => o.Value == SortBy).Label
+        <span class="sort-arrow @(IsOpen ? "up" : null)">▾</span>
+    </div>
+
+    <div class="sort-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="MenuRef">
+        <div class="sort-dropdown-options">
+            @foreach (var opt in Options)
+            {
+                <label class="sort-option-item">
+                    <input type="radio"
+                           name="sort"
+                           value="@opt.Value"
+                           checked="@(SortBy == opt.Value)"
+                           @onchange="@(() => Pick(opt.Value))" />
+                    <span>@opt.Label</span>
+                </label>
+            }
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .sort-dropdown {
+        min-width: 180px;
+        position: relative;
+        font-family: inherit
+    }
+
+    .sort-dropdown-toggle {
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 12px;
+        border-radius: 8px;
+        background: rgba(255,255,255,.05);
+        color: #fff;
+        font-size: .95rem;
+        cursor: pointer;
+        user-select: none
+    }
+
+    .sort-arrow {
+        font-size: 1.5rem;
+        line-height: 0;
+        opacity: .6;
+        display: inline-block;
+        transition: transform .25s ease;
+    }
+
+        .sort-arrow.up {
+            transform: rotate(-180deg);
+        }
+
+    .sort-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: flex;
+        height: 300px;
+        flex-direction: column;
+        gap: 0.75rem;
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: opacity 0.15s ease, transform 0.25s ease;
+        margin-top: 8px;
+        background: #1a1d2b;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        padding: 1rem;
+    }
+
+        .sort-dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .sort-dropdown-menu.hide {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+    .sort-dropdown-options {
+        max-height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .sort-option-item {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        padding: 6px 12px;
+        font-size: .9rem;
+        color: #ddd;
+        cursor: pointer
+    }
+
+        .sort-option-item:hover {
+            background: rgba(255,255,255,.08);
+            color: #fff
+        }
+
+        .sort-option-item input {
+            display: none
+        }
+
+            .sort-option-item input:checked + span {
+                font-weight: 600;
+                color: #fff
+            }
+
+</style>
