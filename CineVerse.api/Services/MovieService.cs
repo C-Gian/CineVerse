@@ -1,16 +1,20 @@
 ﻿using CineVerse.api.ApiResponses;
+using CineVerse.api.Data;
+using CineVerse.api.Entities;
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
+using CineVerse.api.Utils;
 using CineVerse.Client.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CineVerse.api.Services;
 
 public class MovieService : IMovieService
 {
-    public MovieService(IHttpClientFactory factory, IOptions<TmdbOptions> opt)
+    public MovieService(CineverseDb db, IHttpClientFactory factory, IOptions<TmdbOptions> opt)
     {
+        _db = db;
         _apiKey = opt.Value.ApiKey;
         _http = factory.CreateClient("tmdb");
     }
@@ -21,6 +25,7 @@ public class MovieService : IMovieService
 
     #region Fields
 
+    private readonly CineverseDb _db;
     public readonly string _apiKey;
     public readonly HttpClient _http;
 
@@ -149,5 +154,42 @@ public class MovieService : IMovieService
                    ?? throw new ApplicationException("Empty TMDB response");
 
         return result;
+    }
+
+    private async Task<MovieCertificationsApiResponse> GetCertificationsFromApi(CancellationToken ct = default)
+    {
+        var url = $"/certification/movie/list?api_key={_apiKey}&language=en-US";
+        return await _http.GetFromJsonAsync<MovieCertificationsApiResponse>(url, ct)
+               ?? throw new ApplicationException("Empty TMDB response");
+    }
+
+    public async Task<MovieCertificationsApiResponse> GetMoviesCertifications(CancellationToken ct = default)
+    {
+        var rows = await _db.Certifications
+                        .AsNoTracking()
+                        .OrderBy(r => r.CountryCode)
+                        .ThenBy(r => r.DisplayOrder)
+                        .ToListAsync(ct);
+
+        if (rows.Any())
+            return CertificationsToDict.MapEntitiesToDto(rows);
+
+        var apiDto = await GetCertificationsFromApi(ct);
+
+        var entities = apiDto.Certifications
+                             .SelectMany(kv =>
+                                 kv.Value.Select(item => new CertificationEntity
+                                 {
+                                     CountryCode = kv.Key,
+                                     Certification = item.Certification,
+                                     Meaning = item.Meaning,
+                                     DisplayOrder = item.Order
+                                 }))
+                             .ToList();
+
+        _db.Certifications.AddRange(entities);
+        await _db.SaveChangesAsync(ct);
+
+        return apiDto;
     }
 }

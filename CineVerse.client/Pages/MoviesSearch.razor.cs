@@ -15,6 +15,7 @@ public partial class MoviesSearch
     public List<MovieResultResponse> Movies { get; set; } = [];
     public List<Genre> Genres { get; set; } = [];
     public List<CountryApiResponse> Countries { get; set; } = [];
+    public MovieCertificationsApiResponse Certifications { get; set; }
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
     public string? FromYear { get; set; } = string.Empty;
@@ -66,6 +67,7 @@ public partial class MoviesSearch
             .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
         Countries = await CountryService.GetCountriesAsync();
+        Certifications = await MovieService.GetMoviesCertifications();
         await LoadMoviesAsync(1);
         await LoadGenresAsync();
         IsLoading = false;

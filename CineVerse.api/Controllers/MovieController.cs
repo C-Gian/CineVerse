@@ -1,4 +1,5 @@
 using CineVerse.api.ApiResponses;
+using CineVerse.api.Entities;
 using CineVerse.api.Services.Interfaces;
 using CineVerse.Client.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,14 @@ public class MovieController : ControllerBase
     {
         _movieService = movieService;
         _logger = logger;
+    }
+
+    [HttpGet("movie_certifications")]
+    [ProducesResponseType(typeof(MovieCertificationsApiResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetMovieCertifications(CancellationToken ct = default)
+    {
+        var certifications = await _movieService.GetMoviesCertifications(ct);
+        return Ok(certifications);
     }
 
     [HttpGet("general_providers")]

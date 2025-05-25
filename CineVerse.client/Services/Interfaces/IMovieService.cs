@@ -23,4 +23,6 @@ public interface IMovieService
     public Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct = default);
 
     public Task<GeneralWatchProvidersResponse> GetGeneralWatchProviders(string language, string region, CancellationToken ct = default);
+
+    public Task<MovieCertificationsApiResponse> GetMoviesCertifications(CancellationToken ct = default);
 }

@@ -73,6 +73,20 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
+    public async Task<MovieCertificationsApiResponse> GetMoviesCertifications(CancellationToken ct = default)
+    {
+        var req = new RestRequest("api/movie/movie_certifications");
+
+        var debugUri = rest.BuildUri(req);
+
+        var res = await rest.ExecuteGetAsync<MovieCertificationsApiResponse>(req, ct);
+
+        if (!res.IsSuccessful || res.Data is null)
+            throw new Exception($"API error ({res.StatusCode})");
+
+        return res.Data;
+    }
+
     public async Task<MoviesApiResponse> GetNowPlayingMovies(int page = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/now_playing").AddQueryParameter("page", page.ToString());

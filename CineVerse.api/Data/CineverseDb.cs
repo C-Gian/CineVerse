@@ -11,6 +11,7 @@ public class CineverseDb : DbContext
 
     public DbSet<GenreEntity> Genres => Set<GenreEntity>();
     public DbSet<CountryEntity> Countries => Set<CountryEntity>();
+    public DbSet<CertificationEntity> Certifications => Set<CertificationEntity>();
 
     #region ModelCreating
 
@@ -47,6 +48,16 @@ public class CineverseDb : DbContext
             e.Property(c => c.Code).HasMaxLength(2).IsRequired();
             e.Property(c => c.EnglishName).HasMaxLength(100).IsRequired();
             e.Property(c => c.NativeName).HasMaxLength(100).IsRequired();
+        });
+
+        mb.Entity<CertificationEntity>(e =>
+        {
+            e.ToTable("Certifications");
+            e.HasKey(c => new { c.CountryCode, c.Certification });
+            e.Property(c => c.CountryCode).HasColumnName("country_code").HasMaxLength(2).IsRequired();
+            e.Property(c => c.Certification).HasColumnName("certification").HasMaxLength(10).IsRequired();
+            e.Property(c => c.Meaning).HasColumnName("meaning").HasMaxLength(255);
+            e.Property(c => c.DisplayOrder).HasColumnName("display_order");
         });
     }
 
