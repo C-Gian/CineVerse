@@ -1,10 +1,10 @@
 ﻿using CineVerse.api.ApiResponses;
 using CineVerse.api.Data;
 using CineVerse.api.Entities;
+using CineVerse.api.Models;
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
 using CineVerse.api.Utils;
-using CineVerse.Client.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -131,21 +131,6 @@ public class MovieService : IMovieService
         return result;
     }
 
-    public async Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct)
-    {
-        var baseUrl = "discover/movie";
-        var queryString = string.Join("&", queryParams
-            .Where(kv => !string.IsNullOrWhiteSpace(kv.Value))
-            .Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
-
-        var url = $"{baseUrl}?api_key={_apiKey}&language=en-US&{queryString}";
-
-        var result = await _http.GetFromJsonAsync<DiscoverApiResponse>(url, ct)
-            ?? throw new ApplicationException("Empty discover response");
-
-        return result;
-    }
-
     public async Task<GeneralWatchProvidersResponse> GetGeneralWatchProviders(string language, string region, CancellationToken ct)
     {
         var url = $"watch/providers/movie?api_key={_apiKey}&language={language}&region={region}";
@@ -158,7 +143,7 @@ public class MovieService : IMovieService
 
     private async Task<MovieCertificationsApiResponse> GetCertificationsFromApi(CancellationToken ct = default)
     {
-        var url = $"/certification/movie/list?api_key={_apiKey}&language=en-US";
+        var url = $"certification/movie/list?api_key={_apiKey}&language=en-US";
         return await _http.GetFromJsonAsync<MovieCertificationsApiResponse>(url, ct)
                ?? throw new ApplicationException("Empty TMDB response");
     }
@@ -191,5 +176,64 @@ public class MovieService : IMovieService
         await _db.SaveChangesAsync(ct);
 
         return apiDto;
+    }
+
+    public async Task<MovieResponse> DiscoverMoviesAsync(SearchFiltersModel f, CancellationToken ct)
+    {
+        var qs = new Dictionary<string, string?>();
+
+        qs["include_adult"] = f.IncludeAdult.ToString().ToLowerInvariant();
+
+        if (f.IncludedGenres.Any())
+        {
+            qs["with_genres"] = string.Join('|', f.IncludedGenres);
+        }
+        if (f.ExcludedGenres.Any())
+        {
+            qs["without_genres"] = string.Join('|', f.ExcludedGenres);
+        }
+        if (f.RatingGreater is not null)
+        {
+            qs["vote_average.gte"] = f.RatingGreater.ToString();
+        }
+        if (f.RatingLess is not null)
+        {
+            qs["vote_average.lte"] = f.RatingLess.ToString();
+        }
+        if (int.TryParse(f.FromYear, out var y1))
+        {
+            qs["release_date.gte"] = $"{y1}-01-01";
+        }
+        if (int.TryParse(f.ToYear, out var y2))
+        {
+            qs["release_date.lte"] = $"{y2}-12-31";
+        }
+        if (f.SelectedProviderIds.Any())
+        {
+            qs["with_watch_providers"] = string.Join('|', f.SelectedProviderIds);
+        }
+        if (!string.IsNullOrWhiteSpace(f.WatchRegion))
+        {
+            qs["watch_region"] = f.WatchRegion;
+        }
+        if (!string.IsNullOrWhiteSpace(f.Region))
+        {
+            qs["region"] = f.Region;
+        }
+        if (f.SelectedCertCodes.Any() && !string.IsNullOrWhiteSpace(f.Region))
+        {
+            qs["certification_country"] = f.Region;
+            qs["certification"] = f.SelectedCertCodes.First();
+        }
+
+        qs["sort_by"] = f.SortBy;
+
+        var query = string.Join('&', qs.Where(kv => kv.Value is not null).Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value!)}"));
+
+        var url = $"discover/movie?api_key={_apiKey}&{query}";
+        var dto = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
+                     ?? throw new ApplicationException("Empty TMDB response");
+
+        return dto;
     }
 }

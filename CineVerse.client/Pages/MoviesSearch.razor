@@ -26,90 +26,97 @@ else
             </button>
         </div>
 
-        <div class="filters-container">
+        <EditForm Model="SearchFiltersModel"
+                  OnValidSubmit="HandleSearchAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-            <!-- GENRES -->
-            <TitleWrapperComponent Label="Genres"
-                                   TooltipText="Pick one or more genres; the search will match any of the selected genres.">
-                <GenresFilterComponent Genres="Genres"
-                                       OnGenreChanged="HandleGenreChange" />
-            </TitleWrapperComponent>
+            <div class="filters-container">
+                <!-- GENRES -->
+                <TitleWrapperComponent Label="Genres"
+                                       TooltipText="Pick one or more genres; the search will match any of the selected genres.">
+                    <GenresFilterComponent Genres="Genres"
+                                           OnGenreChanged="HandleGenreChange" />
+                </TitleWrapperComponent>
 
-            <!-- RATING -->
-            <TitleWrapperComponent Label="Rating"
-                                   TooltipText="Filter by TMDB vote average. Specify the minimum and/or maximum rating (0 to 10).">
-                <RatingFilter OnRatingChanged="HandleRatingChanged" />
-            </TitleWrapperComponent>
+                <!-- RATING -->
+                <TitleWrapperComponent Label="Rating"
+                                       TooltipText="Filter by TMDB vote average. Specify the minimum and/or maximum rating (0 to 10).">
+                    <RatingFilter OnRatingChanged="HandleRatingChanged" />
+                </TitleWrapperComponent>
 
-            <!-- RELEASE YEAR FROM -->
-            <TitleWrapperComponent Label="Release Year From"
-                                   TooltipText="Include movies released on or after the year you specify (e.g. 2000).">
-                <TextboxComponent InputType="number"
-                                  Placeholder="e.g. 2000"
-                                  @bind-Value="FromYear"
-                                  Check="ValidateFromYearRange" />
-            </TitleWrapperComponent>
+                <!-- RELEASE YEAR FROM -->
+                <TitleWrapperComponent Label="Release Year From"
+                                       TooltipText="Include movies released on or after the year you specify (e.g. 2000).">
+                    <TextboxComponent InputType="number"
+                                      Placeholder="e.g. 2000"
+                                      @bind-Value="SearchFiltersModel.FromYear"
+                                      Check="ValidateFromYearRange" />
+                </TitleWrapperComponent>
 
-            <!-- RELEASE YEAR TO -->
-            <TitleWrapperComponent Label="Release Year To"
-                                   TooltipText="Include movies released on or before the year you specify (e.g. 2024).">
-                <TextboxComponent InputType="number"
-                                  Placeholder="e.g. 2024"
-                                  @bind-Value="ToYear"
-                                  Check="ValidateToYearRange" />
-            </TitleWrapperComponent>
+                <!-- RELEASE YEAR TO -->
+                <TitleWrapperComponent Label="Release Year To"
+                                       TooltipText="Include movies released on or before the year you specify (e.g. 2024).">
+                    <TextboxComponent InputType="number"
+                                      Placeholder="e.g. 2024"
+                                      @bind-Value="SearchFiltersModel.ToYear"
+                                      Check="ValidateToYearRange" />
+                </TitleWrapperComponent>
 
-            <!-- STREAMING PROVIDERS -->
-            <TitleWrapperComponent Label="Providers"
-                                   TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
-                <MultiSelectComponent TItem="GeneralWatchProvider" TValue="int"
-                                      Items="WatchProviders"
-                                      TextSelector="p => p.ProviderName"
-                                      ValueSelector="p => p.ProviderId"
-                                      @bind-SelectedValues="SelectedProviderIds" />
-            </TitleWrapperComponent>
+                <!-- STREAMING PROVIDERS -->
+                <TitleWrapperComponent Label="Providers"
+                                       TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
+                    <MultiSelectComponent TItem="GeneralWatchProvider" TValue="int"
+                                          Items="WatchProviders"
+                                          TextSelector="p => p.ProviderName"
+                                          ValueSelector="p => p.ProviderId"
+                                          @bind-SelectedValues="SearchFiltersModel.SelectedProviderIds" />
+                </TitleWrapperComponent>
 
-            <!-- ADULT CONTENT -->
-            <TitleWrapperComponent Label="Adult Content"
-                                   TooltipText="Toggle ON to include titles marked as adult / explicit in the results.">
-                <ToggleSwitch Label="Include Explicit Content"
-                              @bind-Checked="IncludeAdult" />
-            </TitleWrapperComponent>
+                <!-- ADULT CONTENT -->
+                <TitleWrapperComponent Label="Adult Content"
+                                       TooltipText="Toggle ON to include titles marked as adult / explicit in the results.">
+                    <ToggleSwitch Label="Include Explicit Content"
+                                  @bind-Checked="SearchFiltersModel.IncludeAdult" />
+                </TitleWrapperComponent>
 
-            <!-- RELEASE DATE REGION -->
-            <TitleWrapperComponent Label="Region"
-                                   TooltipText="country code that localises cinema/physical release dates">
-                <TextboxComponent InputType="text"
-                                  Placeholder="e.g. US"
-                                  @bind-Value="Region"
-                                  Check="@(_ => ValidateRegion(Region))" />
-            </TitleWrapperComponent>
+                <!-- RELEASE DATE REGION -->
+                <TitleWrapperComponent Label="Region"
+                                       TooltipText="Country code that localises cinema / physical release dates (e.g. US, IT).">
+                    <TextboxComponent InputType="text"
+                                      Placeholder="e.g. US"
+                                      @bind-Value="SearchFiltersModel.Region"
+                                      Check="@(_ => ValidateRegion(SearchFiltersModel.Region))" />
+                </TitleWrapperComponent>
 
-            <!-- WATCH REGION -->
-            <TitleWrapperComponent Label="Watch Region"
-                                   TooltipText="country code used to resolve streaming availability and provider lists">
-                <TextboxComponent InputType="text"
-                                  Placeholder="e.g. US"
-                                  @bind-Value="WatchRegion"
-                                  Check="@(_ => ValidateRegion(WatchRegion))" />
-            </TitleWrapperComponent>
+                <!-- WATCH REGION -->
+                <TitleWrapperComponent Label="Watch Region"
+                                       TooltipText="Country code used to resolve streaming availability and provider lists.">
+                    <TextboxComponent InputType="text"
+                                      Placeholder="e.g. US"
+                                      @bind-Value="SearchFiltersModel.WatchRegion"
+                                      Check="@(_ => ValidateRegion(SearchFiltersModel.WatchRegion))" />
+                </TitleWrapperComponent>
 
-            <!-- SORT -->
-            <TitleWrapperComponent Label="Sort by"
-                                   TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
-                <SortFilterComponent @bind-SortBy="SortBy" />
-            </TitleWrapperComponent>
+                <!-- SORT -->
+                <TitleWrapperComponent Label="Sort by"
+                                       TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
+                    <SortFilterComponent @bind-SortBy="SearchFiltersModel.SortBy" />
+                </TitleWrapperComponent>
 
-            <!-- CERTIFICATIONS -->
-            <TitleWrapperComponent Label="Certifications"
-                                   TooltipText="Pick one or more age-ratings (e.g. ‘T’, ‘VM14’) that a movie must carry in the country you’ve selected. Leave empty to ignore the certification filter.">
-                <MultiSelectComponent TItem="CertificationApiResponse" TValue="string"
-                                      Items="Certifications"
-                                      TextSelector="c => c.Certification"
-                                      ValueSelector="c => c.Certification"
-                                      @bind-SelectedValues="SelectedCertCodes" />
-            </TitleWrapperComponent>
-        </div>
+                <!-- CERTIFICATIONS -->
+                <TitleWrapperComponent Label="Certifications"
+                                       TooltipText="Pick one or more age-ratings (e.g. ‘T’, ‘VM14’) that a movie must carry in the selected country.">
+                    <MultiSelectComponent TItem="CertificationApiResponse" TValue="string"
+                                          Items="Certifications"
+                                          TextSelector="c => c.Certification"
+                                          ValueSelector="c => c.Certification"
+                                          @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
+                </TitleWrapperComponent>
+            </div>
+
+            <button type="submit" class="search-btn">Search</button>
+        </EditForm>
 
     </div>
 
@@ -179,27 +186,21 @@ else
             }
 
     .search-btn {
-        min-width: 180px;
-        height: 56px;
-        border-radius: 12px;
-        background: #2d2668;
-        border: 1px solid #2d2668;
-        color: #fff;
+        margin-top: 1rem;
+        padding: .6rem 1.4rem;
         font-weight: 600;
-        letter-spacing: .4px;
+        background: #7459ff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background .25s, border .25s;
+        transition: background .2s ease;
     }
 
         .search-btn:hover {
-            background: #6047e6;
-            border-color: #7a68ff;
+            background: #6247ff
         }
 
-        .search-btn:active {
-            background: #4b39c4;
-            border-color: #7a68ff;
-        }
 
     .filters-container {
         display: flex;

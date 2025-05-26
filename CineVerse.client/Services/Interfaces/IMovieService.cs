@@ -1,4 +1,5 @@
 ﻿using CineVerse.client.ApiResponses;
+using CineVerse.client.Models;
 
 namespace CineVerse.client.Services.Interfaces;
 
@@ -20,9 +21,9 @@ public interface IMovieService
 
     public Task<DetailVideoResponse> GetVideoMovieDetail(int movieId, CancellationToken ct = default);
 
-    public Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct = default);
-
     public Task<GeneralWatchProvidersResponse> GetGeneralWatchProviders(string language, string region, CancellationToken ct = default);
 
     public Task<MovieCertificationsApiResponse> GetMoviesCertifications(CancellationToken ct = default);
+
+    public Task<MoviesApiResponse> DiscoverMoviesAsync(SearchFiltersModel filters, CancellationToken ct = default);
 }

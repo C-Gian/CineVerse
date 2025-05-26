@@ -1,4 +1,5 @@
 ﻿using CineVerse.client.ApiResponses;
+using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -17,24 +18,10 @@ public partial class MoviesSearch
     public List<Genre> Genres { get; set; } = [];
     public List<CountryApiResponse> Countries { get; set; } = [];
     public List<CertificationApiResponse> Certifications { get; set; }
+    public List<GeneralWatchProvider> WatchProviders { get; set; }
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
-    public string? FromYear { get; set; } = string.Empty;
-    public string? ToYear { get; set; } = string.Empty;
-    public string? Region { get; set; } = string.Empty;
-    public string? WatchRegion { get; set; } = string.Empty;
-    public string? SortBy { get; set; } = "popularity.desc";
-    public List<int> SelectedGenres { get; set; } = [];
-    public int? RatingLess { get; set; }
-    public int? RatingGreater { get; set; }
-    public bool IncludeAdult { get; set; } = true;
-    public List<GeneralWatchProvider> WatchProviders { get; set; }
-    public List<int> SelectedProviderIds { get; set; } = [];
-
-    List<string> SelectedCertCodes = new(); 
-
-    public List<int> IncludedGenres { get; set; }  = new();
-    public List<int> ExcludedGenres { get; set; }  = new();
+    public SearchFiltersModel SearchFiltersModel { get; set; } = new();
 
     #endregion
 
@@ -58,8 +45,6 @@ public partial class MoviesSearch
 
 
     #region Methods
-
-    
 
     protected override async Task OnInitializedAsync()
     {
@@ -114,6 +99,13 @@ public partial class MoviesSearch
         Movies = await MovieService.SearchMovie(_query, 1);
     }
 
+    private async Task HandleSearchAsync()
+    {
+        var temp = SearchFiltersModel;
+        var result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel);
+        Movies = result.Results ?? [];
+    }
+
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key is "Enter")
@@ -128,7 +120,7 @@ public partial class MoviesSearch
         {
             return true;
         }
-        if (!int.TryParse(FromYear, out var from))
+        if (!int.TryParse(SearchFiltersModel.FromYear, out var from))
         {
             return false;
         }
@@ -141,7 +133,7 @@ public partial class MoviesSearch
         {
             return true;
         }
-        if (!int.TryParse(FromYear, out var from) || !int.TryParse(ToYear, out var to))
+        if (!int.TryParse(SearchFiltersModel.FromYear, out var from) || !int.TryParse(SearchFiltersModel.ToYear, out var to))
         {
             return false;
         }
@@ -151,7 +143,7 @@ public partial class MoviesSearch
         }
         if (to > DateTime.Now.Year)
         {
-            ToYear = DateTime.Now.Year.ToString();
+            SearchFiltersModel.ToYear = DateTime.Now.Year.ToString();
         }
         return true;
     }
@@ -172,15 +164,15 @@ public partial class MoviesSearch
 
     private Task HandleRatingChanged((int? less, int? greater) values)
     {
-        RatingLess = values.less;
-        RatingGreater = values.greater;
+        SearchFiltersModel.RatingLess = values.less;
+        SearchFiltersModel.RatingGreater = values.greater;
         return Task.CompletedTask;
     }
 
     private Task HandleGenreChange((List<int> include, List<int> exclude) values)
     {
-        IncludedGenres = values.include;
-        ExcludedGenres = values.exclude;
+        SearchFiltersModel.IncludedGenres = values.include;
+        SearchFiltersModel.ExcludedGenres = values.exclude;
         return Task.CompletedTask;
     }
 

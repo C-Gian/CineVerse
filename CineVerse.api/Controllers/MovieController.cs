@@ -1,7 +1,6 @@
 using CineVerse.api.ApiResponses;
-using CineVerse.api.Entities;
+using CineVerse.api.Models;
 using CineVerse.api.Services.Interfaces;
-using CineVerse.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineVerse.api.Controllers;
@@ -24,6 +23,14 @@ public class MovieController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet("discover")]
+    [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DiscoverMovies([FromBody] SearchFiltersModel filters, CancellationToken ct = default)
+    {
+        var movies = await _movieService.DiscoverMoviesAsync(filters, ct);
+        return Ok(movies);
+    }
+
     [HttpGet("movie_certifications")]
     [ProducesResponseType(typeof(MovieCertificationsApiResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMovieCertifications(CancellationToken ct = default)
@@ -38,14 +45,6 @@ public class MovieController : ControllerBase
     {
         var providers = await _movieService.GetGeneralWatchProviders(language, region, ct);
         return Ok(providers);
-    }
-
-    [HttpGet("discover")]
-    [ProducesResponseType(typeof(IEnumerable<DiscoverApiResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> DiscoverMovies([FromQuery] Dictionary<string, string> queryParams, CancellationToken ct = default)
-    {
-        var movies = await _movieService.DiscoverMoviesAsync(queryParams, ct);
-        return Ok(movies);
     }
 
     [HttpGet("videos")]

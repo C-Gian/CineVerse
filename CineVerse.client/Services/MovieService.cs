@@ -1,4 +1,5 @@
 ﻿using CineVerse.client.ApiResponses;
+using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using RestSharp;
 
@@ -6,17 +7,11 @@ namespace CineVerse.client.Services;
 
 public class MovieService(RestClient rest) : IMovieService
 {
-    public async Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct = default)
+    public async Task<MoviesApiResponse> DiscoverMoviesAsync(SearchFiltersModel filters, CancellationToken ct = default)
     {
-        var req = new RestRequest("/api/movie/discover");
+        var req = new RestRequest("/api/movie/discover", Method.Post).AddJsonBody(filters);
 
-        foreach (var kv in queryParams)
-        {
-            if (!string.IsNullOrWhiteSpace(kv.Value))
-                req.AddQueryParameter(kv.Key, kv.Value);
-        }
-
-        var res = await rest.ExecuteGetAsync<DiscoverApiResponse>(req, ct);
+        var res = await rest.ExecuteGetAsync<MoviesApiResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");
