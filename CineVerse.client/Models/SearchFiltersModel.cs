@@ -9,7 +9,7 @@ public class SearchFiltersModel
     public string? FromYear { get; set; } = string.Empty;
     public string? ToYear { get; set; } = string.Empty;
     public List<int> SelectedProviderIds { get; set; } = [];
-    public bool IncludeAdult { get; set; } = true;
+    public bool IncludeAdult { get; set; } = false;
     public string? Region { get; set; } = string.Empty;
     public string? WatchRegion { get; set; } = string.Empty;
     public string? SortBy { get; set; } = "popularity.desc";

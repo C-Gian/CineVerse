@@ -11,12 +11,12 @@
         <div class="genre-dropdown-options">
             <div class="genre-table-header">
                 <span>Genre</span>
-                <div class="d-inline-flex align-items-center gap-1">
+                <div class="d-inline-flex align-items-center gap-1" @onclick="SelectAllInclude">
                     <Icon Name="IconName.Union" />
                     <span>Include</span>
                 </div>
 
-                <div class="d-inline-flex align-items-center gap-1">
+                <div class="d-inline-flex align-items-center gap-1" @onclick="SelectAllExclude">
                     <Icon Name="IconName.Exclude" />
                     <span>Exclude</span>
                 </div>

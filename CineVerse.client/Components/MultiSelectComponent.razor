@@ -2,7 +2,7 @@
 @typeparam TValue
 
 <div class="multiselect-dropdown" @onclick:stopPropagation>
-    <div class="multiselect-dropdown-toggle"
+    <div class="multiselect-dropdown-toggle @(IsEnabled ? "multiselect-toggle-enabled" : "multiselect-toggle-disabled")"
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
         <span class="multiselect-label">@ToggleText</span>
@@ -10,7 +10,7 @@
         <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
 
-    <div class="multiselect-dropdown-menu @(IsOpen ? "show" : "hide")"
+    <div class="multiselect-dropdown-menu @((IsOpen && IsEnabled) ? "show" : "hide")"
          tabindex="-1"
          @onfocusout="LostFocus"
          @onfocusin="GainedFocus"
@@ -52,6 +52,16 @@
         color: #fff;
         height: 100%;
         gap: 0.5rem;
+    }
+
+    .multiselect-toggle-enabled {
+        cursor: pointer;
+    }
+
+    .multiselect-toggle-disabled {
+        color: #aaa;
+        cursor: not-allowed;
+        pointer-events: none; 
     }
 
     .multiselect-label {

@@ -231,8 +231,7 @@ public class MovieService : IMovieService
         var query = string.Join('&', qs.Where(kv => kv.Value is not null).Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value!)}"));
 
         var url = $"discover/movie?api_key={_apiKey}&{query}";
-        var dto = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
-                     ?? throw new ApplicationException("Empty TMDB response");
+        var dto = await _http.GetFromJsonAsync<MovieResponse>(url, ct) ?? throw new ApplicationException("Empty TMDB response");
 
         return dto;
     }

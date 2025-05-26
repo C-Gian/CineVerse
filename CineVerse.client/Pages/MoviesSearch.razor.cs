@@ -101,9 +101,14 @@ public partial class MoviesSearch
 
     private async Task HandleSearchAsync()
     {
-        var temp = SearchFiltersModel;
-        var result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel);
-        Movies = result.Results ?? [];
+        if (SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult)
+        {
+            Movies = [];
+        } else
+        {
+            var result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel);
+            Movies = result.Results ?? [];
+        }
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
@@ -162,6 +167,15 @@ public partial class MoviesSearch
         return true;
     }
 
+    private bool ValidateRegionCertifications(string? v)
+    {
+        if (string.IsNullOrEmpty(v))
+        {
+            return false;
+        }
+        return ValidateRegion(v);
+    }
+
     private Task HandleRatingChanged((int? less, int? greater) values)
     {
         SearchFiltersModel.RatingLess = values.less;
@@ -174,6 +188,11 @@ public partial class MoviesSearch
         SearchFiltersModel.IncludedGenres = values.include;
         SearchFiltersModel.ExcludedGenres = values.exclude;
         return Task.CompletedTask;
+    }
+
+    private void ClearSearchFilters()
+    {
+        SearchFiltersModel = new SearchFiltersModel();  
     }
 
     #endregion

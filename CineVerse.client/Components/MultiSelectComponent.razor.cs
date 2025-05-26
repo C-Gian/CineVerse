@@ -14,6 +14,7 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     [Parameter] public List<TValue> SelectedValues { get; set; } = new();
     [Parameter] public EventCallback<List<TValue>> SelectedValuesChanged { get; set; }
+    [Parameter] public bool IsEnabled { get; set; } = true;
 
     public bool IsOpen { get; set; } = false;
     private string ToggleText => SelectedValues.Count == 0 ? "No Selection" : "Selected";

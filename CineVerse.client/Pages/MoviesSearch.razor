@@ -45,6 +45,15 @@ else
                     <RatingFilter OnRatingChanged="HandleRatingChanged" />
                 </TitleWrapperComponent>
 
+                <!-- REGION -->
+                <TitleWrapperComponent Label="Region"
+                                       TooltipText="Country on which to base the search by year and certificates">
+                    <TextboxComponent InputType="text"
+                                      Placeholder="e.g. US"
+                                      @bind-Value="SearchFiltersModel.Region"
+                                      Check="@(_ => ValidateRegion(SearchFiltersModel.Region))" />
+                </TitleWrapperComponent>
+
                 <!-- RELEASE YEAR FROM -->
                 <TitleWrapperComponent Label="Release Year From"
                                        TooltipText="Include movies released on or after the year you specify (e.g. 2000).">
@@ -61,6 +70,26 @@ else
                                       Placeholder="e.g. 2024"
                                       @bind-Value="SearchFiltersModel.ToYear"
                                       Check="ValidateToYearRange" />
+                </TitleWrapperComponent>
+
+                <!-- CERTIFICATIONS -->
+                <TitleWrapperComponent Label="Certifications"
+                                       TooltipText="Pick one or more age-ratings (e.g. ‘T’, ‘VM14’) that a movie must carry in the selected country.">
+                    <MultiSelectComponent TItem="CertificationApiResponse" TValue="string"
+                                          Items="Certifications"
+                                          TextSelector="c => c.Certification"
+                                          ValueSelector="c => c.Certification"
+                                          IsEnabled="@(ValidateRegionCertifications(SearchFiltersModel.Region))"
+                                          @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
+                </TitleWrapperComponent>
+
+                <!-- WATCH REGION -->
+                <TitleWrapperComponent Label="Watch Region"
+                                       TooltipText="Country code only used to list providers of the selected country">
+                    <TextboxComponent InputType="text"
+                                      Placeholder="e.g. US"
+                                      @bind-Value="SearchFiltersModel.WatchRegion"
+                                      Check="@(_ => ValidateRegion(SearchFiltersModel.WatchRegion))" />
                 </TitleWrapperComponent>
 
                 <!-- STREAMING PROVIDERS -->
@@ -80,42 +109,18 @@ else
                                   @bind-Checked="SearchFiltersModel.IncludeAdult" />
                 </TitleWrapperComponent>
 
-                <!-- RELEASE DATE REGION -->
-                <TitleWrapperComponent Label="Region"
-                                       TooltipText="Country code that localises cinema / physical release dates (e.g. US, IT).">
-                    <TextboxComponent InputType="text"
-                                      Placeholder="e.g. US"
-                                      @bind-Value="SearchFiltersModel.Region"
-                                      Check="@(_ => ValidateRegion(SearchFiltersModel.Region))" />
-                </TitleWrapperComponent>
-
-                <!-- WATCH REGION -->
-                <TitleWrapperComponent Label="Watch Region"
-                                       TooltipText="Country code used to resolve streaming availability and provider lists.">
-                    <TextboxComponent InputType="text"
-                                      Placeholder="e.g. US"
-                                      @bind-Value="SearchFiltersModel.WatchRegion"
-                                      Check="@(_ => ValidateRegion(SearchFiltersModel.WatchRegion))" />
-                </TitleWrapperComponent>
-
                 <!-- SORT -->
                 <TitleWrapperComponent Label="Sort by"
                                        TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
                     <SortFilterComponent @bind-SortBy="SearchFiltersModel.SortBy" />
                 </TitleWrapperComponent>
-
-                <!-- CERTIFICATIONS -->
-                <TitleWrapperComponent Label="Certifications"
-                                       TooltipText="Pick one or more age-ratings (e.g. ‘T’, ‘VM14’) that a movie must carry in the selected country.">
-                    <MultiSelectComponent TItem="CertificationApiResponse" TValue="string"
-                                          Items="Certifications"
-                                          TextSelector="c => c.Certification"
-                                          ValueSelector="c => c.Certification"
-                                          @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
-                </TitleWrapperComponent>
+                
             </div>
 
-            <button type="submit" class="search-btn">Search</button>
+            <div style="display: flex; gap: 20px; align-items: center; vertical-align: middle; margin-top: 1rem;">
+                <button type="submit" class="search-btn">Search</button>
+                <button type="button" class="search-clear-btn" @onclick="ClearSearchFilters">Clear</button>
+            </div>
         </EditForm>
 
     </div>
@@ -186,7 +191,6 @@ else
             }
 
     .search-btn {
-        margin-top: 1rem;
         padding: .6rem 1.4rem;
         font-weight: 600;
         background: #7459ff;
@@ -201,6 +205,22 @@ else
             background: #6247ff
         }
 
+    .search-clear-btn {
+        margin-left: .5rem;
+        padding: .6rem 1.4rem;
+        font-weight: 600;
+        background: transparent;
+        color: #fff;
+        border: 1px solid #7459ff;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background .2s ease,color .2s ease;
+    }
+
+        .search-clear-btn:hover {
+            background: #7459ff;
+            color: #fff;
+        }
 
     .filters-container {
         display: flex;

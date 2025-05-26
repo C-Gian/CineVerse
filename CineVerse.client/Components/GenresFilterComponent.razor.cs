@@ -73,6 +73,20 @@ public partial class GenresFilterComponent
         }
     }
 
+    private async Task SelectAllInclude()
+    {
+        IncludedGenres = Genres.Select(g => g.Id).ToList();
+        ExcludedGenres = new();
+        await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
+    }
+
+    private async Task SelectAllExclude()
+    {
+        IncludedGenres = new();
+        ExcludedGenres = Genres.Select(g => g.Id).ToList();
+        await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
+    }
+
     private async Task ClearAll()
     {
         IncludedGenres = new();
