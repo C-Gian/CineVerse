@@ -5,15 +5,15 @@
     <div class="select-toggle"
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
-        <span class="multiselect-label">@DisplayText</span>
-        <span class="multiselect-count">@SelectedValue</span>
+        <span class="multiselect-label">@ToggleText</span>
         <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
 
     <div class="select-menu @(IsOpen ? "show" : "hide")"
          tabindex="-1"
          @onfocusout="LostFocus"
-         @onfocusin="GainedFocus">
+         @onfocusin="GainedFocus"
+         @ref="MenuRef">
         @if (Searchable)
         {
             <input class="select-search"
@@ -56,6 +56,8 @@
         cursor: pointer;
         color: #fff;
         height: 100%;
+        width: 100%;
+        justify-content: space-between;
         gap: 0.5rem;
     }
 

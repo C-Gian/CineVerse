@@ -7,11 +7,8 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 {
     #region Properties 
     [Parameter] public IEnumerable<TItem> Items { get; set; } = Enumerable.Empty<TItem>();
-
     [Parameter] public Func<TItem, string> TextSelector { get; set; } = default!;
-
     [Parameter] public Func<TItem, TValue> ValueSelector { get; set; } = default!;
-
     [Parameter] public List<TValue> SelectedValues { get; set; } = new();
     [Parameter] public EventCallback<List<TValue>> SelectedValuesChanged { get; set; }
     [Parameter] public bool IsEnabled { get; set; } = true;

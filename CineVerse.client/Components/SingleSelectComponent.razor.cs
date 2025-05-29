@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using static MudBlazor.Colors;
 
 namespace CineVerse.client.Components;
 
@@ -14,10 +13,11 @@ public partial class SingleSelectComponent<TItem, TValue> : ComponentBase
     [Parameter] public EventCallback<TValue?> SelectedValueChanged { get; set; }
     [Parameter] public bool Searchable { get; set; } = false;
     public bool IsOpen { get; set; } = false;
-    string DisplayText =>
-        Items.FirstOrDefault(i => Equals(ValueSelector(i), SelectedValue)) is { } sel
+
+    private string ToggleText => Items.FirstOrDefault(i => Equals(ValueSelector(i), SelectedValue)) is { } sel
         ? TextSelector(sel)
         : "Select…";
+
     IEnumerable<TItem> Filtered =>
         string.IsNullOrWhiteSpace(SearchTerm)
             ? Items
@@ -30,7 +30,7 @@ public partial class SingleSelectComponent<TItem, TValue> : ComponentBase
     #region Fields
 
     private string SearchTerm = "";
-    ElementReference MenuRef;
+    private ElementReference MenuRef;
 
     #endregion
 
