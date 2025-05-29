@@ -33,4 +33,22 @@ public class AppState
     };
 
     public string Location { get; set; } = "IT";
+
+
+    public readonly List<(string Value, string Label)> SortOptions =
+        new()
+        {
+            ("popularity.desc",          "Popularity ↓"),
+            ("popularity.asc",           "Popularity ↑"),
+            ("primary_release_date.desc","Release date ↓"),
+            ("primary_release_date.asc", "Release date ↑"),
+            ("revenue.desc",             "Revenue ↓"),
+            ("revenue.asc",              "Revenue ↑"),
+            ("vote_average.desc",        "Rating ↓"),
+            ("vote_average.asc",         "Rating ↑"),
+            ("vote_count.desc",          "Vote count ↓"),
+            ("vote_count.asc",           "Vote count ↑"),
+            ("original_title.asc",       "Title A → Z"),
+            ("original_title.desc",      "Title Z → A")
+        };
 }

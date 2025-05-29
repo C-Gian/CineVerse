@@ -47,11 +47,13 @@ else
 
                 <!-- REGION -->
                 <TitleWrapperComponent Label="Region"
-                                       TooltipText="Country on which to base the search by year and certificates">
-                    <TextboxComponent InputType="text"
-                                      Placeholder="e.g. US"
-                                      @bind-Value="SearchFiltersModel.Region"
-                                      Check="@(_ => ValidateRegion(SearchFiltersModel.Region))" />
+                                       TooltipText="Country on which to base the search filters (certification, providers, release dates etc.)">
+                    <SingleSelectComponent TItem="CountryApiResponse" TValue="string"
+                                           Items="Countries"
+                                           TextSelector="c => c.NativeName"
+                                           ValueSelector="c => c.Code"
+                                           Searchable="true"
+                                           @bind-SelectedValue="SearchFiltersModel.Region" />
                 </TitleWrapperComponent>
 
                 <!-- RELEASE YEAR FROM -->
@@ -83,15 +85,6 @@ else
                                           @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
                 </TitleWrapperComponent>
 
-                <!-- WATCH REGION -->
-                <TitleWrapperComponent Label="Watch Region"
-                                       TooltipText="Country code only used to list providers of the selected country">
-                    <TextboxComponent InputType="text"
-                                      Placeholder="e.g. US"
-                                      @bind-Value="SearchFiltersModel.WatchRegion"
-                                      Check="@(_ => ValidateRegion(SearchFiltersModel.WatchRegion))" />
-                </TitleWrapperComponent>
-
                 <!-- STREAMING PROVIDERS -->
                 <TitleWrapperComponent Label="Providers"
                                        TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
@@ -112,9 +105,12 @@ else
                 <!-- SORT -->
                 <TitleWrapperComponent Label="Sort by"
                                        TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
-                    <SortFilterComponent @bind-SortBy="SearchFiltersModel.SortBy" />
+                    <SingleSelectComponent TItem="(string Value,string Label)" TValue="string"
+                                           Items="AppState.SortOptions"
+                                           TextSelector="o => o.Label"
+                                           ValueSelector="o => o.Value"
+                                           @bind-SelectedValue="SearchFiltersModel.SortBy" />
                 </TitleWrapperComponent>
-                
             </div>
 
             <div style="display: flex; gap: 20px; align-items: center; vertical-align: middle; margin-top: 1rem;">

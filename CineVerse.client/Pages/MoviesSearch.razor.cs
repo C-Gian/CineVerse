@@ -3,7 +3,6 @@ using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System.Diagnostics.Metrics;
 
 namespace CineVerse.client.Pages;
 
