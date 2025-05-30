@@ -11,7 +11,6 @@ public class SearchFiltersModel
     public List<int> SelectedProviderIds { get; set; } = [];
     public bool IncludeAdult { get; set; } = true;
     public string? Region { get; set; } = string.Empty;
-    public string? WatchRegion { get; set; } = string.Empty;
     public string? SortBy { get; set; } = "popularity.desc";
 
     public List<string> SelectedCertCodes = new();

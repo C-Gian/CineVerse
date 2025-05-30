@@ -182,6 +182,24 @@ public class MovieService : IMovieService
     {
         var qs = new Dictionary<string, string?>();
 
+        if (!string.IsNullOrWhiteSpace(f.Region))
+        {
+            qs["region"] = f.Region;
+            qs["certification_country"] = f.Region;
+            qs["watch_region"] = f.Region;
+        }
+
+        if (f.SelectedCertCodes.Any() && !string.IsNullOrWhiteSpace(f.Region))
+        {
+            qs["certification_country"] = f.Region;
+            qs["certification"] = f.SelectedCertCodes.First();
+        }
+
+        if (f.SelectedProviderIds.Any())
+        {
+            qs["with_watch_providers"] = string.Join('|', f.SelectedProviderIds);
+        }
+
         qs["include_adult"] = f.IncludeAdult.ToString().ToLowerInvariant();
 
         if (f.IncludedGenres.Any())
@@ -207,23 +225,6 @@ public class MovieService : IMovieService
         if (int.TryParse(f.ToYear, out var y2))
         {
             qs["release_date.lte"] = $"{y2}-12-31";
-        }
-        if (f.SelectedProviderIds.Any())
-        {
-            qs["with_watch_providers"] = string.Join('|', f.SelectedProviderIds);
-        }
-        if (!string.IsNullOrWhiteSpace(f.WatchRegion))
-        {
-            qs["watch_region"] = f.WatchRegion;
-        }
-        if (!string.IsNullOrWhiteSpace(f.Region))
-        {
-            qs["region"] = f.Region;
-        }
-        if (f.SelectedCertCodes.Any() && !string.IsNullOrWhiteSpace(f.Region))
-        {
-            qs["certification_country"] = f.Region;
-            qs["certification"] = f.SelectedCertCodes.First();
         }
 
         qs["sort_by"] = f.SortBy;

@@ -30,6 +30,12 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     #region Methods
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        IsEnabled = Items.Any();
+    }
+
     async Task Toggle(TValue id)
     {
         Console.WriteLine("Toggle called");

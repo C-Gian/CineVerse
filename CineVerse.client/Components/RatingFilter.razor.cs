@@ -18,9 +18,9 @@ public partial class RatingFilter
         get
         {
             if (SelectedLess is null && SelectedGreater is null) return "";
-            if (SelectedLess is not null && SelectedGreater is null) return $"< {SelectedLess}";
             if (SelectedLess is null && SelectedGreater is not null) return $"> {SelectedGreater}";
-            return $"< {SelectedLess} | > {SelectedGreater}";
+            if (SelectedLess is not null && SelectedGreater is null) return $"< {SelectedLess}";
+            return $"> {SelectedGreater}&nbsp;&nbsp;< {SelectedLess}";
         }
     }
 

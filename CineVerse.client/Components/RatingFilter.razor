@@ -3,27 +3,12 @@
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
         <span class="rating-label">@((SelectedLess == null && SelectedGreater == null) ? "No Range" : "Range")</span>
-        <span class="rating-value">@RatingLabel</span>
+        <span class="rating-value">@((MarkupString)RatingLabel)</span>
         <span class="rating-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
 
     <div class="rating-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
         <div class="rating-radio-columns">
-            <div class="rating-radio-column">
-                <div class="rating-column-label">Less than</div>
-                @for (int i = 1; i <= 10; i++)
-                {
-                    var value = i;
-                    <label class="rating-radio-item">
-                        <input type="radio"
-                               name="less-than"
-                               value="@value"
-                               checked="@(SelectedLess == value)"
-                               @onchange="@(() => SelectLess(value))" />
-                        <span>@value</span>
-                    </label>
-                }
-            </div>
             <div class="rating-radio-column">
                 <div class="rating-column-label">Greater than</div>
                 @for (int i = 1; i <= 10; i++)
@@ -39,6 +24,21 @@
                     </label>
                 }
             </div>
+            <div class="rating-radio-column">
+                <div class="rating-column-label">Less than</div>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    var value = i;
+                    <label class="rating-radio-item">
+                        <input type="radio"
+                               name="less-than"
+                               value="@value"
+                               checked="@(SelectedLess == value)"
+                               @onchange="@(() => SelectLess(value))" />
+                        <span>@value</span>
+                    </label>
+                }
+            </div>
         </div>
         <div class="rating-dropdown-footer">
             <button class="rating-clear" @onclick="() => ResetRating(null)">Clear</button>
@@ -49,8 +49,8 @@
 <style>
     .rating-dropdown {
         position: relative;
-        font-family: sans-serif;
         user-select: none;
+        font-family: inherit;
         height: 42px;
     }
 
@@ -59,11 +59,14 @@
         align-items: center;
         background: rgba(255,255,255,0.06);
         border-radius: 8px;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.75rem;
         cursor: pointer;
         color: #fff;
         height: 100%;
         gap: 0.5rem;
+        width: 100%;
+        min-width: 200px;
+        justify-content: space-between;
     }
 
     .rating-label {
@@ -74,16 +77,12 @@
 
     .rating-value {
         background: #444;
-        margin-left: 5px;
-        margin-right: 5px;
         padding-left: 8px;
         padding-right: 9px;
         padding-top: 1px;
         padding-bottom: 0px;
         border-radius: 5px;
         font-size: 0.8rem;
-        white-space: nowrap;
-        display: inline-block;
     }
 
     .rating-arrow {

@@ -3,7 +3,7 @@
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
         <span class="genre-label">@ToggleText</span>
-        <span class="genre-value">@LabelText</span>
+        <span class="genre-value">@((MarkupString)LabelText)</span>
         <span class="genre-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
 
@@ -58,31 +58,30 @@
         align-items: center;
         background: rgba(255,255,255,0.06);
         border-radius: 8px;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.75rem;
         cursor: pointer;
         color: #fff;
         height: 100%;
         gap: 0.5rem;
+        width: 100%;
+        min-width: 200px;
+        justify-content: space-between;
     }
 
     .genre-label {
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         white-space: nowrap;
     }
 
     .genre-value {
         background: #444;
-        margin-left: 5px;
-        margin-right: 5px;
         padding-left: 8px;
         padding-right: 9px;
         padding-top: 1px;
         padding-bottom: 0px;
         border-radius: 5px;
         font-size: 0.8rem;
-        white-space: nowrap;
-        display: inline-block;
     }
 
     .genre-arrow {

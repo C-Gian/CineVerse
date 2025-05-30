@@ -16,12 +16,14 @@ public partial class MoviesSearch
     public List<MovieResultResponse> Movies { get; set; } = [];
     public List<Genre> Genres { get; set; } = [];
     public List<CountryApiResponse> Countries { get; set; } = [];
-    public List<CertificationApiResponse> Certifications { get; set; }
+    public MovieCertificationsApiResponse Certifications { get; set; }
     public List<GeneralWatchProvider> WatchProviders { get; set; }
     public bool IsLoading { get; set; } = false;
     public int CurrentPage { get; set; }
     public SearchFiltersModel SearchFiltersModel { get; set; } = new();
-
+    public List<CertificationApiResponse> CertificationCountry =>
+        Certifications.Certifications.ContainsKey(SearchFiltersModel.Region!) ?
+        Certifications.Certifications[SearchFiltersModel.Region!] : [];
     #endregion
 
 
@@ -55,8 +57,7 @@ public partial class MoviesSearch
             .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
         Countries = await CountryService.GetCountriesAsync();
-        var certifications = await MovieService.GetMoviesCertifications();
-        Certifications = certifications.Certifications[AppState.Location];
+        Certifications = await MovieService.GetMoviesCertifications();
         await LoadMoviesAsync(1);
         await LoadGenresAsync();
         IsLoading = false;

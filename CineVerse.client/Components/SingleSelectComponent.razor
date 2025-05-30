@@ -52,11 +52,12 @@
         align-items: center;
         background: rgba(255,255,255,0.06);
         border-radius: 8px;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.75rem;
         cursor: pointer;
         color: #fff;
         height: 100%;
         width: 100%;
+        min-width: 200px;
         justify-content: space-between;
         gap: 0.5rem;
     }
@@ -65,7 +66,8 @@
         font-size: 1.5rem;
         line-height: 0;
         opacity: .6;
-        transition: transform .25s
+        display: inline-block;
+        transition: transform .25s ease;
     }
 
         .select-arrow.up {
@@ -78,7 +80,9 @@
         left: 0;
         right: 0;
         display: flex;
-        height: 450px;
+        min-height: 100px;
+        min-width: 200px;
+        height: fit-content;
         flex-direction: column;
         gap: 0.75rem;
         z-index: 9999;
@@ -118,7 +122,7 @@
     }
 
     .select-options {
-        max-height: 450px;
+        max-height: 400px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;

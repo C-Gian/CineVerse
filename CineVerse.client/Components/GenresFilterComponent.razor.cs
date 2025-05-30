@@ -16,7 +16,7 @@ public partial class GenresFilterComponent
     private string LabelText =>
         IncludedGenres.Count == 0 && ExcludedGenres.Count == 0
             ? ""
-            : $"{IncludedGenres.Count} in | {ExcludedGenres.Count} ex";
+            : $"{IncludedGenres.Count} in &nbsp;&nbsp; {ExcludedGenres.Count} ex";
 
     private string ToggleText => (IncludedGenres.Count == 0 && ExcludedGenres.Count == 0) ? "No Selection" : "Selected";
 
