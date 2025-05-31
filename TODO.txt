@@ -1,0 +1,16 @@
+- sistemare chiamate grid in search per avere grid completa.
+- cambiare search, mettere searchbar nell'appbar in alto e lasciare solo filtri.
+- pensare a flusso app, quindi home è ok, ma quando clicco sulla sezione "on air" oppure "popular" etc in quale pagina andare,
+  pensare se search e allfilm è ancora un'unica entità, etc..
+- creare localizzazione app con tutte traduzioni.
+- cambiare chiamate api home aggiungendo per ognuna il paese scelto nella localizzazione.
+- cambiare estetica matchando quella dei link salvati.
+- pensare a nuove pagine da aggiungere altrimenti drawer è scarno.
+- creare utenza con login, registrazione, etc..
+- creare impostazioni menu nelle quali mettere darkk theme, lingua, logout etc..
+- creare pagina utente nel quale si modificano cose.
+- creare watchlist personale.
+- vedere se si possono aggiungere recensioni utente ai detail movie.
+- logo e scritta
+- check new fonte dati oltre tmdb, magari si migliora l'app.
+- 
