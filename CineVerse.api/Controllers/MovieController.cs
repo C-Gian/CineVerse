@@ -25,9 +25,9 @@ public class MovieController : ControllerBase
 
     [HttpGet("discover")]
     [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> DiscoverMovies([FromBody] SearchFiltersModel filters, CancellationToken ct = default)
+    public async Task<IActionResult> DiscoverMovies([FromBody] SearchFiltersModel filters, [FromQuery] int page = 1, CancellationToken ct = default)
     {
-        var movies = await _movieService.DiscoverMoviesAsync(filters, ct);
+        var movies = await _movieService.DiscoverMoviesAsync(filters, page, ct);
         return Ok(movies);
     }
 

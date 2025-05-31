@@ -25,5 +25,5 @@ public interface IMovieService
 
     public Task<MovieCertificationsApiResponse> GetMoviesCertifications(CancellationToken ct = default);
 
-    public Task<MoviesApiResponse> DiscoverMoviesAsync(SearchFiltersModel filters, CancellationToken ct = default);
+    public Task<MoviesApiResponse> DiscoverMoviesAsync(SearchFiltersModel filters, int page = 1, CancellationToken ct = default);
 }

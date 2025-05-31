@@ -7,10 +7,10 @@ namespace CineVerse.client.Services;
 
 public class MovieService(RestClient rest) : IMovieService
 {
-    public async Task<MoviesApiResponse> DiscoverMoviesAsync(SearchFiltersModel filters, CancellationToken ct = default)
+    public async Task<MoviesApiResponse> DiscoverMoviesAsync(SearchFiltersModel filters, int page = 1, CancellationToken ct = default)
     {
-        var req = new RestRequest("/api/movie/discover", Method.Post).AddJsonBody(filters);
-
+        var req = new RestRequest("/api/movie/discover", Method.Post).AddJsonBody(filters).AddQueryParameter("page", page.ToString());
+        
         var res = await rest.ExecuteGetAsync<MoviesApiResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)

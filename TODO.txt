@@ -2,6 +2,8 @@
 - cambiare search, mettere searchbar nell'appbar in alto e lasciare solo filtri.
 - pensare a flusso app, quindi home è ok, ma quando clicco sulla sezione "on air" oppure "popular" etc in quale pagina andare,
   pensare se search e allfilm è ancora un'unica entità, etc..
+- pensare se fare search dinamica, quindi se mentre si scrive mostrare risultati in live.
+- cercare come gestire css, ovvero come usare file per ogni componente e come fare per mettere elementi comuni nell'app.css in modo da non riscriverli mille volte, facendo si che i componenti prendano sia dal loro file che dall'app.css. Se ci riesco, refactorare tutto il codice.
 - creare localizzazione app con tutte traduzioni.
 - cambiare chiamate api home aggiungendo per ognuna il paese scelto nella localizzazione.
 - cambiare estetica matchando quella dei link salvati.
@@ -13,4 +15,11 @@
 - vedere se si possono aggiungere recensioni utente ai detail movie.
 - logo e scritta
 - check new fonte dati oltre tmdb, magari si migliora l'app.
-- 
+
+
+
+
+futuro lontanissimo:
+- eliminare mud blazor risistemando tutta l'app a livello estetico.
+- omogenizzare e migliorare css e formattazione in tutta l'app.
+- efficientare il codice.

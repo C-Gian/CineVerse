@@ -178,9 +178,11 @@ public class MovieService : IMovieService
         return apiDto;
     }
 
-    public async Task<MovieResponse> DiscoverMoviesAsync(SearchFiltersModel f, CancellationToken ct)
+    public async Task<MovieResponse> DiscoverMoviesAsync(SearchFiltersModel f, int page, CancellationToken ct)
     {
         var qs = new Dictionary<string, string?>();
+
+        qs["page"] = page.ToString();
 
         if (!string.IsNullOrWhiteSpace(f.Region))
         {
