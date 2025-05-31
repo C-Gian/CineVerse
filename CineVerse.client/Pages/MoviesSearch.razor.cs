@@ -51,15 +51,17 @@ public partial class MoviesSearch
     {
         await base.OnInitializedAsync();
         IsLoading = true;
+
         var allProviders = await MovieService.GetGeneralWatchProviders(LANGUAGE, REGION);
+        Countries = await CountryService.GetCountriesAsync();
+        Genres = await LoadGenresAsync();
+        Certifications = await MovieService.GetMoviesCertifications();
         WatchProviders = allProviders.Results
             .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)                
             .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
-        Countries = await CountryService.GetCountriesAsync();
-        Certifications = await MovieService.GetMoviesCertifications();
-        await LoadMoviesAsync(1);
-        await LoadGenresAsync();
+        await HandleSearchAsync();
+
         IsLoading = false;
     }
 
@@ -89,25 +91,26 @@ public partial class MoviesSearch
         }
     }
 
-    private async Task LoadGenresAsync()
+    private async Task<List<Genre>> LoadGenresAsync()
     {
-        Genres = await GenreService.GetGenres() ?? [];
-    }
-
-    private async Task SearchAsync()
-    {
-        Movies = await MovieService.SearchMovie(_query, 1);
+        return await GenreService.GetGenres() ?? [];
     }
 
     private async Task HandleSearchAsync()
     {
-        if (SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult)
+        if (string.IsNullOrEmpty(_query))
         {
-            Movies = [];
+            if (SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult)
+            {
+                Movies = [];
+            } else
+            {
+                var result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel);
+                Movies = result.Results ?? [];
+            }
         } else
         {
-            var result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel);
-            Movies = result.Results ?? [];
+            Movies = await MovieService.SearchMovie(_query, 1);
         }
     }
 
@@ -115,7 +118,7 @@ public partial class MoviesSearch
     {
         if (e.Key is "Enter")
         {
-            await SearchAsync();
+            await HandleSearchAsync();
         }
     }
 
@@ -192,7 +195,13 @@ public partial class MoviesSearch
 
     private void ClearSearchFilters()
     {
-        SearchFiltersModel = new SearchFiltersModel();  
+        SearchFiltersModel = new SearchFiltersModel();
+        ClearQuery();
+    }
+
+    private void ClearQuery()
+    {
+        _query = "";
     }
 
     #endregion

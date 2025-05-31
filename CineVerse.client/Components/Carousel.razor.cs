@@ -12,6 +12,7 @@ public partial class Carousel<TItem> : ComponentBase, IDisposable
     [Parameter] public int CardWidth { get; set; }
     [Parameter] public int Margin { get; set; }
     [Parameter] public bool IsLink { get; set; }
+    [Parameter] public bool MarginBottom { get; set; } = false;
     private int TotalPages => (int)Math.Ceiling(Items.Count / (double)VisibleCount);
     private string TrackStyle => $"transform: translateX(-{_page * (VisibleCount * CardWidth + Margin)}px);";
 

@@ -135,6 +135,7 @@
     display: flex;
     background-color: #03060b;
     height: calc(100vh - 75px);
+    overflow-y: hidden;
 }
 
 .content-area {

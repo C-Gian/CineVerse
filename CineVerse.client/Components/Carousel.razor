@@ -5,16 +5,16 @@
 		<SectionTitle SectionName="@SectionName" IsLink=@IsLink Link="/movies/list" />
 
 		<div class="carousel-info-buttons">
-			<button class="nav left" @onclick="Prev">
-				<span>‹</span>
+			<button class="carousel-nav" @onclick="Prev">
+				<span class="carousel-nav-span">‹</span>
 			</button>
-			<button class="nav right" @onclick="Next">
-				<span>›</span>
+			<button class="carousel-nav" @onclick="Next">
+				<span class="carousel-nav-span">›</span>
 			</button>
 		</div>
 	</div>
 
-	<div class="carousel-wrapper" @onmouseenter="Pause" @onmouseleave="Resume">
+	<div class="carousel-wrapper" style="margin-bottom: @(MarginBottom ? "100px" : "0px")" @onmouseenter="Pause" @onmouseleave="Resume">
 		<div class="carousel-viewport">
 			<div class="carousel-track" style="@TrackStyle">
 				@foreach (var item in Items)
@@ -76,7 +76,7 @@
 		padding: 0.5rem;
 	}
 
-	.nav {
+	.carousel-nav {
 		background: rgba(255, 255, 255, 0.06);
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		color: #fff;
@@ -93,19 +93,20 @@
 		backdrop-filter: blur(4px);
 	}
 
-		.nav:hover {
+		.carousel-nav:hover {
 			background: rgba(255, 255, 255, 0.12);
 			border-color: rgba(255, 255, 255, 0.25);
 		}
 
-		.nav:disabled {
+		.carousel-nav:disabled {
 			opacity: 0.3;
 			cursor: default;
 		}
 
-		.nav span {
+	.carousel-nav-span {
+			height: inherit !important;
 			position: relative;
-			top: -1px;
+			top: -5px;
 		}
 
 </style>

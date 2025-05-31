@@ -1,6 +1,6 @@
 ﻿@inherits ComponentBase
 
-<div class="movie-card-container" @onclick="NavigateToDetails">
+<a href="@($"/movie/{Movie.Id}")" class="movie-card-container">
 	<div class="movie-card-image">
 		<img src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title poster" />
 	</div>
@@ -9,7 +9,7 @@
 		<h3 class="movie-title">@Movie.Title</h3>
 		<span class="movie-year">@Movie.ReleaseDate?.Split('-')[0]</span>
 	</div>
-</div>
+</a>
 
 <style>
 	.movie-card-container {

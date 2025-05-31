@@ -4,74 +4,63 @@
 @using CineVerse.client.Components;
 
 <div class="home-container">
-	@{
-		if (NowPlayingMovies.Any())
-		{
-			<CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="NowPlayingMovies" IsLink=true VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
-				<SlideTemplate Context="movie">
-					<div style="width: 300px; height: 100%;">
-						<MovieCard Movie="movie" />
-					</div>
-				</SlideTemplate>
-			</CineVerse.client.Components.Carousel>
-		}
-		else
-		{
-			<MudProgressCircular Size="Size.Large" Class="m-6" />
-		}
-	}
+    @if (IsLoading)
+    {
+        <div class="home-loading-overlay">
+            <MudProgressCircular Color="Color.Tertiary"
+                                 Rounded="true"
+                                 Size="Size.Large"
+                                 Indeterminate="true"
+                                 StrokeWidth="4" />
+        </div>
+    } 
+    else
+    {
+        <CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="NowPlayingMovies" IsLink=true VisibleCount="5" AutoplayMs="5000" SectionName="On Air" CardWidth="300" Margin="80">
+            <SlideTemplate Context="movie">
+                <div style="width: 300px; height: 100%;">
+                    <MovieCard Movie="movie" />
+                </div>
+            </SlideTemplate>
+        </CineVerse.client.Components.Carousel>
 
-	@{
-		if (UpcomingMovies.Any())
-		{
-			<div>
-				<SectionTitle SectionName="Upcoming Movies" IsLink="true" Link="/movies/list" />
-				<SplitSlider Movies="UpcomingMovies" MaxVisible="7" AutoplayMs="5000" />
-			</div>
-		}
-		else
-		{
-			<MudProgressCircular Size="Size.Large" Class="m-6" />
-		}
-	}
+        <div>
+            <SectionTitle SectionName="Upcoming Movies" IsLink="true" Link="/movies/list" />
+            <SplitSlider Movies="UpcomingMovies" MaxVisible="7" AutoplayMs="5000" />
+        </div>
 
-	@{
-		if (AppState.Genres.Any())
-		{
-			<div>
-				<SectionTitle SectionName="Genres" IsLink="false" />
-				<GenreGrid Movies="PopularMovies" />
-			</div>
-		}
-		else
-		{
-			<MudProgressCircular Size="Size.Large" Class="m-6" />
-		}
-	}
+        <div>
+            <SectionTitle SectionName="Genres" IsLink="false" />
+            <GenreGrid Movies="PopularMovies" />
+        </div>
 
-	@{
-		if (PopularMovies.Any())
-		{
-			<CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="PopularMovies" IsLink=true VisibleCount="7" AutoplayMs="5000" SectionName="Popular" CardWidth="200" Margin="100">
-				<SlideTemplate Context="movie">
-					<div style="width: 200px; height: 100%;">
-						<MovieCard Movie="movie" />
-					</div>
-				</SlideTemplate>
-			</CineVerse.client.Components.Carousel>
-		}
-		else
-		{
-			<MudProgressCircular Size="Size.Large" Class="m-6" />
-		}
-	}
+        <CineVerse.client.Components.Carousel TItem="MovieResultResponse" Items="PopularMovies" IsLink=true VisibleCount="7" AutoplayMs="5000" SectionName="Popular" CardWidth="200" Margin="100" MarginBottom="true">
+            <SlideTemplate Context="movie">
+                <div style="width: 200px; height: 100%;">
+                    <MovieCard Movie="movie" />
+                </div>
+            </SlideTemplate>
+        </CineVerse.client.Components.Carousel>
+    }
 </div>
 
 <style>
-	.home-container {
-		display: flex;
-		flex-direction: column;
-		gap: 100px;
-		margin: 50px;
-	}
+    .home-container {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        gap: 100px;
+        padding: 50px;
+    }
+
+    .home-loading-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+        height: 100%; 
+        width: 100%;
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+    }
 </style>

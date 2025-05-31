@@ -32,13 +32,13 @@
              style="--drawer-w:72px; padding: 0 1rem;">
             <ul class="nav-list">
                 <li>
-                    <a href="/" class="nav-link @(CurrentUrl=="/" ? "active":null)">
+                    <a href="/" class="nav-link @(CurrentUrl == "/" ? "active" : null)">
                         <i class="material-icons">home</i>
                         <span class="nav-text">Home</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/movies/search" class="nav-link @(CurrentUrl=="/movies/search" ? "active":null)">
+                    <a href="/movies/search" class="nav-link @(CurrentUrl == "/movies/search" ? "active" : null)">
                         <i class="material-icons">movie</i>
                         <span class="nav-text">All Movies</span>
                     </a>
@@ -58,7 +58,7 @@
         display: flex;
         align-items: center;
         gap: .75rem;
-        padding: .65rem 1rem;
+        padding: .65rem 1rem !important;
         color: #AAB0C0;
         text-decoration: none;
         font-size: .95rem;
@@ -72,8 +72,14 @@
         }
 
         .nav-link.active {
+            
             background: rgba(255, 255, 255, 0.1) !important;
             color: white;
+        }
+
+        .nav-link > .material-icons {
+            position: relative;
+            left: -5px !important;
         }
 
     .drawer.closed .nav-text {
