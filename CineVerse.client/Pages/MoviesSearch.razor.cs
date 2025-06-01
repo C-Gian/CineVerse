@@ -1,8 +1,10 @@
 ﻿using CineVerse.client.ApiResponses;
 using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
+using CineVerse.Client.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System.Collections.Generic;
 
 namespace CineVerse.client.Pages;
 
@@ -14,6 +16,7 @@ public partial class MoviesSearch
     [Inject] public ICountryService CountryService { get; set; }
     [Inject] public AppState AppState { get; set; }
     public List<MovieResultResponse> Movies { get; set; } = [];
+    public Queue<MovieResultResponse> MovieBuffer { get; set; } = new();
     public List<Genre> Genres { get; set; } = [];
     public List<CountryApiResponse> Countries { get; set; } = [];
     public MovieCertificationsApiResponse Certifications { get; set; }
@@ -60,7 +63,7 @@ public partial class MoviesSearch
             .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)                
             .OrderBy(p => p.DisplayPriorities![REGION])       
             .ToList();
-        await HandleSearchAsync();
+        await LoadMoviesAsync(1);
 
         IsLoading = false;
     }
@@ -73,11 +76,23 @@ public partial class MoviesSearch
         {
             Movies = [];
 
-            var movieResponse = await MovieService.GetPopularMovies((pageNumber * 2) - 1) ?? new MoviesApiResponse();
-            var movieResponse2 = await MovieService.GetPopularMovies(pageNumber * 2) ?? new MoviesApiResponse();
-
-            Movies.AddRange(movieResponse.Results);
-            Movies.AddRange(movieResponse2.Results);
+            if (string.IsNullOrEmpty(_query))
+            {
+                if (!(SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult))
+                {
+                    var result1 = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, (pageNumber * 2) - 1);
+                    var result2 = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, (pageNumber * 2));
+                    Movies.AddRange(result1.Results);
+                    Movies.AddRange(result2.Results);
+                }
+            }
+            else
+            {
+                var result1 = await MovieService.SearchMovie(_query, (pageNumber * 2) - 1);
+                var result2 = await MovieService.SearchMovie(_query, (pageNumber * 2));
+                Movies.AddRange(result1);
+                Movies.AddRange(result2);
+            }
 
             CurrentPage = pageNumber;
         }
@@ -98,20 +113,7 @@ public partial class MoviesSearch
 
     private async Task HandleSearchAsync()
     {
-        if (string.IsNullOrEmpty(_query))
-        {
-            if (SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult)
-            {
-                Movies = [];
-            } else
-            {
-                var result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel);
-                Movies = result.Results ?? [];
-            }
-        } else
-        {
-            Movies = await MovieService.SearchMovie(_query, 1);
-        }
+        await LoadMoviesAsync(1);
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)

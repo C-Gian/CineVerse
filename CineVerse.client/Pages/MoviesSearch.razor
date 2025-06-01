@@ -6,7 +6,13 @@
 
 @if (IsLoading)
 {
-    <MudProgressCircular Size="Size.Large" Class="m-6" />
+    <div class="search-loading-overlay">
+        <MudProgressCircular Color="Color.Tertiary"
+                             Rounded="true"
+                             Size="Size.Large"
+                             Indeterminate="true"
+                             StrokeWidth="4" />
+    </div>
 }
 else
 {
@@ -132,6 +138,17 @@ else
 
 
 <style>
+    .search-loading-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+        height: 100%;
+        width: 100%;
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+    }
+
     .search-panel {
         position: relative;
         z-index: 9999;
