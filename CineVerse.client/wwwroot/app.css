@@ -3,6 +3,7 @@
 html, body {
     font-family: 'Manrope', sans-serif !important;
     user-select: none;
+    margin: 0px;
 }
 
 a, .btn-link {

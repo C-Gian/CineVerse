@@ -3,18 +3,11 @@ using CineVerse.client.Options;
 using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
 using Microsoft.Extensions.Options;
-using MudBlazor.Services;
 using RestSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMudServices();
-
-builder.Services.AddBlazorBootstrap();
-
 builder.Services.AddSingleton<AppState>();
-
-builder.Services.AddSingleton(AppTheme.Dark);
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();

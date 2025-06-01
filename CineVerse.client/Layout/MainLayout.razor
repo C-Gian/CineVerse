@@ -1,10 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@inject MudTheme Theme
-
-<MudThemeProvider Theme="Theme" />
-<MudPopoverProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
 
 <div class="layout-root">
 
@@ -54,6 +48,10 @@
 </div>
 
 <style>
+    .appbar{
+        
+    }
+
     .nav-link {
         display: flex;
         align-items: center;
@@ -81,6 +79,10 @@
             position: relative;
             left: -5px !important;
         }
+
+    .drawer.closed {
+        width: 50px;
+    }
 
     .drawer.closed .nav-text {
         opacity: 0;
