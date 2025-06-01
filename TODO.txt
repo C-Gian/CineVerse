@@ -1,4 +1,3 @@
-- sistemare chiamate grid in search per avere grid completa.
 - cambiare search, mettere searchbar nell'appbar in alto e lasciare solo filtri.
 - pensare a flusso app, quindi home è ok, ma quando clicco sulla sezione "on air" oppure "popular" etc in quale pagina andare,
   pensare se search e allfilm è ancora un'unica entità, etc..
