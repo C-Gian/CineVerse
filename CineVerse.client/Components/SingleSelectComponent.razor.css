@@ -1,0 +1,37 @@
+﻿.select-search {
+    margin-bottom: .5rem;
+    padding: .8rem .6rem;
+    margin: .2rem .1rem;
+    border-radius: 6px;
+    background: #242636;
+    color: #fff;
+    border: none;
+    font-size: .9rem;
+    outline: none
+}
+
+.select-item {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    cursor: pointer;
+    color: #ddd;
+    font-size: .9rem;
+    padding: .8rem .75rem;
+    border-radius: 6px;
+    transition: background .15s ease,color .15s ease;
+}
+
+    .select-item:hover {
+        background: rgba(255,255,255,.10);
+        color: #fff
+    }
+
+    .select-item input {
+        display: none
+    }
+
+        .select-item input:checked + span {
+            font-weight: 600;
+            color: #fff
+        }

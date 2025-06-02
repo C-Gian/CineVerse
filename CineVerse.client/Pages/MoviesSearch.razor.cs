@@ -1,10 +1,9 @@
 ﻿using CineVerse.client.ApiResponses;
 using CineVerse.client.Models;
 using CineVerse.client.Services.Interfaces;
-using CineVerse.Client.Utils;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
-using System.Collections.Generic;
 
 namespace CineVerse.client.Pages;
 
@@ -156,29 +155,6 @@ public partial class MoviesSearch
             SearchFiltersModel.ToYear = DateTime.Now.Year.ToString();
         }
         return true;
-    }
-
-    private bool ValidateRegion(string? v)
-    {
-        if (string.IsNullOrEmpty(v))
-        {
-            return true;
-        }
-        var codedCountries = Countries.Select(c => c.Code).ToList();
-        if (!codedCountries.Contains(v))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private bool ValidateRegionCertifications(string? v)
-    {
-        if (string.IsNullOrEmpty(v))
-        {
-            return false;
-        }
-        return ValidateRegion(v);
     }
 
     private Task HandleRatingChanged((int? less, int? greater) values)

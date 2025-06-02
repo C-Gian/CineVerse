@@ -1,14 +1,14 @@
 ﻿@typeparam TItem
 @typeparam TValue
 
-<div class="select-dropdown" @onclick:stopPropagation>
-    <div class="select-toggle"
+<div class="dropdown" @onclick:stopPropagation>
+    <div class="dropdown-toggle"
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
-        <span class="multiselect-label">@ToggleText</span>
-        <span class="multiselect-arrow @(IsOpen ? "up" : null)">▾</span>
+        <span class="dropdown-toggle-label">@ToggleText</span>
+        <span class="dropdown-toggle-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
-    <div class="select-menu @(IsOpen ? "show" : "hide")"
+    <div class="dropdown-menu @(IsOpen ? "show" : "hide")"
          tabindex="-1"
          @onfocusout="LostFocus"
          @onfocusin="GainedFocus"
@@ -22,7 +22,7 @@
                    @ref="MenuRef" />
         }
 
-        <div class="select-options">
+        <div class="dropdown-options">
             @foreach (var opt in Filtered)
             {
                 var key = ValueSelector(opt);
@@ -36,126 +36,3 @@
         </div>
     </div>
 </div>
-
-
-<style>
-    .select-dropdown {
-        display: flex;
-        min-width: 180px;
-        position: relative;
-        font-family: inherit;
-        height: 52px;
-    }
-
-    .select-toggle {
-        display: flex;
-        align-items: center;
-        background: rgba(255,255,255,0.06);
-        border-radius: 8px;
-        padding: 0.5rem 0.75rem;
-        cursor: pointer;
-        color: #fff;
-        height: 100%;
-        width: 100%;
-        min-width: 200px;
-        justify-content: space-between;
-        gap: 0.5rem;
-    }
-
-    .select-arrow {
-        font-size: 1.5rem;
-        line-height: 0;
-        opacity: .6;
-        display: inline-block;
-        transition: transform .25s ease;
-    }
-
-        .select-arrow.up {
-            transform: rotate(180deg)
-        }
-
-    .select-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        display: flex;
-        min-height: 100px;
-        min-width: 200px;
-        height: fit-content;
-        flex-direction: column;
-        padding: 1rem;
-        gap: 0.75rem;
-        z-index: 9999;
-        opacity: 0;
-        transform: translateY(-10px);
-        pointer-events: none;
-        transition: opacity 0.15s ease, transform 0.25s ease;
-        margin-top: 8px;
-        background: #1a1d2b;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-
-        .select-menu.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-            outline: none;
-            box-shadow: none;
-        }
-
-        .select-menu.hide {
-            opacity: 0;
-            transform: translateY(-10px);
-            pointer-events: none;
-        }
-
-    .select-search {
-        margin-bottom: .5rem;
-        padding: .8rem .6rem;
-        margin: .2rem .1rem;
-        border-radius: 6px;
-        background: #242636;
-        color: #fff;
-        border: none;
-        font-size: .9rem;
-        outline: none
-    }
-
-    .select-options {
-        max-height: 400px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        box-sizing: content-box;
-        overscroll-behavior: contain;
-    }
-
-    .select-item {
-        display: flex;
-        align-items: center;
-        gap: .6rem;
-        cursor: pointer;
-        color: #ddd;
-        font-size: .9rem;
-        padding: .8rem .75rem;
-        border-radius: 6px; 
-        transition: background .15s ease,color .15s ease;
-    }
-
-        .select-item:hover {
-            background: rgba(255,255,255,.10);
-            color: #fff
-        }
-
-        .select-item input {
-            display: none
-        }
-
-            .select-item input:checked + span {
-                font-weight: 600;
-                color: #fff
-            }
-
-</style>

@@ -1,12 +1,12 @@
-﻿<div class="rating-dropdown" @onclick:stopPropagation>
-    <div class="rating-dropdown-toggle"
+﻿<div class="dropdown" @onclick:stopPropagation>
+    <div class="dropdown-toggle"
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
-        <span class="rating-label">@((SelectedLess == null && SelectedGreater == null) ? "No Range" : "Range")</span>
-        <span class="rating-value">@((MarkupString)RatingLabel)</span>
-        <span class="rating-arrow @(IsOpen ? "up" : null)">▾</span>
+        <span class="dropdown-toggle-label">@((SelectedLess == null && SelectedGreater == null) ? "No Range" : "Range")</span>
+        <span class="dropdown-toggle-value">@((MarkupString)RatingLabel)</span>
+        <span class="dropdown-toggle-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
-    <div class="rating-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
+    <div class="dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
         <div class="rating-radio-columns">
             <div class="rating-radio-column">
                 <div class="rating-column-label">Greater than</div>
@@ -39,170 +39,8 @@
                 }
             </div>
         </div>
-        <div class="rating-dropdown-footer">
-            <button class="rating-clear" @onclick="() => ResetRating(null)">Clear</button>
+        <div class="dropdown-footer">
+            <button type="button" class="clear-btn" @onclick="() => ResetRating(null)">Clear</button>
         </div>
     </div>
 </div>
-
-<style>
-    .rating-dropdown {
-        display: flex;
-        position: relative;
-        user-select: none;
-        font-family: inherit;
-        height: 52px;
-    }
-
-    .rating-dropdown-toggle {
-        display: flex;
-        align-items: center;
-        background: rgba(255,255,255,0.06);
-        border-radius: 8px;
-        padding: 0.5rem 0.75rem;
-        cursor: pointer;
-        color: #fff;
-        height: 100%;
-        gap: 0.5rem;
-        width: 100%;
-        min-width: 200px;
-        justify-content: space-between;
-    }
-
-    .rating-label {
-        font-weight: 600;
-        font-size: 0.85rem;
-        white-space: nowrap;
-    }
-
-    .rating-value {
-        background: #444;
-        padding-left: 8px;
-        padding-right: 9px;
-        padding-top: 1px;
-        padding-bottom: 0px;
-        border-radius: 5px;
-        font-size: 0.8rem;
-    }
-
-    .rating-arrow {
-        font-size: 1.5rem;
-        line-height: 0;
-        opacity: .6;
-        display: inline-block;
-        transition: transform .25s ease;
-    }
-
-        .rating-arrow.up {
-            transform: rotate(-180deg);
-        }
-
-    .rating-dropdown-menu {
-        transition: opacity 0.15s ease, transform 0.25s ease;
-        background: #1a1d2b;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        position: absolute;
-        margin-top: 8px;
-        display: flex;
-        flex-direction: column;
-        padding: 1rem;
-        gap: 0.75rem;
-        width: 100%;
-        height: fit-content;
-        z-index: 9999;
-        opacity: 0;
-        transform: translateY(-10px);
-        pointer-events: none;
-        top: 100%;
-    }
-
-        .rating-dropdown-menu.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-            outline: none;
-            box-shadow: none;
-        }
-
-        .rating-dropdown-menu.hide {
-            opacity: 0;
-            transform: translateY(-10px);
-            pointer-events: none;
-        }
-
-    .rating-radio-columns {
-        display: flex;
-        gap: 2.5rem;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    .rating-radio-column {
-        display: flex;
-        flex-direction: column;
-        gap: 0.30rem;
-        flex: 1;
-        min-width: 100px;
-        align-items: center;
-    }
-
-    .rating-column-label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #ccc;
-        margin-bottom: 0.2rem;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-        padding-bottom: 0.4rem;
-    }
-
-    .rating-radio-item {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        color: #eee;
-        font-size: 1rem;
-        padding: 4px 0;
-    }
-
-        .rating-radio-item input[type="radio"] {
-            accent-color: #5f8fff;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .rating-radio-item span {
-            display: inline-block;
-            width: 10px; 
-            text-align: right;
-        }
-
-    .rating-dropdown-footer {
-        display: flex;
-        justify-content: space-between;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        padding-top: 0.75rem;
-    }
-
-    .rating-clear {
-        width: 100%;
-        height: 42px;
-        padding: 0.4rem 0.8rem;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.85rem;
-        border: none;
-        background: transparent;
-        border: 1px solid rgba(95, 143, 255, 0.4);
-        color: #5f8fff;
-        transition: all 0.2s ease;
-        font-weight: 600;
-    }
-
-        .rating-clear:hover {
-            background: rgba(95, 143, 255, 0.1);
-            border-color: #5f8fff;
-        }
-</style>
