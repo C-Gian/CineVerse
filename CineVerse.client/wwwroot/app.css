@@ -4,7 +4,36 @@ html, body {
     font-family: 'Manrope', sans-serif !important;
     user-select: none;
     margin: 0px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120,120,120,0.4) transparent;
 }
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+
+    body *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    body *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    body *::-webkit-scrollbar-thumb {
+        background-color: rgba(120, 120, 120, 0.3);
+        border-radius: 6px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+        transition: background-color 0.3s ease;
+    }
+
+        body *::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(120, 120, 120, 0.6);
+        }
+
 
 a, .btn-link {
     color: #006bb7;
@@ -52,30 +81,4 @@ h1:focus {
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
-}
-
-body, html {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(120,120,120,0.4) transparent;
-}
-
-body *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-body *::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-body *::-webkit-scrollbar-thumb {
-    background-color: rgba(120, 120, 120, 0.3);
-    border-radius: 6px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-    transition: background-color 0.3s ease;
-}
-
-body *::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(120, 120, 120, 0.6);
 }

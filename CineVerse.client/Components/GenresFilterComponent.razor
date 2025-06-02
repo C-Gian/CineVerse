@@ -6,18 +6,15 @@
         <span class="genre-value">@((MarkupString)LabelText)</span>
         <span class="genre-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
-
     <div class="genre-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
         <div class="genre-dropdown-options">
             <div class="genre-table-header">
                 <span>Genre</span>
                 <div class="d-inline-flex align-items-center gap-1" @onclick="SelectAllInclude">
-                    <Icon Name="IconName.Union" />
                     <span>Include</span>
                 </div>
 
                 <div class="d-inline-flex align-items-center gap-1" @onclick="SelectAllExclude">
-                    <Icon Name="IconName.Exclude" />
                     <span>Exclude</span>
                 </div>
             </div>
@@ -51,7 +48,7 @@
         position: relative;
         user-select: none;
         font-family: inherit;
-        height: 42px;
+        height: 52px;
     }
 
     .genre-dropdown-toggle {
@@ -102,8 +99,8 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        width: 350px;
-        height: 400px;
+        width: 100%;
+        height: fit-content;
         z-index: 9999;
         opacity: 0;
         transform: translateY(-10px);
@@ -121,6 +118,8 @@
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
+            outline: none;
+            box-shadow: none;
         }
 
         .genre-dropdown-menu.hide {
@@ -135,16 +134,15 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        padding-bottom: 1rem;
+        overscroll-behavior: contain;
     }
 
     .genre-table-header,
     .genre-table-row {
         display: grid;
-        grid-template-columns: 1fr 80px 80px;
+        grid-template-columns: minmax(0, 1fr) auto auto;
         align-items: center;
-        gap: 1rem;
-        margin-right: 10px;
+        gap: 0.75rem;
     }
 
     .genre-table-header {
@@ -153,11 +151,17 @@
         color: #aaa;
         border-bottom: 1px solid rgba(255,255,255,0.1);
         padding-bottom: 0.5rem;
+        margin-right: 10px;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #1a1d2b;
     }
 
     .genre-table-row {
         font-size: 0.9rem;
         color: #eee;
+        margin-right: 20px;
     }
 
         .genre-table-row input[type="checkbox"] {
@@ -171,6 +175,8 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        overflow-wrap: anywhere;
+        white-space: normal;
     }
 
     .genre-filtre-item-checkbox {
@@ -186,6 +192,7 @@
 
     .genre-clear-btn {
         width: 100%;
+        height: 42px;
         padding: 0.4rem 0.8rem;
         border-radius: 6px;
         font-weight: 600;
