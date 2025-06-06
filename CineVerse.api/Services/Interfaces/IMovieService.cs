@@ -11,7 +11,7 @@ public interface IMovieService
 
     public Task<MovieResponse> GetUpcomingMovies(int page, CancellationToken ct = default);
 
-    public Task<List<MovieResultResponse>> SearchMovie(string query, int page, CancellationToken ct = default);
+    public Task<MovieResponse> SearchMovie(string query, int page, CancellationToken ct = default);
 
     public Task<MovieDetailResponse> GetMovieDetail(int movieId, CancellationToken ct = default);
 

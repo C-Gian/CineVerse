@@ -18,7 +18,7 @@
                                name="greater-than"
                                value="@value"
                                checked="@(SelectedGreater == value)"
-                               @onchange="@(() => SelectGreater(value))" />
+                               @onclick="@(() => SelectGreater(value))" />
                         <span>@value</span>
                     </label>
                 }
@@ -33,7 +33,7 @@
                                name="less-than"
                                value="@value"
                                checked="@(SelectedLess == value)"
-                               @onchange="@(() => SelectLess(value))" />
+                               @onclick="@(() => SelectLess(value))" />
                         <span>@value</span>
                     </label>
                 }

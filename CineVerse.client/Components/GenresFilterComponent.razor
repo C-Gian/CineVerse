@@ -6,7 +6,7 @@
         <span class="dropdown-toggle-value">@((MarkupString)LabelText)</span>
         <span class="dropdown-toggle-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
-    <div class="dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
+    <div class="dropdown-menu @(IsOpen ? "show" : "hide") " tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
         <div class="dropdown-options">
             <div class="genre-table-header">
                 <span>Genre</span>
@@ -17,6 +17,7 @@
                 <div class="d-inline-flex align-items-center gap-1" @onclick="SelectAllExclude">
                     <span>Exclude</span>
                 </div>
+
             </div>
 
             @foreach (var genre in Genres)

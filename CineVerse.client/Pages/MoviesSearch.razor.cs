@@ -74,25 +74,20 @@ public partial class MoviesSearch
         try
         {
             Movies = [];
+            var result = new MoviesApiResponse();
 
-            if (string.IsNullOrEmpty(_query))
+            var excludeEverything = SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult;
+
+            if (!string.IsNullOrEmpty(_query))
             {
-                if (!(SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult))
-                {
-                    var result1 = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, (pageNumber * 2) - 1);
-                    var result2 = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, (pageNumber * 2));
-                    Movies.AddRange(result1.Results);
-                    Movies.AddRange(result2.Results);
-                }
+                result = await MovieService.SearchMovie(_query, pageNumber);
             }
-            else
+            else if (!excludeEverything)
             {
-                var result1 = await MovieService.SearchMovie(_query, (pageNumber * 2) - 1);
-                var result2 = await MovieService.SearchMovie(_query, (pageNumber * 2));
-                Movies.AddRange(result1);
-                Movies.AddRange(result2);
+                result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, pageNumber);
             }
 
+            Movies.AddRange(result.Results);
             CurrentPage = pageNumber;
         }
         catch (Exception ex)

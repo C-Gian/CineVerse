@@ -26,13 +26,13 @@ public partial class RatingFilter
 
     private async Task SelectLess(int? value)
     {
-        SelectedLess = value;
+        SelectedLess = SelectedLess == value ? null : value;
         await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
     }
 
     private async Task SelectGreater(int? value)
     {
-        SelectedGreater = value;
+        SelectedGreater = SelectedGreater == value ? null : value;
         await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
     }
 
@@ -47,18 +47,18 @@ public partial class RatingFilter
     {
         if (IsOpen)
         {
-            IsOpen = false; 
+            IsOpen = false;
             return;
         }
 
-        IsOpen = true;                  
-        await myDivRef.FocusAsync();    
+        IsOpen = true;
+        await myDivRef.FocusAsync();
     }
 
     async Task LostFocus(FocusEventArgs _)
     {
         IsOpen = false;
-        await Task.Delay(100);          
+        await Task.Delay(100);
     }
 
     async Task GainedFocus(FocusEventArgs _)

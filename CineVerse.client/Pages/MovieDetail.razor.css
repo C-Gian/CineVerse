@@ -1,0 +1,249 @@
+﻿.detail-layout {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background-color: #0e0e16;
+}
+
+.detail-header-section {
+    position: relative;
+    height: fit-content;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+}
+
+.detail-header-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    height: 100%;
+    width: 100%;
+    padding: 2rem 3rem;
+}
+
+.detail-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.detail-poster {
+    width: 250px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+}
+
+.detail-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    max-width: 60%;
+}
+
+    .detail-header-left h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+.detail-meta-info {
+    font-size: 0.85rem;
+    color: #bbb;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.detail-overview-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ddd;
+}
+
+.detail-body-section {
+    position: relative;
+    z-index: 9999;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(14,14,22,255);
+}
+
+.detail-section {
+    padding: 2rem 3rem;
+}
+
+    .detail-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+.detail-media-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 140px);
+    gap: 1rem;
+    grid-auto-flow: dense;
+}
+
+.detail-media-cell {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.media-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.detail-cell-0 {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.detail-cell-1 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.detail-cell-2 {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.detail-cell-3 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.detail-cell-4 {
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.detail-cell-5 {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.detail-cell-6 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.detail-cell-7 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.detail-cell-8 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.detail-cell-9 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.detail-cast-list {
+    display: flex;
+    gap: 3rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.detail-cast-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+    text-align: center;
+    color: #ccc;
+    gap: 0.25rem;
+}
+
+    .detail-cast-card img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 0.5rem;
+    }
+
+.detail-cast-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.detail-cast-role {
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+.detail-image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+    .detail-image-gallery img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+.detail-rating {
+    color: #FFD700;
+    font-weight: 400;
+}
+
+.detail-providers-container {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    align-items: center;
+    gap: 3rem;
+    width: fit-content;
+    padding: 1rem 1rem;
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+}
+
+.detail-providers-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.detail-provider-list {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.detail-provider-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+    color: #ccc;
+    font-size: 0.85rem;
+}
+
+    .detail-provider-card img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: transparent;
+    }

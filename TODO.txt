@@ -1,5 +1,5 @@
-- capire perchè se clicco clear si resetta grid senza aver cliccato search.
-- capire situazione icone (searchbar, exclude/include), prova quelle google usate per il drawer.
+- cookies and local storage per salvare sessione di ricerca
+- only released film, so expand to year filter 
 - creazione loader per rimpiazzo mudloader.
 - cambiare search, mettere searchbar nell'appbar in alto e lasciare solo filtri.
 - pensare a flusso app, quindi home è ok, ma quando clicco sulla sezione "on air" oppure "popular" etc in quale pagina andare,

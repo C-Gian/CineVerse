@@ -61,14 +61,14 @@ public class MovieService : IMovieService
         return result;
     }
 
-    public async Task<List<MovieResultResponse>> SearchMovie(string query, int page, CancellationToken ct)
+    public async Task<MovieResponse> SearchMovie(string query, int page, CancellationToken ct)
     {
         var url = $"search/movie?api_key={_apiKey}&query={query}&page={page}";
 
         var result = await _http.GetFromJsonAsync<MovieResponse>(url, ct)
                    ?? throw new ApplicationException("Empty TMDB response");
 
-        return result.Results;
+        return result;
     }
 
     public async Task<MovieDetailResponse> GetMovieDetail(int movieId, CancellationToken ct)

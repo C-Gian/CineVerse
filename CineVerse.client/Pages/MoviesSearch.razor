@@ -1,5 +1,4 @@
 ﻿@page "/movies/search"
-@page "/movies/list"
 
 @using CineVerse.client.Components
 @using CineVerse.client.ApiResponses
@@ -12,7 +11,9 @@ else
 {
     <div class="search-panel">
 
+
         <div class="search-box">
+            <span class="material-icons search-icon">search</span>
             <input type="text"
                    placeholder="Search for a movie…"
                    @bind-value="_query"
@@ -125,139 +126,3 @@ else
         <h1>NO MOVIES</h1>
     }
 }
-
-
-<style>
-    .search-loading-overlay {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        vertical-align: middle;
-        height: 100%;
-        width: 100%;
-        backdrop-filter: blur(4px);
-        z-index: 9999;
-    }
-
-    .search-panel {
-        position: relative;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        margin: 50px;
-        padding: 24px;
-        gap: 30px;
-        border-radius: 18px;
-        background: rgba(13,17,31,1);
-        backdrop-filter: blur(12px);
-    }
-
-    .search-box {
-        display: flex;
-        width: 100%;
-        position: relative;
-        flex: 1;
-    }
-
-        .search-box .icon {
-            position: absolute;
-            top: 50%;
-            left: 16px;
-            transform: translateY(-50%);
-            font-size: 1.1rem;
-            color: #7a7a7a;
-            pointer-events: none;
-        }
-
-        .search-box input {
-            width: 100%;
-            height: 56px;
-            padding: 0 44px 0 48px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(200,200,200,0.02);
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.01) inset;
-        }
-
-            .search-box input::placeholder {
-                color: #8a8da5;
-            }
-
-    .search-clear-btn {
-        position: absolute;
-        top: 50%;
-        right: 12px;
-        transform: translateY(-50%);
-        background: transparent;
-        border: none;
-        color: #aaa;
-        font-size: 1rem;
-        cursor: pointer;
-        padding: 10px;
-        line-height: 1;
-        border-radius: 50%;
-        transition: background 0.25s ease, color 0.25s ease, transform 0.1s ease;
-    }
-
-        .search-clear-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-
-    .filters-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-    }
-
-    .search-form {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .filters-button-group {
-        display: flex;
-        margin-top: 2rem;
-        gap: 20px;
-        align-items: center;
-        vertical-align: middle;
-    }
-
-    .filters-search-btn {
-        padding: 0.75rem 1.8rem;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 10px;
-        background: linear-gradient(135deg, #7459ff, #6247ff);
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-        .filters-search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(116,89,255,0.4);
-        }
-
-    .filters-clear-btn {
-        padding: 0.75rem 1.8rem;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 10px;
-        background: transparent;
-        color: #ccc;
-        border: 2px solid #7459ff;
-        cursor: pointer;
-        transition: background 0.2s ease, color 0.2s ease;
-    }
-
-        .filters-clear-btn:hover {
-            background: #7459ff;
-            color: white;
-        }
-</style> 

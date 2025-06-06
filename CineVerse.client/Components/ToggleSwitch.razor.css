@@ -1,0 +1,51 @@
+﻿.toggle-switch {
+    display: flex;
+    height: 52px;
+    align-items: center;
+    gap: .5rem;
+    cursor: pointer;
+    user-select: none;
+    align-items: center;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    color: #fff;
+    gap: 0.5rem;
+    min-width: 200px;
+    justify-content: space-between;
+}
+
+.toggle-label {
+    font-size: .875rem;
+    color: white;
+}
+
+.toggle-ui {
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    background: #c6c6c6;
+    position: relative;
+    transition: background .2s
+}
+
+    .toggle-ui::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 2px;
+        left: 2px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform .2s
+    }
+
+    .toggle-ui.on {
+        background: #2d2668;
+    }
+
+        .toggle-ui.on::before {
+            transform: translateX(16px)
+        }
