@@ -118,39 +118,39 @@ public partial class MoviesSearch
         }
     }
 
-    private bool ValidateFromYearRange(string? v)
-    {
-        if (string.IsNullOrEmpty(v))
-        {
-            return true;
-        }
-        if (!int.TryParse(SearchFiltersModel.FromYear, out var from))
-        {
-            return false;
-        }
-        return true;
-    }
+    //private bool ValidateFromYearRange(string? v)
+    //{
+    //    if (string.IsNullOrEmpty(v))
+    //    {
+    //        return true;
+    //    }
+    //    if (!int.TryParse(SearchFiltersModel.FromYear, out var from))
+    //    {
+    //        return false;
+    //    }
+    //    return true;
+    //}
 
-    private bool ValidateToYearRange(string? v)
-    {
-        if (string.IsNullOrEmpty(v))
-        {
-            return true;
-        }
-        if (!int.TryParse(SearchFiltersModel.FromYear, out var from) || !int.TryParse(SearchFiltersModel.ToYear, out var to))
-        {
-            return false;
-        }
-        if (to < from)
-        {
-            return false;
-        }
-        if (to > DateTime.Now.Year)
-        {
-            SearchFiltersModel.ToYear = DateTime.Now.Year.ToString();
-        }
-        return true;
-    }
+    //private bool ValidateToYearRange(string? v)
+    //{
+    //    if (string.IsNullOrEmpty(v))
+    //    {
+    //        return true;
+    //    }
+    //    if (!int.TryParse(SearchFiltersModel.FromYear, out var from) || !int.TryParse(SearchFiltersModel.ToYear, out var to))
+    //    {
+    //        return false;
+    //    }
+    //    if (to < from)
+    //    {
+    //        return false;
+    //    }
+    //    if (to > DateTime.Now.Year)
+    //    {
+    //        SearchFiltersModel.ToYear = DateTime.Now.Year.ToString();
+    //    }
+    //    return true;
+    //}
 
     private Task HandleRatingChanged((int? less, int? greater) values)
     {

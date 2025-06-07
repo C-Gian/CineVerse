@@ -6,8 +6,8 @@ public class SearchFiltersModel
     public List<int> ExcludedGenres { get; set; } = new();
     public int? RatingLess { get; set; }
     public int? RatingGreater { get; set; }
-    public string? FromYear { get; set; } = string.Empty;
-    public string? ToYear { get; set; } = string.Empty;
+    public DateTime? FromYear { get; set; }
+    public DateTime? ToYear { get; set; }
     public List<int> SelectedProviderIds { get; set; } = [];
     public bool IncludeAdult { get; set; } = false;
     public string? Region { get; set; } = "US";

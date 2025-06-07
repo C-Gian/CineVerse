@@ -1,0 +1,55 @@
+﻿.partial-date-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.partial-date-toggle {
+    height: 52px;
+    padding: 0 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.partial-date-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.partial-textbox {
+    width: 80px;
+    padding: 0.5rem;
+    font-size: 0.95rem;
+    background-color: rgba(255,255,255,0.06);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+}
+
+    .partial-textbox:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+.calendar-icon {
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    opacity: 0.6;
+}
