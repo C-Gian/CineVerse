@@ -26,6 +26,9 @@ public partial class MoviesSearch
     public List<CertificationApiResponse> CertificationCountry =>
         Certifications.Certifications.ContainsKey(SearchFiltersModel.Region!) ?
         Certifications.Certifications[SearchFiltersModel.Region!] : [];
+    private string? ReleaseYearFromErrorText { get; set; }
+    private string? ReleaseYearToErrorText { get; set; }
+
     #endregion
 
 
@@ -59,8 +62,8 @@ public partial class MoviesSearch
         Genres = await LoadGenresAsync();
         Certifications = await MovieService.GetMoviesCertifications();
         WatchProviders = allProviders.Results
-            .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)                
-            .OrderBy(p => p.DisplayPriorities![REGION])       
+            .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)
+            .OrderBy(p => p.DisplayPriorities![REGION])
             .ToList();
         await LoadMoviesAsync(1);
 
@@ -117,40 +120,27 @@ public partial class MoviesSearch
             await HandleSearchAsync();
         }
     }
+    
+    private (bool, string?) ValidateYear(string? v, bool isFrom)
+    {
+        if (string.IsNullOrEmpty(v))
+        {
+            return (true, null);
+        }
 
-    //private bool ValidateFromYearRange(string? v)
-    //{
-    //    if (string.IsNullOrEmpty(v))
-    //    {
-    //        return true;
-    //    }
-    //    if (!int.TryParse(SearchFiltersModel.FromYear, out var from))
-    //    {
-    //        return false;
-    //    }
-    //    return true;
-    //}
+        var fromValid = int.TryParse(SearchFiltersModel.ReleaseYearFrom, out var from);
+        var toValid = int.TryParse(SearchFiltersModel.ReleaseDayTo, out var to);
 
-    //private bool ValidateToYearRange(string? v)
-    //{
-    //    if (string.IsNullOrEmpty(v))
-    //    {
-    //        return true;
-    //    }
-    //    if (!int.TryParse(SearchFiltersModel.FromYear, out var from) || !int.TryParse(SearchFiltersModel.ToYear, out var to))
-    //    {
-    //        return false;
-    //    }
-    //    if (to < from)
-    //    {
-    //        return false;
-    //    }
-    //    if (to > DateTime.Now.Year)
-    //    {
-    //        SearchFiltersModel.ToYear = DateTime.Now.Year.ToString();
-    //    }
-    //    return true;
-    //}
+        if (!fromValid && !toValid)
+            return (false, "From Year and To Year must be valid numbers");
+
+        if (!fromValid || !toValid)
+            return (true, null); 
+
+        return isFrom
+            ? (from > to ? (false, "From Year must be lesser than To Year") : (true, null))
+            : (to < from ? (false, "To Year must be greater than From Year") : (true, null));
+    }
 
     private Task HandleRatingChanged((int? less, int? greater) values)
     {

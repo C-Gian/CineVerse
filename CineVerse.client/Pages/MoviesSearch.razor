@@ -53,19 +53,21 @@ else
                 </TitleWrapperComponent>
 
                 <!-- RELEASE YEAR FROM -->
-                <TitleWrapperComponent Label="Release Year From"
+                <TitleWrapperComponent Label="Release Year Greater Than"
                                        TooltipText="Include movies released on or after the year you specify (e.g. 2000).">
-
+                    <TextboxComponent InputType="number"
+                                      Placeholder="e.g. 2000"
+                                      @bind-Value="SearchFiltersModel.ReleaseYearFrom"
+                                      Check="v => ValidateYear(v, true)" />
                 </TitleWrapperComponent>
 
                 <!-- RELEASE YEAR TO -->
-                <TitleWrapperComponent Label="Release Year To"
+                <TitleWrapperComponent Label="Release Year Lesser Than"
                                        TooltipText="Include movies released on or before the year you specify (e.g. 2024).">
-                    <DateInputComponent Year="@FilterModel.ReleaseYear"
-                                        Month="@FilterModel.ReleaseMonth"
-                                        Day="@FilterModel.ReleaseDay"
-                                        OnChange="@(date => OnPartialDateChanged(date, isFrom: true))" />
-
+                    <TextboxComponent InputType="number"
+                                      Placeholder="e.g. 2025"
+                                      @bind-Value="SearchFiltersModel.ReleaseDayTo"
+                                      Check="v => ValidateYear(v, false)" />
                 </TitleWrapperComponent>
 
                 <!-- CERTIFICATIONS -->

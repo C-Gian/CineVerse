@@ -40,3 +40,9 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.error-message {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #ff4d4d;
+}

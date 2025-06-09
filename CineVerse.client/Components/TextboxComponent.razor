@@ -6,4 +6,9 @@
            placeholder="@Placeholder"
            @onkeydown="OnKeyDown"
            @onblur="Validate" />
+
+    @if (IsInvalid && !string.IsNullOrEmpty(InternalErrorText))
+    {
+        <div class="error-message">@InternalErrorText</div>
+    }
 </div>

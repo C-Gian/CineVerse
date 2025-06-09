@@ -15,22 +15,20 @@ public partial class TextboxComponent
     [Parameter] public string? Step { get; set; }
     [Parameter] public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
     [Parameter] public EventCallback<string> ValueChanged { get; set; }
-    [Parameter] public bool ShowTooltip { get; set; }
-    [Parameter] public string TooltipText { get; set; } = string.Empty;
-
-    [Parameter] public Func<string?, bool>? Check { get; set; }
+    [Parameter] public Func<string?, (bool IsValid, string? ErrorMessage)>? Check { get; set; }
 
     #endregion
 
 
     #region Fields
 
-    bool IsInvalid;
+    private bool IsInvalid;
+    private string? InternalErrorText;
 
     #endregion
 
 
-    #region Fields
+    #region Methods
 
     private async Task HandleInput(ChangeEventArgs e)
     {
@@ -40,7 +38,16 @@ public partial class TextboxComponent
 
     void Validate()
     {
-        IsInvalid = Check is not null && !Check.Invoke(Value);
+        if (Check is null)
+        {
+            IsInvalid = false;
+            InternalErrorText = null;
+            return;
+        }
+
+        var (valid, message) = Check.Invoke(Value);
+        IsInvalid = !valid;
+        InternalErrorText = message;
     }
 
     #endregion
