@@ -1,4 +1,4 @@
-﻿using CineVerse.client.ApiResponses;
+﻿using CineVerse.shared.ApiResponses;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 

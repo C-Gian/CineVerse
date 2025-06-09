@@ -1,8 +1,7 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Models;
-using CineVerse.client.Services.Interfaces;
+﻿using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Pages;
@@ -77,7 +76,7 @@ public partial class MoviesSearch
         try
         {
             Movies = [];
-            var result = new MoviesApiResponse();
+            var result = new MovieResponse();
 
             var excludeEverything = SearchFiltersModel.ExcludedGenres.Count == Genres.Count && !SearchFiltersModel.IncludeAdult;
 
@@ -129,7 +128,7 @@ public partial class MoviesSearch
         }
 
         var fromValid = int.TryParse(SearchFiltersModel.ReleaseYearFrom, out var from);
-        var toValid = int.TryParse(SearchFiltersModel.ReleaseDayTo, out var to);
+        var toValid = int.TryParse(SearchFiltersModel.ReleaseYearTo, out var to);
 
         if (!fromValid && !toValid)
             return (false, "From Year and To Year must be valid numbers");

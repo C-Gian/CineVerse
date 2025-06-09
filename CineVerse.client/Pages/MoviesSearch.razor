@@ -1,7 +1,7 @@
 ﻿@page "/movies/search"
 
 @using CineVerse.client.Components
-@using CineVerse.client.ApiResponses
+@using CineVerse.shared.ApiResponses
 
 @if (IsLoading)
 {
@@ -66,7 +66,7 @@ else
                                        TooltipText="Include movies released on or before the year you specify (e.g. 2024).">
                     <TextboxComponent InputType="number"
                                       Placeholder="e.g. 2025"
-                                      @bind-Value="SearchFiltersModel.ReleaseDayTo"
+                                      @bind-Value="SearchFiltersModel.ReleaseYearTo"
                                       Check="v => ValidateYear(v, false)" />
                 </TitleWrapperComponent>
 
@@ -80,7 +80,7 @@ else
                                           @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
                 </TitleWrapperComponent>
 
-                <!-- STREAMING PROVIDERS -->
+                @* <!-- STREAMING PROVIDERS -->
                 <TitleWrapperComponent Label="Providers"
                                        TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
                     <MultiSelectComponent TItem="GeneralWatchProvider" TValue="int"
@@ -88,7 +88,7 @@ else
                                           TextSelector="p => p.ProviderName"
                                           ValueSelector="p => p.ProviderId"
                                           @bind-SelectedValues="SearchFiltersModel.SelectedProviderIds" />
-                </TitleWrapperComponent>
+                </TitleWrapperComponent> *@
 
                 <!-- ADULT CONTENT -->
                 <TitleWrapperComponent Label="Adult Content"

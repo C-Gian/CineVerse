@@ -1,6 +1,6 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Components;
+﻿using CineVerse.client.Components;
 using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
 using Microsoft.AspNetCore.Components;
 using System.Net.Mail;
 
@@ -17,7 +17,7 @@ public partial class MovieDetail
 
     public MovieDetailResponse Movie { get; set; }
     public DetailImagesResponse MovieImages { get; set; }
-    public MoviesApiResponse MovieRecommendations { get; set; }
+    public MovieResponse MovieRecommendations { get; set; }
     public DetailCastApiResponse MovieCast { get; set; }
     public DetailVideoResponse MovieVideos { get; set; }
     public DetailWatchProvidersResponse MovieWatchProviders { get; set; }

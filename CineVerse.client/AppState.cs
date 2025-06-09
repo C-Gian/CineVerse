@@ -1,5 +1,5 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Utils;
+﻿using CineVerse.client.Utils;
+using CineVerse.shared.ApiResponses;
 
 namespace CineVerse.client;
 

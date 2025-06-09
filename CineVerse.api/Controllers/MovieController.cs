@@ -1,6 +1,5 @@
-using CineVerse.api.ApiResponses;
-using CineVerse.api.Models;
 using CineVerse.api.Services.Interfaces;
+using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineVerse.api.Controllers;

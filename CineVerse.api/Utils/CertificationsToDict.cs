@@ -1,5 +1,5 @@
-﻿using CineVerse.api.ApiResponses;
-using CineVerse.api.Entities;
+﻿using CineVerse.api.Entities;
+using CineVerse.shared.ApiResponses;
 
 namespace CineVerse.api.Utils;
 

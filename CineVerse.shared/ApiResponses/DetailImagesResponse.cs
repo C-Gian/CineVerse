@@ -1,4 +1,4 @@
-﻿namespace CineVerse.client.ApiResponses;
+﻿namespace CineVerse.shared.ApiResponses;
 
 using System.Collections.Generic;
 using System.Text.Json.Serialization;

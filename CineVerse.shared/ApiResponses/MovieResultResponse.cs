@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CineVerse.api.ApiResponses;
+namespace CineVerse.shared.ApiResponses;
 
 public class MovieResultResponse
 {

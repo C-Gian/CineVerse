@@ -37,6 +37,11 @@ public partial class SingleSelectComponent<TItem, TValue> : ComponentBase
 
     #region Methods
 
+    protected override void OnInitialized()
+    {
+
+    }
+
     async Task Pick(TValue value)
     {
         SelectedValue = value;

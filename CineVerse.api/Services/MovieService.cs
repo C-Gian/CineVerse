@@ -1,10 +1,10 @@
-﻿using CineVerse.api.ApiResponses;
-using CineVerse.api.Data;
+﻿using CineVerse.api.Data;
 using CineVerse.api.Entities;
-using CineVerse.api.Models;
 using CineVerse.api.Options;
 using CineVerse.api.Services.Interfaces;
 using CineVerse.api.Utils;
+using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -220,11 +220,11 @@ public class MovieService : IMovieService
         {
             qs["vote_average.lte"] = f.RatingLess.ToString();
         }
-        if (int.TryParse(f.FromYear, out var y1))
+        if (int.TryParse(f.ReleaseYearFrom, out var y1))
         {
             qs["release_date.gte"] = $"{y1}-01-01";
         }
-        if (int.TryParse(f.ToYear, out var y2))
+        if (int.TryParse(f.ReleaseYearTo, out var y2))
         {
             if (!f.IncludeUpcomingMovies && y2 == DateTime.UtcNow.Year)
             {

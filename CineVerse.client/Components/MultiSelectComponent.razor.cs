@@ -30,6 +30,11 @@ public partial class MultiSelectComponent<TItem, TValue> : ComponentBase
 
     #region Methods
 
+    protected override void OnInitialized()
+    {
+
+    }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();

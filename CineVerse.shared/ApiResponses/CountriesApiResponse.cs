@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CineVerse.client.ApiResponses;
+namespace CineVerse.shared.ApiResponses;
 
 public class CountryApiResponse
 {

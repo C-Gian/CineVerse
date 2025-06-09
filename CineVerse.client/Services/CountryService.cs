@@ -1,5 +1,5 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Services.Interfaces;
+﻿using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
 using RestSharp;
 
 namespace CineVerse.client.Services;

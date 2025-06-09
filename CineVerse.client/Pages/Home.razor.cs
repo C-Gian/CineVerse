@@ -1,5 +1,5 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Services.Interfaces;
+﻿using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
 using Microsoft.AspNetCore.Components;
 namespace CineVerse.client.Pages;
 
@@ -50,8 +50,8 @@ public partial class Home
         {
             NowPlayingMovies = [];
 
-            var movieResponse = await MovieService.GetNowPlayingMovies(pageNumber) ?? new MoviesApiResponse();
-            var movieResponse2 = await MovieService.GetNowPlayingMovies(pageNumber+1) ?? new MoviesApiResponse();
+            var movieResponse = await MovieService.GetNowPlayingMovies(pageNumber) ?? new MovieResponse();
+            var movieResponse2 = await MovieService.GetNowPlayingMovies(pageNumber+1) ?? new MovieResponse();
 
             NowPlayingMovies.AddRange(movieResponse.Results);
             NowPlayingMovies.AddRange(movieResponse2.Results);
@@ -70,8 +70,8 @@ public partial class Home
         {
             PopularMovies = [];
 
-            var movieResponse = await MovieService.GetPopularMovies((pageNumber * 2) - 1) ?? new MoviesApiResponse();
-            var movieResponse2 = await MovieService.GetPopularMovies(pageNumber * 2) ?? new MoviesApiResponse();
+            var movieResponse = await MovieService.GetPopularMovies((pageNumber * 2) - 1) ?? new MovieResponse();
+            var movieResponse2 = await MovieService.GetPopularMovies(pageNumber * 2) ?? new MovieResponse();
 
             PopularMovies.AddRange(movieResponse.Results);
             PopularMovies.AddRange(movieResponse2.Results);
@@ -96,7 +96,7 @@ public partial class Home
 
             while (UpcomingMovies.Count < 20)
             {
-                var movieResponse = await MovieService.GetUpcomingMovies(pageNumber++) ?? new MoviesApiResponse();
+                var movieResponse = await MovieService.GetUpcomingMovies(pageNumber++) ?? new MovieResponse();
 
                 foreach (var item in movieResponse.Results)
                 {

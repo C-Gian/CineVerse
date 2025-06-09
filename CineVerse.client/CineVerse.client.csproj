@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CineVerse.shared\CineVerse.shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\cineverse-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

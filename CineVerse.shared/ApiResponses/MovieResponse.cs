@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CineVerse.client.ApiResponses;
+namespace CineVerse.shared.ApiResponses;
 
-public class MoviesApiResponse
+public class MovieResponse
 {
     [JsonPropertyName("page")]
     public int Page { get; set; }
