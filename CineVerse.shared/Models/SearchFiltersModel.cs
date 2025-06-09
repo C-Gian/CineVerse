@@ -2,10 +2,8 @@
 
 public class SearchFiltersModel
 {
-    public List<int> IncludedGenres { get; set; } = new();
-    public List<int> ExcludedGenres { get; set; } = new();
-    public int? RatingLess { get; set; }
-    public int? RatingGreater { get; set; }
+    public GenreSelectionModel? GenresSelection { get; set; } = new();
+    public RatingSelectionModel? RatingsSelection { get; set; } = new();
     public string? ReleaseYearFrom { get; set; }
     public string? ReleaseYearTo { get; set; }
     public List<int> SelectedProviderIds { get; set; } = [];
@@ -14,6 +12,6 @@ public class SearchFiltersModel
     public string? Region { get; set; } = "US";
     public string? WatchRegion { get; set; } = string.Empty;
     public string? SortBy { get; set; } = "popularity.desc";
-
-    public List<string> SelectedCertCodes = new();
+    public int Page { get; set; } = 1;
+    public List<string> SelectedCertCodes { get; set; } = new();
 }

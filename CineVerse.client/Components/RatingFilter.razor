@@ -2,7 +2,7 @@
     <div class="dropdown-toggle"
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
-        <span class="dropdown-toggle-label">@((SelectedLess == null && SelectedGreater == null) ? "No Range" : "Range")</span>
+        <span class="dropdown-toggle-label">@((Value?.RatingLess == null && Value?.RatingGreater == null) ? "No Range" : "Range")</span>
         <span class="dropdown-toggle-value">@((MarkupString)RatingLabel)</span>
         <span class="dropdown-toggle-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
@@ -12,14 +12,14 @@
                 <div class="rating-column-label">Greater than</div>
                 @for (int i = 1; i <= 10; i++)
                 {
-                    var value = i;
+                    var v = i;
                     <label class="rating-radio-item">
                         <input type="radio"
                                name="greater-than"
-                               value="@value"
-                               checked="@(SelectedGreater == value)"
-                               @onclick="@(() => SelectGreater(value))" />
-                        <span>@value</span>
+                               value="@v"
+                               checked="@(Value?.RatingGreater == v)"
+                               @onclick="@(() => SelectGreater(v))" />
+                        <span>@v</span>
                     </label>
                 }
             </div>
@@ -27,14 +27,14 @@
                 <div class="rating-column-label">Less than</div>
                 @for (int i = 1; i <= 10; i++)
                 {
-                    var value = i;
+                    var v = i;
                     <label class="rating-radio-item">
                         <input type="radio"
                                name="less-than"
-                               value="@value"
-                               checked="@(SelectedLess == value)"
-                               @onclick="@(() => SelectLess(value))" />
-                        <span>@value</span>
+                               value="@v"
+                               checked="@(Value?.RatingLess == v)"
+                               @onclick="@(() => SelectLess(v))" />
+                        <span>@v</span>
                     </label>
                 }
             </div>

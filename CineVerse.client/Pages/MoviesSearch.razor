@@ -28,18 +28,18 @@ else
 
         <EditForm Model="SearchFiltersModel" OnValidSubmit="HandleSearchAsync" class="search-form">
             <div class="filters-container">
+
                 <!-- GENRES -->
                 <TitleWrapperComponent Label="Genres"
                                        TooltipText="Pick one or more genres; the search will match any of the selected genres.">
-                    <GenresFilterComponent Genres="Genres"
-                                           OnGenreChanged="HandleGenreChange" />
+                    <GenresFilterComponent @bind-Value="SearchFiltersModel.GenresSelection" Genres="Genres" />
                 </TitleWrapperComponent>
 
                 <!-- RATING -->
                 <TitleWrapperComponent Label="Rating"
                                        TooltipText="Filter by TMDB vote average. Specify the minimum and/or maximum rating (0 to 10).">
-                    <RatingFilter OnRatingChanged="HandleRatingChanged" />
-                </TitleWrapperComponent>
+                    <RatingFilter @bind-Value="SearchFiltersModel.RatingsSelection" />
+                </TitleWrapperComponent> 
 
                 <!-- REGION -->
                 <TitleWrapperComponent Label="Region"
@@ -80,7 +80,7 @@ else
                                           @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
                 </TitleWrapperComponent>
 
-                @* <!-- STREAMING PROVIDERS -->
+                <!-- STREAMING PROVIDERS -->
                 <TitleWrapperComponent Label="Providers"
                                        TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
                     <MultiSelectComponent TItem="GeneralWatchProvider" TValue="int"
@@ -88,7 +88,7 @@ else
                                           TextSelector="p => p.ProviderName"
                                           ValueSelector="p => p.ProviderId"
                                           @bind-SelectedValues="SearchFiltersModel.SelectedProviderIds" />
-                </TitleWrapperComponent> *@
+                </TitleWrapperComponent>
 
                 <!-- ADULT CONTENT -->
                 <TitleWrapperComponent Label="Adult Content"
@@ -126,7 +126,7 @@ else
 
     @if (Movies.Any())
     {
-        <MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="CurrentPage" />
+        <MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="SearchFiltersModel.Page" />
     }
     else
     {

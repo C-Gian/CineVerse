@@ -204,21 +204,21 @@ public class MovieService : IMovieService
 
         qs["include_adult"] = f.IncludeAdult.ToString().ToLowerInvariant();
 
-        if (f.IncludedGenres.Any())
+        if (f.GenresSelection.Included.Any())
         {
-            qs["with_genres"] = string.Join('|', f.IncludedGenres);
+            qs["with_genres"] = string.Join('|', f.GenresSelection.Included);
         }
-        if (f.ExcludedGenres.Any())
+        if (f.GenresSelection.Excluded.Any())
         {
-            qs["without_genres"] = string.Join('|', f.ExcludedGenres);
+            qs["without_genres"] = string.Join('|', f.GenresSelection.Excluded);
         }
-        if (f.RatingGreater is not null)
+        if (f.RatingsSelection?.RatingGreater is not null)
         {
-            qs["vote_average.gte"] = f.RatingGreater.ToString();
+            qs["vote_average.gte"] = f.RatingsSelection.RatingGreater.ToString();
         }
-        if (f.RatingLess is not null)
+        if (f.RatingsSelection?.RatingLess is not null)
         {
-            qs["vote_average.lte"] = f.RatingLess.ToString();
+            qs["vote_average.lte"] = f.RatingsSelection.RatingLess.ToString();
         }
         if (int.TryParse(f.ReleaseYearFrom, out var y1))
         {

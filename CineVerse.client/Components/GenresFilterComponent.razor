@@ -26,12 +26,12 @@
                     <span class="genre-name">@genre.Name</span>
                     <input class="dropdown-item-checkbox"
                            type="checkbox"
-                           checked="@IncludedGenres.Contains(genre.Id)"
+                           checked="@Value.Included.Contains(genre.Id)"
                            @onchange="() => ToggleGenre(genre.Id, true)" />
 
                     <input class="dropdown-item-checkbox"
                            type="checkbox"
-                           checked="@ExcludedGenres.Contains(genre.Id)"
+                           checked="@Value.Excluded.Contains(genre.Id)"
                            @onchange="() => ToggleGenre(genre.Id, false)" />
                 </div>
             }
