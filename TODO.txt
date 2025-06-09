@@ -1,5 +1,5 @@
 - cookies and local storage per salvare sessione di ricerca
-- only released film, so expand to year filter 
+- rendere comuni i modelli, ora sono duplicati tra api e client, renderli unici e comuni.
 - creazione loader per rimpiazzo mudloader.
 - cambiare search, mettere searchbar nell'appbar in alto e lasciare solo filtri.
 - pensare a flusso app, quindi home è ok, ma quando clicco sulla sezione "on air" oppure "popular" etc in quale pagina andare,

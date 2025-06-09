@@ -226,7 +226,15 @@ public class MovieService : IMovieService
         }
         if (int.TryParse(f.ToYear, out var y2))
         {
-            qs["release_date.lte"] = $"{y2}-12-31";
+            if (!f.IncludeUpcomingMovies && y2 == DateTime.UtcNow.Year)
+            {
+                var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+                qs["release_date.lte"] = yesterday.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                qs["release_date.lte"] = $"{y2}-12-31";
+            }
         }
 
         qs["sort_by"] = f.SortBy;

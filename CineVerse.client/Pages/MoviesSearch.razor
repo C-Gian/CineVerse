@@ -97,6 +97,13 @@ else
                                   @bind-Checked="SearchFiltersModel.IncludeAdult" />
                 </TitleWrapperComponent>
 
+                <!-- FUTURE FILM INCLUDE -->
+                <TitleWrapperComponent Label="Upcoming Movies"
+                                       TooltipText="Toggle ON to include titles not released yet.">
+                    <ToggleSwitch Label="Include Not Released Movies"
+                                  @bind-Checked="SearchFiltersModel.IncludeUpcomingMovies" />
+                </TitleWrapperComponent>
+
                 <!-- SORT -->
                 <TitleWrapperComponent Label="Sort by"
                                        TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">

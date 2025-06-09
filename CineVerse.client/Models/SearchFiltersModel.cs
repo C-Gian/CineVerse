@@ -10,6 +10,7 @@ public class SearchFiltersModel
     public string? ReleaseDayTo { get; set; }
     public List<int> SelectedProviderIds { get; set; } = [];
     public bool IncludeAdult { get; set; } = false;
+    public bool IncludeUpcomingMovies { get; set; } = false;
     public string? Region { get; set; } = "US";
     public string? WatchRegion { get; set; } = string.Empty;
     public string? SortBy { get; set; } = "popularity.desc";
