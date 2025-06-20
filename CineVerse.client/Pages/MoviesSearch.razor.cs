@@ -11,12 +11,13 @@ namespace CineVerse.client.Pages;
 public partial class MoviesSearch
 {
     #region Properties
-    [Inject] public UserStateService UserStateService { get; set; }
+    [Inject] public AppState AppState { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
     [Inject] public IJSRuntime JS { get; set; }
     [Inject] public IMovieService MovieService { get; set; }
     [Inject] public IGenreService GenreService { get; set; }
     [Inject] public ICountryService CountryService { get; set; }
-    [Inject] public AppState AppState { get; set; }
+
     public List<MovieResultResponse> Movies { get; set; } = [];
     public Queue<MovieResultResponse> MovieBuffer { get; set; } = new();
     public List<Genre> Genres { get; set; } = [];
@@ -65,16 +66,7 @@ public partial class MoviesSearch
             .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)
             .OrderBy(p => p.DisplayPriorities![REGION])
             .ToList();
-
-        var loaded = await UserStateService.LoadSearchAsync(JS);
-        if (loaded is not null)
-        {
-            SearchFiltersModel = loaded;
-            await LoadMoviesAsync(SearchFiltersModel.Page);
-        } else
-        {
-            await LoadMoviesAsync(1);
-        }
+        await InitializeSearchAsync();
 
         IsLoading = false;
     }
@@ -119,7 +111,7 @@ public partial class MoviesSearch
 
     private async Task HandleSearchAsync()
     {
-        await UserStateService.SaveSearchAsync(SearchFiltersModel, JS);
+        await AppState.SaveSearchAsync(SearchFiltersModel, JS);
 
         await LoadMoviesAsync(1);
     }
@@ -162,6 +154,26 @@ public partial class MoviesSearch
     private void ClearQuery()
     {
         _query = "";
+    }
+
+    private async Task InitializeSearchAsync()
+    {
+        AppState.UpdateCurrentPage(AppState.GetLogicalRoute(NavigationManager.Uri));
+
+        var cameFromDetails = AppState.LastPage?.Contains("detail", StringComparison.OrdinalIgnoreCase) == true;
+
+        if (cameFromDetails)
+        {
+            var loaded = await AppState.LoadSearchAsync(JS);
+            SearchFiltersModel = loaded ?? new();
+        }
+        else
+        {
+            SearchFiltersModel = new();
+        }
+
+        await LoadMoviesAsync(SearchFiltersModel.Page);
+        await JS.InvokeVoidAsync("localStorage.removeItem", "lastSearch");
     }
 
     #endregion

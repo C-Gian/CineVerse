@@ -18,7 +18,11 @@
 - logo e scritta
 - check new fonte dati oltre tmdb, magari si migliora l'app.
 
-
+da whatsapp:
+- certification e providers non funzionano, forse c'è da capire se sono obbligatoriamente da utilizzare solo con altre cose.
+region e watch region bisogna verificare.
+- make film text selezionabile e copiabile.
+- dare feedback utente se ricerca è stata effettuata o ha avuto problemi in caso di non cambio film sotto.
 
 
 futuro lontanissimo:

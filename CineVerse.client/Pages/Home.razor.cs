@@ -1,4 +1,5 @@
-﻿using CineVerse.client.Services.Interfaces;
+﻿using CineVerse.client.Services;
+using CineVerse.client.Services.Interfaces;
 using CineVerse.shared.ApiResponses;
 using Microsoft.AspNetCore.Components;
 namespace CineVerse.client.Pages;
@@ -6,15 +7,10 @@ namespace CineVerse.client.Pages;
 public partial class Home
 {
     #region Properties
-
-    [Inject]
-    public AppState AppState { get; set; }
-
-    [Inject]
-    public IMovieService MovieService { get; set; }
-
-    [Inject]
-    public IGenreService GenreService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public AppState AppState { get; set; }
+    [Inject] public IMovieService MovieService { get; set; }
+    [Inject] public IGenreService GenreService { get; set; }
 
     public List<MovieResultResponse> NowPlayingMovies { get; set; } = new();
     public List<MovieResultResponse> PopularMovies { get; set; } = new();
@@ -32,10 +28,13 @@ public partial class Home
 
     #endregion
 
+    
+
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        AppState.UpdateCurrentPage(AppState.GetLogicalRoute(NavigationManager.Uri));
         IsLoading = true;
         AppState.Genres = await LoadGenresAsync();
         await LoadNowPlayingMoviesAsync(1);
