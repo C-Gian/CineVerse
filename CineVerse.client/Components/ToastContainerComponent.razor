@@ -1,0 +1,6 @@
+﻿<div class="toast-container">
+    @foreach (var toast in _toasts)
+    {
+        <ToastComponent Message="toast" OnDismiss="RemoveToast" />
+    }
+</div>

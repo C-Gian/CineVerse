@@ -8,13 +8,10 @@
 
   <ItemGroup>
     <Compile Remove="Constants\**" />
-    <Compile Remove="Enums\**" />
     <Compile Remove="Helpers\**" />
     <EmbeddedResource Remove="Constants\**" />
-    <EmbeddedResource Remove="Enums\**" />
     <EmbeddedResource Remove="Helpers\**" />
     <None Remove="Constants\**" />
-    <None Remove="Enums\**" />
     <None Remove="Helpers\**" />
   </ItemGroup>
 

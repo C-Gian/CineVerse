@@ -1,6 +1,7 @@
 ﻿using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
 using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Enums;
 using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -17,6 +18,7 @@ public partial class MoviesSearch
     [Inject] public IMovieService MovieService { get; set; }
     [Inject] public IGenreService GenreService { get; set; }
     [Inject] public ICountryService CountryService { get; set; }
+    [Inject] private IToastService ToastService { get; set; } = default!;
 
     public List<MovieResultResponse> Movies { get; set; } = [];
     public Queue<MovieResultResponse> MovieBuffer { get; set; } = new();
@@ -90,13 +92,13 @@ public partial class MoviesSearch
             {
                 result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, pageNumber);
             }
-
             Movies.AddRange(result.Results);
             SearchFiltersModel.Page = pageNumber;
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+            ToastService.Show("ERROR", "Unable to retrieve search results.", ToastType.Error);
         }
         finally
         {

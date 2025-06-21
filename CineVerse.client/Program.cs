@@ -8,6 +8,7 @@ using RestSharp;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<AppState>();
+builder.Services.AddSingleton<IToastService, ToastService>();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();

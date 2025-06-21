@@ -1,0 +1,15 @@
+﻿.toast-container {
+    position: fixed;
+    top: 6rem;
+    right: 2rem;
+    z-index: 9999 !important;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    pointer-events: none;
+}
+
+    .toast-container :deep(.toast) {
+        pointer-events: auto;
+    }
