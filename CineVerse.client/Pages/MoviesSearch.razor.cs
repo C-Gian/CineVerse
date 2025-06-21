@@ -37,8 +37,6 @@ public partial class MoviesSearch
 
     #region Fields
 
-    private string _query = string.Empty;
-
     private readonly SemaphoreSlim _gate = new(1, 1);
 
     #endregion
@@ -73,6 +71,12 @@ public partial class MoviesSearch
         IsLoading = false;
     }
 
+    private async Task HandleSearchAsync()
+    {
+        await AppState.SaveSearchAsync(SearchFiltersModel, JS);
+        await LoadMoviesAsync(1);
+    }
+
     private async Task LoadMoviesAsync(int pageNumber)
     {
         await _gate.WaitAsync();
@@ -84,14 +88,11 @@ public partial class MoviesSearch
 
             var excludeEverything = SearchFiltersModel.GenresSelection?.Excluded.Count == Genres.Count && !SearchFiltersModel.IncludeAdult;
 
-            if (!string.IsNullOrEmpty(_query))
-            {
-                result = await MovieService.SearchMovie(_query, pageNumber);
-            }
-            else if (!excludeEverything)
+            if (!excludeEverything)
             {
                 result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, pageNumber);
             }
+
             Movies.AddRange(result.Results);
             SearchFiltersModel.Page = pageNumber;
         }
@@ -109,21 +110,6 @@ public partial class MoviesSearch
     private async Task<List<Genre>> LoadGenresAsync()
     {
         return await GenreService.GetGenres() ?? [];
-    }
-
-    private async Task HandleSearchAsync()
-    {
-        await AppState.SaveSearchAsync(SearchFiltersModel, JS);
-
-        await LoadMoviesAsync(1);
-    }
-
-    private async Task HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key is "Enter")
-        {
-            await HandleSearchAsync();
-        }
     }
     
     private (bool, string?) ValidateYear(string? v, bool isFrom)
@@ -150,14 +136,7 @@ public partial class MoviesSearch
     private void ClearSearchFilters()
     {
         SearchFiltersModel = new SearchFiltersModel();
-        ClearQuery();
     }
-
-    private void ClearQuery()
-    {
-        _query = "";
-    }
-
     private async Task InitializeSearchAsync()
     {
         AppState.UpdateCurrentPage(AppState.GetLogicalRoute(NavigationManager.Uri));

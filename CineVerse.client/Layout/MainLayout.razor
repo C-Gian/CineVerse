@@ -18,6 +18,20 @@
 
         <div class="flex-spacer"></div>
 
+        <div class="search-box">
+            <span class="material-icons search-icon">search</span>
+            <input type="text"
+                   placeholder="Search for a movie…"
+                   @bind-value="_query"
+                   @bind-value:event="oninput"
+                   @onkeydown="HandleKeyDown" />
+
+            @if (!string.IsNullOrWhiteSpace(_query))
+            {
+                <button type="button" class="search-clear-btn" @onclick="ClearQuery">✕</button>
+            }
+        </div>
+
         <img class="avatar" src="https://i.pravatar.cc/40" />
     </div>
 
@@ -49,61 +63,3 @@
         </main>
     </div>
 </div>
-
-<style>
-    .appbar{
-        
-    }
-
-    .nav-link {
-        display: flex;
-        align-items: center;
-        gap: .75rem;
-        padding: .65rem 1rem !important;
-        color: #AAB0C0;
-        text-decoration: none;
-        font-size: .95rem;
-        border-radius: 10px;
-        transition: background 0.25s, color 0.25s;
-    }
-
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.5);
-            color: #ffffff;
-        }
-
-        .nav-link.active {
-            
-            background: rgba(255, 255, 255, 0.1) !important;
-            color: white;
-        }
-
-        .nav-link > .material-icons {
-            position: relative;
-            left: -5px !important;
-        }
-
-    .drawer.closed {
-        width: 50px;
-    }
-
-    .drawer.closed .nav-text {
-        opacity: 0;
-        transition: opacity 0.2s;
-    }
-
-    .drawer.open .nav-text {
-        opacity: 1;
-    }
-
-</style>
-
-@code {
-    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
-
-    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
-    private string CurrentUrl => "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Split('?')[0];
-
-
-    private bool _drawerOpen = true;
-}
