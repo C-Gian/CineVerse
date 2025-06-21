@@ -1,0 +1,66 @@
+﻿.pager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .55rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+}
+
+.nav-btn {
+    margin-left: 10px;
+    margin-right: 10px;
+    min-width: 66px;
+    padding: .45rem .9rem;
+    font-size: .85rem;
+    font-weight: 600;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.03);
+    color: #AAB0C0;
+    cursor: pointer;
+    transition: background .25s, border .25s, color .25s;
+}
+
+    .nav-btn:hover:not(:disabled) {
+        background: rgba(255,255,255,.06);
+        border-color: rgba(255,255,255,.12);
+        color: #fff;
+    }
+
+    .nav-btn:disabled {
+        opacity: .35;
+        cursor: default;
+    }
+
+.page-btn {
+    margin-left: 2px;
+    margin-right: 2px;
+    width: 40px;
+    height: 40px;
+    font-size: .9rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.06);
+    background: rgba(255,255,255,.03);
+    color: #AAB0C0;
+    cursor: pointer;
+    transition: background .25s, color .25s, transform .2s;
+}
+
+    .page-btn:hover:not(:disabled) {
+        transform: translateY(-3px);
+        background: rgba(255,255,255,.07);
+        color: #fff;
+    }
+
+    .page-btn.active {
+        background: #7459ff;
+        border-color: #7459ff;
+        color: #fff;
+    }
+
+        .page-btn.active:disabled {
+            opacity: 1;
+            cursor: default;
+        }

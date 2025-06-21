@@ -1,0 +1,12 @@
+﻿.dropdown-options {
+    max-height: 350px !important;
+}
+
+.multiselect-option-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: #eee;
+    padding: 6px 0;
+}

@@ -1,178 +1,135 @@
 ﻿@page "/movies/search"
-@page "/movies/list"
 
 @using CineVerse.client.Components
-@using CineVerse.client.ApiResponses
+@using CineVerse.shared.ApiResponses
 
 @if (IsLoading)
 {
-    <MudProgressCircular Size="Size.Large" Class="m-6" />
+    <Loader />
 }
 else
 {
     <div class="search-panel">
 
-        <div class="search-container">
-            <div class="search-box">
-                <Icon Name="IconName.Search" class="icon" />
-                <input type="text"
-                       placeholder="Search for a movie…"
-                       @bind="_query"
-                       @onkeydown="HandleKeyDown" />
+
+        <div class="search-box">
+            <span class="material-icons search-icon">search</span>
+            <input type="text"
+                   placeholder="Search for a movie…"
+                   @bind-value="_query"
+                   @bind-value:event="oninput"
+                   @onkeydown="HandleKeyDown" />
+
+            @if (!string.IsNullOrWhiteSpace(_query))
+            {
+                <button type="button" class="search-clear-btn" @onclick="ClearQuery">✕</button>
+            }
+        </div>
+
+        <EditForm Model="SearchFiltersModel" OnValidSubmit="HandleSearchAsync" class="search-form">
+            <div class="filters-container">
+
+                <!-- GENRES -->
+                <TitleWrapperComponent Label="Genres"
+                                       TooltipText="Pick one or more genres; the search will match any of the selected genres.">
+                    <GenresFilterComponent @bind-Value="SearchFiltersModel.GenresSelection" Genres="Genres" />
+                </TitleWrapperComponent>
+
+                <!-- RATING -->
+                <TitleWrapperComponent Label="Rating"
+                                       TooltipText="Filter by TMDB vote average. Specify the minimum and/or maximum rating (0 to 10).">
+                    <RatingFilter @bind-Value="SearchFiltersModel.RatingsSelection" />
+                </TitleWrapperComponent> 
+
+                <!-- REGION -->
+                <TitleWrapperComponent Label="Region"
+                                       TooltipText="Country on which to base the search filters (certification, providers, release dates etc.)">
+                    <SingleSelectComponent TItem="CountryApiResponse" TValue="string"
+                                           Items="Countries"
+                                           TextSelector="c => c.NativeName"
+                                           ValueSelector="c => c.Code"
+                                           Searchable="true"
+                                           @bind-SelectedValue="SearchFiltersModel.Region" />
+                </TitleWrapperComponent>
+
+                <!-- RELEASE YEAR FROM -->
+                <TitleWrapperComponent Label="Release Year Greater Than"
+                                       TooltipText="Include movies released on or after the year you specify (e.g. 2000).">
+                    <TextboxComponent InputType="number"
+                                      Placeholder="e.g. 2000"
+                                      @bind-Value="SearchFiltersModel.ReleaseYearFrom"
+                                      Check="v => ValidateYear(v, true)" />
+                </TitleWrapperComponent>
+
+                <!-- RELEASE YEAR TO -->
+                <TitleWrapperComponent Label="Release Year Lesser Than"
+                                       TooltipText="Include movies released on or before the year you specify (e.g. 2024).">
+                    <TextboxComponent InputType="number"
+                                      Placeholder="e.g. 2025"
+                                      @bind-Value="SearchFiltersModel.ReleaseYearTo"
+                                      Check="v => ValidateYear(v, false)" />
+                </TitleWrapperComponent>
+
+                <!-- CERTIFICATIONS -->
+                <TitleWrapperComponent Label="Certifications"
+                                       TooltipText="Pick one or more age-ratings (e.g. ‘T’, ‘VM14’) that a movie must carry in the selected country.">
+                    <MultiSelectComponent TItem="CertificationApiResponse" TValue="string"
+                                          Items="CertificationCountry"
+                                          TextSelector="c => c.Certification"
+                                          ValueSelector="c => c.Certification"
+                                          @bind-SelectedValues="SearchFiltersModel.SelectedCertCodes" />
+                </TitleWrapperComponent>
+
+                <!-- STREAMING PROVIDERS -->
+                <TitleWrapperComponent Label="Providers"
+                                       TooltipText="Show only titles available on the selected streaming services for the chosen watch region.">
+                    <MultiSelectComponent TItem="GeneralWatchProvider" TValue="int"
+                                          Items="WatchProviders"
+                                          TextSelector="p => p.ProviderName"
+                                          ValueSelector="p => p.ProviderId"
+                                          @bind-SelectedValues="SearchFiltersModel.SelectedProviderIds" />
+                </TitleWrapperComponent>
+
+                <!-- ADULT CONTENT -->
+                <TitleWrapperComponent Label="Adult Content"
+                                       TooltipText="Toggle ON to include titles marked as adult / explicit in the results.">
+                    <ToggleSwitch Label="Include Explicit Content"
+                                  @bind-Checked="SearchFiltersModel.IncludeAdult" />
+                </TitleWrapperComponent>
+
+                <!-- FUTURE FILM INCLUDE -->
+                <TitleWrapperComponent Label="Upcoming Movies"
+                                       TooltipText="Toggle ON to include titles not released yet.">
+                    <ToggleSwitch Label="Include Not Released Movies"
+                                  @bind-Checked="SearchFiltersModel.IncludeUpcomingMovies" />
+                </TitleWrapperComponent>
+
+                <!-- SORT -->
+                <TitleWrapperComponent Label="Sort by"
+                                       TooltipText="Choose how the results are ordered (popularity, release date, revenue, etc.).">
+                    <SingleSelectComponent TItem="(string Value,string Label)" TValue="string"
+                                           Items="AppState.SortOptions"
+                                           TextSelector="o => o.Label"
+                                           ValueSelector="o => o.Value"
+                                           @bind-SelectedValue="SearchFiltersModel.SortBy" />
+                </TitleWrapperComponent>
             </div>
 
-            <button class="search-btn" @onclick="() => LoadMoviesAsync(1)">
-                SEARCH
-            </button>
-        </div>
-
-        <div class="filters-container">
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <GenresFilterComponent Genres="Genres" OnGenreChanged="HandleGenreChange"></GenresFilterComponent>
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <RatingFilter OnRatingChanged="HandleRatingChanged" />
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <TextboxComponent InputType="number"
-                                  Placeholder="e.g. 2000"
-                                  @bind-Value="FromYear"
-                                  OnBlur="ValidateFromYearRange" />
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <TextboxComponent InputType="number"
-                                  Placeholder="e.g. 2024"
-                                  @bind-Value="ToYear"
-                                  OnBlur="ValidateToYearRange" />
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <MultiSelectComponent TItem=GeneralWatchProvider TValue=int
-                                      Items="WatchProviders"
-                                      TextSelector="p => p.ProviderName"
-                                      ValueSelector="p => p.ProviderId"
-                                      @bind-SelectedValues="SelectedProviderIds" />
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <ToggleSwitch Label="Include Explicit Content" @bind-Checked="IncludeAdult" />
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <TextboxComponent InputType="text"
-                                  Placeholder="US"
-                                  @bind-Value="Region"
-                                  OnBlur="@(() => ValidateRegion(Region))" />
-            </TitleWrapperComponent>
-
-            <TitleWrapperComponent Label="Providers" TooltipText="Filtra i film con media voti ≥ al valore inserito.">
-                <TextboxComponent InputType="text"
-                                  Placeholder="US"
-                                  @bind-Value="WatchRegion"
-                                  OnBlur="@(() => ValidateRegion(WatchRegion))" />
-            </TitleWrapperComponent>
-
-        </div>
+            <div class="filters-button-group">
+                <button type="button" class="filters-clear-btn" @onclick="ClearSearchFilters">Clear</button>
+                <button type="submit" class="filters-search-btn">Search</button>
+            </div>
+        </EditForm>
 
     </div>
 
 
     @if (Movies.Any())
     {
-        <MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="CurrentPage" />
+        <MovieGrid Movies="Movies" PageChanged="LoadMoviesAsync" CurrentPage="SearchFiltersModel.Page" />
     }
     else
     {
         <h1>NO MOVIES</h1>
     }
 }
-
-
-<style>
-    .search-panel {
-        position: relative;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        gap: 20px;
-        margin: 50px;
-        padding: 24px;
-        gap: 20px;
-        border-radius: 18px;
-        background: rgba(13,17,31,1);
-        backdrop-filter: blur(12px);
-    }
-
-    .search-container {
-        display: flex;
-        width: 100%;
-    }
-
-    .search-box {
-        position: relative;
-        flex: 1;
-    }
-
-        .search-box .icon {
-            position: absolute;
-            top: 50%;
-            left: 16px;
-            transform: translateY(-50%);
-            font-size: 1.1rem;
-            color: #7a7a7a;
-            pointer-events: none;
-        }
-
-        .search-box input {
-            width: 100%;
-            height: 56px;
-            padding: 0 18px 0 48px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(200,200,200,0.02);
-            color: #fff;
-            font-size: 1rem;
-            outline: none !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.01) inset;
-        }
-
-            .search-box input::placeholder {
-                color: #8a8da5;
-            }
-
-    .search-btn {
-        min-width: 180px;
-        height: 56px;
-        border-radius: 12px;
-        background: #2d2668;
-        border: 1px solid #2d2668;
-        color: #fff;
-        font-weight: 600;
-        letter-spacing: .4px;
-        cursor: pointer;
-        transition: background .25s, border .25s;
-    }
-
-        .search-btn:hover {
-            background: #6047e6;
-            border-color: #7a68ff;
-        }
-
-        .search-btn:active {
-            background: #4b39c4;
-            border-color: #7a68ff;
-        }
-
-    .filters-container {
-        display: flex;
-        gap: 20px;
-        align-items: end;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-</style> 

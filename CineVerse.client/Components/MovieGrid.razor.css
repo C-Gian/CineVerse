@@ -1,0 +1,7 @@
+﻿.poster-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 275px);
+    gap: 1.25rem;
+    justify-content: space-between;
+    margin: 50px;
+}

@@ -1,0 +1,75 @@
+﻿.carousel-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.carousel-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+}
+
+.carousel-info-buttons {
+    display: flex;
+    align-self: flex-start;
+    gap: 10px;
+}
+
+.carousel-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: auto;
+}
+
+.carousel-viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+}
+
+.carousel-slide {
+    flex: 0 0 175px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0.5rem;
+}
+
+.carousel-nav {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 1.75rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 20%;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s ease, border 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+    .carousel-nav:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .carousel-nav:disabled {
+        opacity: 0.3;
+        cursor: default;
+    }
+
+.carousel-nav-span {
+    height: inherit !important;
+    position: relative;
+}

@@ -1,64 +1,63 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using CineVerse.shared.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace CineVerse.client.Components;
 
 public partial class RatingFilter
 {
-    [Parameter] public EventCallback<(int? less, int? greater)> OnRatingChanged { get; set; }
+    [Parameter] public RatingSelectionModel Value { get; set; } = new();
+    [Parameter] public EventCallback<RatingSelectionModel> ValueChanged { get; set; }
     [Parameter] public string Label { get; set; } = "Rating";
     public bool IsOpen { get; set; } = false;
-    public bool ClosedFromLostFocus { get; set; } = false;
 
     private ElementReference myDivRef;
-    private int? SelectedLess;
-    private int? SelectedGreater;
     private string RatingLabel
     {
         get
         {
-            if (SelectedLess is null && SelectedGreater is null) return "";
-            if (SelectedLess is not null && SelectedGreater is null) return $"< {SelectedLess}";
-            if (SelectedLess is null && SelectedGreater is not null) return $"> {SelectedGreater}";
-            return $"< {SelectedLess} | > {SelectedGreater}";
+            if (Value?.RatingLess is null && Value?.RatingGreater is null) return "";
+            if (Value?.RatingLess is null && Value?.RatingGreater is not null) return $"> {Value?.RatingGreater}";
+            if (Value?.RatingLess is not null && Value?.RatingGreater is null) return $"< {Value?.RatingLess}";
+            return $"> {Value?.RatingGreater}&nbsp;&nbsp;< {Value?.RatingLess}";
         }
     }
 
     private async Task SelectLess(int? value)
     {
-        SelectedLess = value;
-        await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
+        Value.RatingLess = Value?.RatingLess == value ? null : value;
+        await ValueChanged.InvokeAsync(Value);
     }
 
     private async Task SelectGreater(int? value)
     {
-        SelectedGreater = value;
-        await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
+        Value.RatingGreater = Value?.RatingGreater == value ? null : value;
+        await ValueChanged.InvokeAsync(Value);
     }
 
     private async Task ResetRating(int? value)
     {
-        SelectedLess = value;
-        SelectedGreater = value;
-        await OnRatingChanged.InvokeAsync((SelectedLess, SelectedGreater));
+        Value.RatingLess = value;
+        Value.RatingGreater = value;
+        await ValueChanged.InvokeAsync(Value);
     }
 
     async Task TogglePointer()
     {
         if (IsOpen)
         {
-            IsOpen = false; 
+            IsOpen = false;
             return;
         }
 
-        IsOpen = true;                  
-        await myDivRef.FocusAsync();    
+        IsOpen = true;
+        await myDivRef.FocusAsync();
     }
 
     async Task LostFocus(FocusEventArgs _)
     {
         IsOpen = false;
-        await Task.Delay(100);          
+        await Task.Delay(100);
     }
 
     async Task GainedFocus(FocusEventArgs _)

@@ -1,50 +1,14 @@
 ﻿<div class="textbox-wrapper">
     <input value="@Value"
            @oninput="HandleInput"
-           class="textbox"
+           class="textbox @(IsInvalid ? "invalid" : null)"
            type="@InputType"
            placeholder="@Placeholder"
            @onkeydown="OnKeyDown"
-           @onblur="HandleBlur" />
+           @onblur="Validate" />
+
+    @if (IsInvalid && !string.IsNullOrEmpty(InternalErrorText))
+    {
+        <div class="error-message">@InternalErrorText</div>
+    }
 </div>
-
-<style>
-
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
-
-    .textbox-wrapper {
-        width: 200px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .textbox {
-        width: 100%;
-        height: 42px;
-        padding: 0 12px;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.05);
-        color: #fff;
-        font-size: 0.95rem;
-        outline: none;
-        transition: border 0.2s ease;
-        font-family: inherit;
-    }
-
-        .textbox::placeholder {
-            color: #888;
-        }
-
-        .textbox:focus {
-            border-color: #7459ff;
-        }
-</style>

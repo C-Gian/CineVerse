@@ -1,0 +1,29 @@
+- creare scritta errore quando fail a caricare film
+- cambiare search, mettere searchbar nell'appbar in alto e lasciare solo filtri.
+- pensare a flusso app, quindi home è ok, ma quando clicco sulla sezione "on air" oppure "popular" etc in quale pagina andare,
+  pensare se search e allfilm è ancora un'unica entità, etc..
+- pensare se fare search dinamica, quindi se mentre si scrive mostrare risultati in live.
+- cercare come gestire css, ovvero come usare file per ogni componente e come fare per mettere elementi comuni nell'app.css in modo da non riscriverli mille volte, facendo si che i componenti prendano sia dal loro file che dall'app.css. Se ci riesco, refactorare tutto il codice.
+- creare localizzazione app con tutte traduzioni.
+- cambiare chiamate api home aggiungendo per ognuna il paese scelto nella localizzazione.
+- cambiare estetica matchando quella dei link salvati.
+- pensare a nuove pagine da aggiungere altrimenti drawer è scarno.
+- creare utenza con login, registrazione, etc..
+- creare impostazioni menu nelle quali mettere darkk theme, lingua, logout etc..
+- creare pagina utente nel quale si modificano cose.
+- creare watchlist personale.
+- vedere se si possono aggiungere recensioni utente ai detail movie.
+- logo e scritta
+- check new fonte dati oltre tmdb, magari si migliora l'app.
+
+da whatsapp:
+- certification e providers non funzionano, forse c'è da capire se sono obbligatoriamente da utilizzare solo con altre cose.
+region e watch region bisogna verificare.
+- make film text selezionabile e copiabile.
+- dare feedback utente se ricerca è stata effettuata o ha avuto problemi in caso di non cambio film sotto.
+
+
+futuro lontanissimo:
+- eliminare mud blazor risistemando tutta l'app a livello estetico.
+- omogenizzare e migliorare css e formattazione in tutta l'app.
+- efficientare il codice.

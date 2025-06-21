@@ -1,0 +1,48 @@
+﻿.textbox-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.textbox {
+    height: 52px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+    .textbox::placeholder {
+        color: #999;
+    }
+
+    .textbox:focus {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .textbox.invalid {
+        border: 2px solid #ff4d4d;
+        background: rgba(255, 0, 0, 0.05);
+    }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.error-message {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #ff4d4d;
+}

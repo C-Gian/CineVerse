@@ -1,5 +1,8 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Utils;
+﻿using CineVerse.client.Utils;
+using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Models;
+using Microsoft.JSInterop;
+using System.Text.Json;
 
 namespace CineVerse.client;
 
@@ -7,8 +10,14 @@ public class AppState
 {
     public SectionType SectionType { get; set; }
     public List<Genre> Genres { get; set; } = new();
-
-    public static readonly Dictionary<string, string> GenreBackgrounds = new()
+    public string Location { get; set; } = "IT";
+    public SearchFiltersModel? LastSearch { get; private set; }
+    public string? SelectedLanguage { get; private set; }
+    public bool IsDarkMode { get; private set; }
+    public string? LastPage { get; private set; }
+    public string? CurrentPage { get; private set; }
+    
+    public static readonly Dictionary<string, string> GenreBackgrounds = new() //home genres pics
     {
         ["Adventure"] = "https://image.tmdb.org/t/p/original/ueDw7djPgKPZfph0vC43aD2EMyF.jpg",
         ["Fantasy"] = "https://image.tmdb.org/t/p/original/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg",
@@ -31,4 +40,51 @@ public class AppState
         ["TV Movie"] = "https://image.tmdb.org/t/p/original/jXZ2tyJl44yKvh22I6ooQwU5rFM.jpg"
     };
 
+    public readonly List<(string Value, string Label)> SortOptions =
+        new()
+        {
+            ("popularity.desc",          "Popularity ↓"),
+            ("popularity.asc",           "Popularity ↑"),
+            ("primary_release_date.desc","Release date ↓"),
+            ("primary_release_date.asc", "Release date ↑"),
+            ("revenue.desc",             "Revenue ↓"),
+            ("revenue.asc",              "Revenue ↑"),
+            ("vote_average.desc",        "Rating ↓"),
+            ("vote_average.asc",         "Rating ↑"),
+            ("vote_count.desc",          "Vote count ↓"),
+            ("vote_count.asc",           "Vote count ↑"),
+            ("original_title.asc",       "Title A → Z"),
+            ("original_title.desc",      "Title Z → A")
+        };
+
+    public Task SaveSearchAsync(SearchFiltersModel model, IJSRuntime js)
+    {
+        LastSearch = model;
+        var json = JsonSerializer.Serialize(model);
+        return js.InvokeVoidAsync("localStorage.setItem", "lastSearch", json).AsTask();
+    }
+
+    public async Task<SearchFiltersModel?> LoadSearchAsync(IJSRuntime js)
+    {
+        var json = await js.InvokeAsync<string>("localStorage.getItem", "lastSearch");
+        LastSearch = string.IsNullOrWhiteSpace(json)
+            ? null
+            : JsonSerializer.Deserialize<SearchFiltersModel>(json);
+        return LastSearch;
+    }
+
+    public void UpdateCurrentPage(string uri)
+    {
+        LastPage = CurrentPage ?? uri;
+        CurrentPage = uri;
+    }
+
+    public string GetLogicalRoute(string uri)
+    {
+        if (uri.Contains("/movie/", StringComparison.OrdinalIgnoreCase))
+            return "detail";
+        if (uri.Contains("/search", StringComparison.OrdinalIgnoreCase))
+            return "search";
+        return "home";
+    }
 }

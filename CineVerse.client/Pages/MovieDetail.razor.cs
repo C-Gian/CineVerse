@@ -1,23 +1,22 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Components;
+﻿using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
 using Microsoft.AspNetCore.Components;
-using System.Net.Mail;
 
 namespace CineVerse.client.Pages;
 
 public partial class MovieDetail
 {
     #region Properties
-    [Inject] public IMovieService MovieService { get; set; }
-    [Inject] public IGenreService GenreService { get; set; }
     [Inject] public AppState AppState { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public IMovieService MovieService { get; set; }
+    [Inject] public IGenreService GenreService { get; set; }
     [Parameter] public int MovieId { get; set; }
 
     public MovieDetailResponse Movie { get; set; }
     public DetailImagesResponse MovieImages { get; set; }
-    public MoviesApiResponse MovieRecommendations { get; set; }
+    public MovieResponse MovieRecommendations { get; set; }
     public DetailCastApiResponse MovieCast { get; set; }
     public DetailVideoResponse MovieVideos { get; set; }
     public DetailWatchProvidersResponse MovieWatchProviders { get; set; }
@@ -46,6 +45,7 @@ public partial class MovieDetail
 
     protected override async Task OnInitializedAsync()
     {
+        AppState.UpdateCurrentPage(AppState.GetLogicalRoute(NavigationManager.Uri));
         Movie = await MovieService.GetMovieDetail(MovieId);
         MovieImages = await MovieService.GetImagesMovieDetail(MovieId);
         MovieRecommendations = await MovieService.GetRecommendationsMovieDetail(MovieId);

@@ -1,4 +1,5 @@
-﻿using CineVerse.client.ApiResponses;
+﻿using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -7,43 +8,42 @@ namespace CineVerse.client.Components;
 public partial class GenresFilterComponent
 {
     [Parameter] public List<Genre> Genres { get; set; } = new();
-    [Parameter] public EventCallback<(List<int> include, List<int> exclude)> OnGenreChanged { get; set; }
+    [Parameter] public GenreSelectionModel Value { get; set; } = new();
+    [Parameter] public EventCallback<GenreSelectionModel> ValueChanged { get; set; }
 
-    private List<int> IncludedGenres = new();
-    private List<int> ExcludedGenres = new();
     public bool IsOpen { get; set; } = false;
     private ElementReference myDivRef;
     private string LabelText =>
-        IncludedGenres.Count == 0 && ExcludedGenres.Count == 0
+        Value.Included.Count == 0 && Value.Excluded.Count == 0
             ? ""
-            : $"{IncludedGenres.Count} in | {ExcludedGenres.Count} ex";
+            : $"{Value.Included.Count} in &nbsp;&nbsp; {Value.Excluded.Count} ex";
 
-    private string ToggleText => (IncludedGenres.Count == 0 && ExcludedGenres.Count == 0) ? "No Selection" : "Selected";
+    private string ToggleText => (Value.Included.Count == 0 && Value.Excluded.Count == 0) ? "No Selection" : "Selected";
 
     private async Task ToggleGenre(int genreId, bool include)
     {
         if (include)
         {
-            if (IncludedGenres.Contains(genreId))
-                IncludedGenres.Remove(genreId);
+            if (Value.Included.Contains(genreId))
+                Value.Included.Remove(genreId);
             else
             {
-                IncludedGenres.Add(genreId);
-                ExcludedGenres.Remove(genreId);
+                Value.Included.Add(genreId);
+                Value.Excluded.Remove(genreId);
             }
         }
         else
         {
-            if (ExcludedGenres.Contains(genreId))
-                ExcludedGenres.Remove(genreId);
+            if (Value.Excluded.Contains(genreId))
+                Value.Excluded.Remove(genreId);
             else
             {
-                ExcludedGenres.Add(genreId);
-                IncludedGenres.Remove(genreId);
+                Value.Excluded.Add(genreId);
+                Value.Included.Remove(genreId);
             }
         }
 
-        await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
+        await ValueChanged.InvokeAsync(Value);
     }
 
     async Task TogglePointer()
@@ -73,10 +73,24 @@ public partial class GenresFilterComponent
         }
     }
 
+    private async Task SelectAllInclude()
+    {
+        Value.Included = Genres.Select(g => g.Id).ToList();
+        Value.Excluded = new();
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    private async Task SelectAllExclude()
+    {
+        Value.Included = new();
+        Value.Excluded = Genres.Select(g => g.Id).ToList();
+        await ValueChanged.InvokeAsync(Value);
+    }
+
     private async Task ClearAll()
     {
-        IncludedGenres = new();
-        ExcludedGenres = new();
-        await OnGenreChanged.InvokeAsync((IncludedGenres, ExcludedGenres));
+        Value.Included = new();
+        Value.Excluded = new();
+        await ValueChanged.InvokeAsync(Value);
     }
 }

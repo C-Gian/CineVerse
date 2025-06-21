@@ -1,6 +1,5 @@
-using CineVerse.api.ApiResponses;
 using CineVerse.api.Services.Interfaces;
-using CineVerse.Client.Models;
+using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineVerse.api.Controllers;
@@ -23,24 +22,28 @@ public class MovieController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet("discover")]
+    public async Task<IActionResult> DiscoverMovies([FromBody] SearchFiltersModel filters, [FromQuery] int page = 1, CancellationToken ct = default)
+    {
+        var movies = await _movieService.DiscoverMoviesAsync(filters, page, ct);
+        return Ok(movies);
+    }
+
+    [HttpGet("movie_certifications")]
+    public async Task<IActionResult> GetMovieCertifications(CancellationToken ct = default)
+    {
+        var certifications = await _movieService.GetMoviesCertifications(ct);
+        return Ok(certifications);
+    }
+
     [HttpGet("general_providers")]
-    [ProducesResponseType(typeof(GeneralWatchProvidersResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetGeneralWatchProviders([FromQuery] string language, [FromQuery] string region, CancellationToken ct = default)
     {
         var providers = await _movieService.GetGeneralWatchProviders(language, region, ct);
         return Ok(providers);
     }
 
-    [HttpGet("discover")]
-    [ProducesResponseType(typeof(IEnumerable<DiscoverApiResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> DiscoverMovies([FromQuery] Dictionary<string, string> queryParams, CancellationToken ct = default)
-    {
-        var movies = await _movieService.DiscoverMoviesAsync(queryParams, ct);
-        return Ok(movies);
-    }
-
     [HttpGet("videos")]
-    [ProducesResponseType(typeof(IEnumerable<DetailVideoResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetVideoMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetVideoMovieDetail(movieId, ct);
@@ -48,7 +51,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("images")]
-    [ProducesResponseType(typeof(IEnumerable<DetailImagesResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetImagesMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetImagesMovieDetail(movieId, ct);
@@ -56,7 +58,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("recommendations")]
-    [ProducesResponseType(typeof(IEnumerable<MovieResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetRecommendationsMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetRecommendationsMovieDetail(movieId, ct);
@@ -64,7 +65,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("providers")]
-    [ProducesResponseType(typeof(IEnumerable<DetailWatchProvidersResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProvidersMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetProvidersMovieDetail(movieId, ct);
@@ -72,7 +72,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("cast")]
-    [ProducesResponseType(typeof(IEnumerable<DetailCastApiResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCastMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetCastMovieDetail(movieId, ct);
@@ -80,7 +79,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("detail")]
-    [ProducesResponseType(typeof(IEnumerable<MovieDetailResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMovieDetail([FromQuery] int movieId, CancellationToken ct = default)
     {
         var movie = await _movieService.GetMovieDetail(movieId, ct);
@@ -88,7 +86,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("now_playing")]
-    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetNowPlayingMovies([FromQuery] int page = 1, CancellationToken ct = default)
     {
         var movies = await _movieService.GetNowPlayingMovies(page, ct);
@@ -96,7 +93,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("popular")]
-    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPopularMovies([FromQuery] int page = 1, CancellationToken ct = default)
     {
         var movies = await _movieService.GetPopularMovies(page, ct);
@@ -104,7 +100,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("upcoming")]
-    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUpcomingMovies([FromQuery] int page = 1, CancellationToken ct = default)
     {
         var movies = await _movieService.GetUpcomingMovies(page, ct);
@@ -112,7 +107,6 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("search")]
-    [ProducesResponseType(typeof(IEnumerable<MovieResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SearchMovie([FromQuery] string query, [FromQuery] int page = 1, CancellationToken ct = default)
     {
         var movies = await _movieService.SearchMovie(query, page, ct);

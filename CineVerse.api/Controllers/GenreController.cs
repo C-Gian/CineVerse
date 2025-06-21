@@ -1,4 +1,3 @@
-using CineVerse.api.ApiResponses;
 using CineVerse.api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

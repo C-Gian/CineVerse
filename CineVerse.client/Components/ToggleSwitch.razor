@@ -1,48 +1,4 @@
 ﻿<div class="toggle-switch" @onpointerdown="Toggle" tabindex="0">
-    <label class="textbox-label">@Label</label>
+    <label class="toggle-label">@Label</label>
     <span class="toggle-ui @(Checked ? "on" : "off")"></span>
 </div>
-
-<style>
-    .toggle-switch {
-        display: inline-flex;
-        align-items: center;
-        gap: .5rem;
-        cursor: pointer;
-        user-select: none
-    }
-
-    .toggle-label {
-        font-size: .875rem
-    }
-
-    .toggle-ui {
-        width: 36px;
-        height: 20px;
-        border-radius: 10px;
-        background: #c6c6c6;
-        position: relative;
-        transition: background .2s
-    }
-
-        .toggle-ui::before {
-            content: "";
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            top: 2px;
-            left: 2px;
-            border-radius: 50%;
-            background: #fff;
-            transition: transform .2s
-        }
-
-        .toggle-ui.on {
-            background: #2d2668;
-        }
-
-            .toggle-ui.on::before {
-                transform: translateX(16px)
-            }
-
-</style>

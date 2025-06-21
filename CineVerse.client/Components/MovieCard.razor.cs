@@ -1,4 +1,4 @@
-﻿using CineVerse.client.ApiResponses;
+﻿using CineVerse.shared.ApiResponses;
 using Microsoft.AspNetCore.Components;
 
 namespace CineVerse.client.Components;
@@ -18,12 +18,6 @@ public partial class MovieCard
 
     private static string PosterUrl(string? path, string size = "w342") =>
         string.IsNullOrWhiteSpace(path)
-            ? "/placeholder.png"
+            ? "/Images/placeholder.png"
             : $"https://image.tmdb.org/t/p/{size}{path}";
-
-    public void NavigateToDetails()
-    {
-        var url = $"/movie/{Movie.Id}";
-        NavigationManager.NavigateTo(url);
-    }
 }

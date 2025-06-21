@@ -1,0 +1,38 @@
+﻿@typeparam TItem
+@typeparam TValue
+
+<div class="dropdown" @onclick:stopPropagation>
+    <div class="dropdown-toggle"
+         @onpointerdown="TogglePointer"
+         @onpointerdown:stopPropagation="true">
+        <span class="dropdown-toggle-label">@ToggleText</span>
+        <span class="dropdown-toggle-arrow @(IsOpen ? "up" : null)">▾</span>
+    </div>
+    <div class="dropdown-menu @(IsOpen ? "show" : "hide")"
+         tabindex="-1"
+         @onfocusout="LostFocus"
+         @onfocusin="GainedFocus"
+         @ref="MenuRef">
+        @if (Searchable)
+        {
+            <input class="select-search"
+                   placeholder="Search…"
+                   @bind="SearchTerm"
+                   @bind:event="oninput"
+                   @ref="MenuRef" />
+        }
+
+        <div class="dropdown-options">
+            @foreach (var opt in Filtered)
+            {
+                var key = ValueSelector(opt);
+                <label class="select-item">
+                    <input type="radio" name="single"
+                           checked="@Equals(SelectedValue, key)"
+                           @onchange="@(() => Pick(key))" />
+                    <span>@TextSelector(opt)</span>
+                </label>
+            }
+        </div>
+    </div>
+</div>

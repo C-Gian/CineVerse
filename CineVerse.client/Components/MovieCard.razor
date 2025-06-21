@@ -1,6 +1,6 @@
 ﻿@inherits ComponentBase
 
-<div class="movie-card-container" @onclick="NavigateToDetails">
+<a href="@($"/movie/{Movie.Id}")" class="movie-card-container">
 	<div class="movie-card-image">
 		<img src="@PosterUrl(Movie.PosterPath)" alt="@Movie.Title poster" />
 	</div>
@@ -9,84 +9,4 @@
 		<h3 class="movie-title">@Movie.Title</h3>
 		<span class="movie-year">@Movie.ReleaseDate?.Split('-')[0]</span>
 	</div>
-</div>
-
-<style>
-	.movie-card-container {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.movie-card-image {
-		width: 100%;
-		height: 100%;
-		border-radius: 12px;
-		overflow: hidden;
-		position: relative;
-		cursor: pointer;
-		transition: transform .25s;
-	}
-
-		.movie-card-image img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform .35s ease;
-		}
-
-	.movie-card:hover {
-		transform: translateY(-6px);
-		box-shadow: 0 8px 18px rgba(0,0,0,.35);
-	}
-
-	.movie-card img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform .35s ease;
-	}
-
-	.movie-card-container:hover .movie-card-image {
-		transform: translateY(-6px);
-		box-shadow: 0 8px 18px rgba(0,0,0,.35); 
-	}
-
-		.movie-card-container:hover .movie-card-image img {
-			transform: scale(1.06);
-		}
-
-	.movie-card-image {
-		transition: transform .25s;
-	}
-
-		.movie-card-image img {
-			transition: transform .35s ease;
-		}
-
-	.movie-card-info {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-
-	.movie-title {
-		margin: 10px 0 2px;
-		font-size: 1.05rem;
-		font-weight: 600;
-		color: #fff;
-		width: 100%;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.movie-year {
-		display: block;
-		font-size: .85rem;
-		opacity: .7;
-		color: #fff;
-		width: 175px;
-	}
-
-</style>
+</a>

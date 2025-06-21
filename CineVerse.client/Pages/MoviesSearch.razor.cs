@@ -1,34 +1,34 @@
-﻿using CineVerse.client.ApiResponses;
+﻿using CineVerse.client.Services;
 using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace CineVerse.client.Pages;
 
 public partial class MoviesSearch
 {
     #region Properties
+    [Inject] public AppState AppState { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public IJSRuntime JS { get; set; }
     [Inject] public IMovieService MovieService { get; set; }
     [Inject] public IGenreService GenreService { get; set; }
     [Inject] public ICountryService CountryService { get; set; }
-    [Inject] public AppState AppState { get; set; }
+
     public List<MovieResultResponse> Movies { get; set; } = [];
+    public Queue<MovieResultResponse> MovieBuffer { get; set; } = new();
     public List<Genre> Genres { get; set; } = [];
     public List<CountryApiResponse> Countries { get; set; } = [];
-    public bool IsLoading { get; set; } = false;
-    public int CurrentPage { get; set; }
-    public string? FromYear { get; set; } = string.Empty;
-    public string? ToYear { get; set; } = string.Empty;
-    public string? Region { get; set; } = string.Empty;
-    public string? WatchRegion { get; set; } = string.Empty;
-    public List<int> SelectedGenres { get; set; } = [];
-    public int? RatingLess { get; set; }
-    public int? RatingGreater { get; set; }
-    public bool IncludeAdult { get; set; } = true;
+    public MovieCertificationsApiResponse Certifications { get; set; }
     public List<GeneralWatchProvider> WatchProviders { get; set; }
-    public List<int> SelectedProviderIds { get; set; } = [];
-    public List<int> IncludedGenres { get; set; }  = new();
-    public List<int> ExcludedGenres { get; set; }  = new();
+    public bool IsLoading { get; set; } = false;
+    public SearchFiltersModel SearchFiltersModel { get; set; } = new();
+    public List<CertificationApiResponse> CertificationCountry =>
+        Certifications.Certifications.ContainsKey(SearchFiltersModel.Region!) ?
+        Certifications.Certifications[SearchFiltersModel.Region!] : [];
 
     #endregion
 
@@ -53,20 +53,21 @@ public partial class MoviesSearch
 
     #region Methods
 
-    
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         IsLoading = true;
+
         var allProviders = await MovieService.GetGeneralWatchProviders(LANGUAGE, REGION);
-        WatchProviders = allProviders.Results
-            .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)                
-            .OrderBy(p => p.DisplayPriorities![REGION])       
-            .ToList();
         Countries = await CountryService.GetCountriesAsync();
-        await LoadMoviesAsync(1);
-        await LoadGenresAsync();
+        Genres = await LoadGenresAsync();
+        Certifications = await MovieService.GetMoviesCertifications();
+        WatchProviders = allProviders.Results
+            .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)
+            .OrderBy(p => p.DisplayPriorities![REGION])
+            .ToList();
+        await InitializeSearchAsync();
+
         IsLoading = false;
     }
 
@@ -77,14 +78,21 @@ public partial class MoviesSearch
         try
         {
             Movies = [];
+            var result = new MovieResponse();
 
-            var movieResponse = await MovieService.GetPopularMovies((pageNumber * 2) - 1) ?? new MoviesApiResponse();
-            var movieResponse2 = await MovieService.GetPopularMovies(pageNumber * 2) ?? new MoviesApiResponse();
+            var excludeEverything = SearchFiltersModel.GenresSelection?.Excluded.Count == Genres.Count && !SearchFiltersModel.IncludeAdult;
 
-            Movies.AddRange(movieResponse.Results);
-            Movies.AddRange(movieResponse2.Results);
+            if (!string.IsNullOrEmpty(_query))
+            {
+                result = await MovieService.SearchMovie(_query, pageNumber);
+            }
+            else if (!excludeEverything)
+            {
+                result = await MovieService.DiscoverMoviesAsync(SearchFiltersModel, pageNumber);
+            }
 
-            CurrentPage = pageNumber;
+            Movies.AddRange(result.Results);
+            SearchFiltersModel.Page = pageNumber;
         }
         catch (Exception ex)
         {
@@ -96,75 +104,76 @@ public partial class MoviesSearch
         }
     }
 
-    private async Task LoadGenresAsync()
+    private async Task<List<Genre>> LoadGenresAsync()
     {
-        Genres = await GenreService.GetGenres() ?? [];
+        return await GenreService.GetGenres() ?? [];
     }
 
-    private async Task SearchAsync()
+    private async Task HandleSearchAsync()
     {
-        Movies = await MovieService.SearchMovie(_query, 1);
+        await AppState.SaveSearchAsync(SearchFiltersModel, JS);
+
+        await LoadMoviesAsync(1);
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key is "Enter")
         {
-            await SearchAsync();
+            await HandleSearchAsync();
         }
     }
-
-    private void ValidateFromYearRange(FocusEventArgs e)
+    
+    private (bool, string?) ValidateYear(string? v, bool isFrom)
     {
-        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out _))
+        if (string.IsNullOrEmpty(v))
         {
-            if (from < 1985)
-            {
-                FromYear = "1985";
-            }
-            if (from > DateTime.Now.Year)
-            {
-                FromYear = DateTime.Now.Year.ToString();
-            }
+            return (true, null);
         }
+
+        var fromValid = int.TryParse(SearchFiltersModel.ReleaseYearFrom, out var from);
+        var toValid = int.TryParse(SearchFiltersModel.ReleaseYearTo, out var to);
+
+        if (!fromValid && !toValid)
+            return (false, "From Year and To Year must be valid numbers");
+
+        if (!fromValid || !toValid)
+            return (true, null); 
+
+        return isFrom
+            ? (from > to ? (false, "From Year must be lesser than To Year") : (true, null))
+            : (to < from ? (false, "To Year must be greater than From Year") : (true, null));
     }
 
-    private void ValidateToYearRange(FocusEventArgs e)
+    private void ClearSearchFilters()
     {
-        if (int.TryParse(FromYear, out var from) && int.TryParse(ToYear, out var to))
+        SearchFiltersModel = new SearchFiltersModel();
+        ClearQuery();
+    }
+
+    private void ClearQuery()
+    {
+        _query = "";
+    }
+
+    private async Task InitializeSearchAsync()
+    {
+        AppState.UpdateCurrentPage(AppState.GetLogicalRoute(NavigationManager.Uri));
+
+        var cameFromDetails = AppState.LastPage?.Contains("detail", StringComparison.OrdinalIgnoreCase) == true;
+
+        if (cameFromDetails)
         {
-            if (to < from)
-            {
-                ToYear = from.ToString();
-            }
-            if (to > DateTime.Now.Year)
-            {
-                ToYear = DateTime.Now.Year.ToString();
-            }
+            var loaded = await AppState.LoadSearchAsync(JS);
+            SearchFiltersModel = loaded ?? new();
         }
-    }
-
-    private void ValidateRegion(string element)
-    {
-        var codedCountries = Countries.Select(c => c.Code).ToList();
-        if (!codedCountries.Contains(element))
+        else
         {
-            var testo = 0;
+            SearchFiltersModel = new();
         }
-    }
 
-    private Task HandleRatingChanged((int? less, int? greater) values)
-    {
-        RatingLess = values.less;
-        RatingGreater = values.greater;
-        return Task.CompletedTask;
-    }
-
-    private Task HandleGenreChange((List<int> include, List<int> exclude) values)
-    {
-        IncludedGenres = values.include;
-        ExcludedGenres = values.exclude;
-        return Task.CompletedTask;
+        await LoadMoviesAsync(SearchFiltersModel.Page);
+        await JS.InvokeVoidAsync("localStorage.removeItem", "lastSearch");
     }
 
     #endregion

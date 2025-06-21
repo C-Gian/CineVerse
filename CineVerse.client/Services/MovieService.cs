@@ -1,22 +1,17 @@
-﻿using CineVerse.client.ApiResponses;
-using CineVerse.client.Services.Interfaces;
+﻿using CineVerse.client.Services.Interfaces;
+using CineVerse.shared.ApiResponses;
+using CineVerse.shared.Models;
 using RestSharp;
 
 namespace CineVerse.client.Services;
 
 public class MovieService(RestClient rest) : IMovieService
 {
-    public async Task<DiscoverApiResponse> DiscoverMoviesAsync(Dictionary<string, string> queryParams, CancellationToken ct = default)
+    public async Task<MovieResponse> DiscoverMoviesAsync(SearchFiltersModel filters, int page = 1, CancellationToken ct = default)
     {
-        var req = new RestRequest("/api/movie/discover");
-
-        foreach (var kv in queryParams)
-        {
-            if (!string.IsNullOrWhiteSpace(kv.Value))
-                req.AddQueryParameter(kv.Key, kv.Value);
-        }
-
-        var res = await rest.ExecuteGetAsync<DiscoverApiResponse>(req, ct);
+        var req = new RestRequest("/api/movie/discover", Method.Post).AddJsonBody(filters).AddQueryParameter("page", page.ToString());
+        
+        var res = await rest.ExecuteGetAsync<MovieResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");
@@ -73,11 +68,25 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
-    public async Task<MoviesApiResponse> GetNowPlayingMovies(int page = 1, CancellationToken ct = default)
+    public async Task<MovieCertificationsApiResponse> GetMoviesCertifications(CancellationToken ct = default)
+    {
+        var req = new RestRequest("api/movie/movie_certifications");
+
+        var debugUri = rest.BuildUri(req);
+
+        var res = await rest.ExecuteGetAsync<MovieCertificationsApiResponse>(req, ct);
+
+        if (!res.IsSuccessful || res.Data is null)
+            throw new Exception($"API error ({res.StatusCode})");
+
+        return res.Data;
+    }
+
+    public async Task<MovieResponse> GetNowPlayingMovies(int page = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/now_playing").AddQueryParameter("page", page.ToString());
 
-        var res = await rest.ExecuteGetAsync<MoviesApiResponse>(req, ct);
+        var res = await rest.ExecuteGetAsync<MovieResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");
@@ -85,11 +94,11 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
-    public async Task<MoviesApiResponse> GetPopularMovies(int page = 1, CancellationToken ct = default)
+    public async Task<MovieResponse> GetPopularMovies(int page = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/popular").AddQueryParameter("page", page.ToString());
 
-        var res = await rest.ExecuteGetAsync<MoviesApiResponse>(req, ct);
+        var res = await rest.ExecuteGetAsync<MovieResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");
@@ -109,11 +118,11 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
-    public async Task<MoviesApiResponse> GetRecommendationsMovieDetail(int movieId, CancellationToken ct = default)
+    public async Task<MovieResponse> GetRecommendationsMovieDetail(int movieId, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/recommendations").AddQueryParameter("movieId", movieId);
 
-        var res = await rest.ExecuteGetAsync<MoviesApiResponse>(req, ct);
+        var res = await rest.ExecuteGetAsync<MovieResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");
@@ -121,11 +130,11 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
-    public async Task<MoviesApiResponse> GetUpcomingMovies(int page = 1, CancellationToken ct = default)
+    public async Task<MovieResponse> GetUpcomingMovies(int page = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/upcoming").AddQueryParameter("page", page.ToString());
 
-        var res = await rest.ExecuteGetAsync<MoviesApiResponse>(req, ct);
+        var res = await rest.ExecuteGetAsync<MovieResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");
@@ -145,11 +154,11 @@ public class MovieService(RestClient rest) : IMovieService
         return res.Data;
     }
 
-    public async Task<List<MovieResultResponse>> SearchMovie(string query, int page = 1, CancellationToken ct = default)
+    public async Task<MovieResponse> SearchMovie(string query, int page = 1, CancellationToken ct = default)
     {
         var req = new RestRequest("/api/movie/search").AddQueryParameter("query", query).AddQueryParameter("page", page.ToString());
 
-        var res = await rest.ExecuteGetAsync<List<MovieResultResponse>>(req, ct);
+        var res = await rest.ExecuteGetAsync<MovieResponse>(req, ct);
 
         if (!res.IsSuccessful || res.Data is null)
             throw new ApplicationException($"API error ({res.StatusCode})");

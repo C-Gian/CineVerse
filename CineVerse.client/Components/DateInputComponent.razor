@@ -1,0 +1,31 @@
+﻿<div class="partial-date-wrapper" @onclick:stopPropagation>
+    <div class="partial-date-toggle" @onclick="Toggle">
+        <span>@DisplayText</span>
+        <span class="calendar-icon">📅</span>
+    </div>
+
+    @if (IsOpen)
+    {
+        <div class="partial-date-popup">
+            <input class="partial-textbox" placeholder="yyyy"
+                   type="number"
+                   @bind="Year"
+                   min="1"
+                   max="9999" />
+
+            <input class="partial-textbox" placeholder="MM"
+                   type="number"
+                   @bind="Month"
+                   min="1"
+                   max="12"
+                   disabled="@(Year is null)" />
+
+            <input class="partial-textbox" placeholder="dd"
+                   type="number"
+                   @bind="Day"
+                   min="1"
+                   max="31"
+                   disabled="@(Month is null)" />
+        </div>
+    }
+</div>

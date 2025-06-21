@@ -1,188 +1,46 @@
-﻿<div class="rating-dropdown" @onclick:stopPropagation>
-    <div class="rating-dropdown-toggle"
+﻿<div class="dropdown" @onclick:stopPropagation>
+    <div class="dropdown-toggle"
          @onpointerdown="TogglePointer"
          @onpointerdown:stopPropagation="true">
-        <span class="rating-label">@((SelectedLess == null && SelectedGreater == null) ? "No Range" : "Range")</span>
-        <span class="rating-value">@RatingLabel</span>
-        <span class="rating-arrow @(IsOpen ? "up" : null)">▾</span>
+        <span class="dropdown-toggle-label">@((Value?.RatingLess == null && Value?.RatingGreater == null) ? "No Range" : "Range")</span>
+        <span class="dropdown-toggle-value">@((MarkupString)RatingLabel)</span>
+        <span class="dropdown-toggle-arrow @(IsOpen ? "up" : null)">▾</span>
     </div>
-
-    <div class="rating-dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
+    <div class="dropdown-menu @(IsOpen ? "show" : "hide")" tabindex="-1" @onfocusout="LostFocus" @onfocusin="GainedFocus" @ref="myDivRef">
         <div class="rating-radio-columns">
-            <div class="rating-radio-column">
-                <div class="rating-column-label">Less than</div>
-                @for (int i = 1; i <= 10; i++)
-                {
-                    var value = i;
-                    <label class="rating-radio-item">
-                        <input type="radio"
-                               name="less-than"
-                               value="@value"
-                               checked="@(SelectedLess == value)"
-                               @onchange="@(() => SelectLess(value))" />
-                        <span>@value</span>
-                    </label>
-                }
-            </div>
             <div class="rating-radio-column">
                 <div class="rating-column-label">Greater than</div>
                 @for (int i = 1; i <= 10; i++)
                 {
-                    var value = i;
+                    var v = i;
                     <label class="rating-radio-item">
                         <input type="radio"
                                name="greater-than"
-                               value="@value"
-                               checked="@(SelectedGreater == value)"
-                               @onchange="@(() => SelectGreater(value))" />
-                        <span>@value</span>
+                               value="@v"
+                               checked="@(Value?.RatingGreater == v)"
+                               @onclick="@(() => SelectGreater(v))" />
+                        <span>@v</span>
+                    </label>
+                }
+            </div>
+            <div class="rating-radio-column">
+                <div class="rating-column-label">Less than</div>
+                @for (int i = 1; i <= 10; i++)
+                {
+                    var v = i;
+                    <label class="rating-radio-item">
+                        <input type="radio"
+                               name="less-than"
+                               value="@v"
+                               checked="@(Value?.RatingLess == v)"
+                               @onclick="@(() => SelectLess(v))" />
+                        <span>@v</span>
                     </label>
                 }
             </div>
         </div>
-        <div class="rating-dropdown-footer">
-            <button class="rating-clear" @onclick="() => ResetRating(null)">Clear</button>
+        <div class="dropdown-footer">
+            <button type="button" class="clear-btn" @onclick="() => ResetRating(null)">Clear</button>
         </div>
     </div>
 </div>
-
-<style>
-    .rating-dropdown {
-        position: relative;
-        font-family: sans-serif;
-        user-select: none;
-        height: 42px;
-    }
-
-    .rating-dropdown-toggle {
-        display: flex;
-        align-items: center;
-        background: rgba(255,255,255,0.06);
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        color: #fff;
-        height: 100%;
-        gap: 0.5rem;
-    }
-
-    .rating-label {
-        font-weight: 600;
-        font-size: 0.85rem;
-        white-space: nowrap;
-    }
-
-    .rating-value {
-        background: #444;
-        margin-left: 5px;
-        margin-right: 5px;
-        padding-left: 8px;
-        padding-right: 9px;
-        padding-top: 1px;
-        padding-bottom: 0px;
-        border-radius: 5px;
-        font-size: 0.8rem;
-        white-space: nowrap;
-        display: inline-block;
-    }
-
-    .rating-arrow {
-        font-size: 1.5rem;
-        line-height: 0;
-        opacity: .6;
-        display: inline-block;
-        transition: transform .25s ease;
-    }
-
-        .rating-arrow.up {
-            transform: rotate(-180deg);
-        }
-
-    .rating-dropdown-menu {
-        opacity: 0;
-        transform: translateY(-10px);
-        pointer-events: none;
-        transition: opacity 0.15s ease, transform 0.25s ease;
-        position: absolute;
-        margin-top: 8px;
-        z-index: 9999;
-        background: #1a1d2b;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        padding: 1rem;
-        width: 300px;
-    }
-
-        .rating-dropdown-menu.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .rating-dropdown-menu.hide {
-            opacity: 0;
-            transform: translateY(-10px);
-            pointer-events: none;
-        }
-
-    .rating-radio-columns {
-        display: flex;
-        gap: 2rem;
-        justify-content: space-between;
-    }
-
-    .rating-radio-column {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-        flex: 1;
-    }
-
-    .rating-column-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #aaa;
-        margin-bottom: 0.3rem;
-    }
-
-    .rating-radio-item {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: #eee;
-        font-size: 0.9rem;
-    }
-
-        .rating-radio-item input[type="radio"] {
-            accent-color: #5f8fff;
-        }
-
-    .rating-dropdown-footer {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        padding-top: 1rem;
-        margin-top: 10px;
-    }
-
-    .rating-clear {
-        width: 100%;
-        padding: 0.4rem 0.8rem;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.85rem;
-        border: none;
-        background: transparent;
-        border: 1px solid rgba(95, 143, 255, 0.4);
-        color: #5f8fff;
-        transition: all 0.2s ease;
-        font-weight: 600;
-    }
-
-        .rating-clear:hover {
-            background: rgba(95, 143, 255, 0.1);
-            border-color: #5f8fff;
-        }
-</style>
