@@ -1,0 +1,22 @@
+﻿<form class="search-box" @onsubmit="OnSubmit">
+    <div class="search-bar">
+        <input type="text"
+               placeholder="Search…"
+               @bind="Query"
+               @bind:event="oninput"
+               @onkeydown="SearchbarMovieSubmit" />
+
+        @if (!string.IsNullOrWhiteSpace(Query))
+        {
+            <button type="button"
+                    class="clear-btn"
+                    @onclick="ClearQuery">
+                <span class="material-icons">close</span>
+            </button>
+        }
+
+        <button type="submit" class="trailing-btn">
+            <span class="material-icons">search</span>
+        </button>
+    </div>
+</form>

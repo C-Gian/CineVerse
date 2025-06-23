@@ -12,6 +12,7 @@ namespace CineVerse.client.Pages;
 public partial class MoviesSearch
 {
     #region Properties
+    [Parameter] [SupplyParameterFromQuery(Name = "query")] public string? Query { get; set; }
     [Inject] public AppState AppState { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
     [Inject] public IJSRuntime JS { get; set; }
@@ -66,7 +67,16 @@ public partial class MoviesSearch
             .Where(p => p.DisplayPriorities?.TryGetValue(REGION, out var pr) == true && pr < MAX_PRIORITY)
             .OrderBy(p => p.DisplayPriorities![REGION])
             .ToList();
-        await InitializeSearchAsync();
+
+
+        if (string.IsNullOrEmpty(Query))
+        {
+            await InitializeSearchAsync(); //classic load of the search page
+        } 
+        else
+        {
+            await InitializeSearchQueryAsync(); //load search with query
+        }
 
         IsLoading = false;
     }
@@ -154,6 +164,34 @@ public partial class MoviesSearch
         }
 
         await LoadMoviesAsync(SearchFiltersModel.Page);
+        await JS.InvokeVoidAsync("localStorage.removeItem", "lastSearch");
+    }
+
+    private async Task InitializeSearchQueryAsync()
+    {
+        AppState.UpdateCurrentPage(AppState.GetLogicalRoute(NavigationManager.Uri));
+
+        await _gate.WaitAsync();
+
+        try
+        {
+            Movies = [];
+            var result = new MovieResponse();
+
+            result = await MovieService.SearchMovie(Query!, 1);
+
+            Movies.AddRange(result.Results);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            ToastService.Show("ERROR", "Unable to retrieve search results.", ToastType.Error);
+        }
+        finally
+        {
+            _gate.Release();
+        }
+
         await JS.InvokeVoidAsync("localStorage.removeItem", "lastSearch");
     }
 

@@ -16,21 +16,7 @@
             <span class="logo-text">CINEVERSE</span>
         </div>
 
-        <div class="flex-spacer"></div>
-
-        <div class="search-box">
-            <span class="material-icons search-icon">search</span>
-            <input type="text"
-                   placeholder="Search for a movie…"
-                   @bind-value="_query"
-                   @bind-value:event="oninput"
-                   @onkeydown="HandleKeyDown" />
-
-            @if (!string.IsNullOrWhiteSpace(_query))
-            {
-                <button type="button" class="search-clear-btn" @onclick="ClearQuery">✕</button>
-            }
-        </div>
+        <SearchbarComponent @bind-Query="Query" />
 
         <img class="avatar" src="https://i.pravatar.cc/40" />
     </div>

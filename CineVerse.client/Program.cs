@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<AppState>();
 builder.Services.AddSingleton<IToastService, ToastService>();
 
+builder.Services.AddScoped<ISearchSessionService, SearchSessionService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<ICountryService, CountryService>();
