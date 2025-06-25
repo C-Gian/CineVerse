@@ -29,8 +29,8 @@
     display: flex;
     height: 75px;
     align-items: center;
-    gap: .5rem;
-    margin-left: .2rem;
+    gap: 1rem;
+    margin-left: .5rem;
     cursor: pointer;
 }
 
@@ -48,6 +48,10 @@
     .logo-text.closed {
         display: none;
     }
+
+.logo-white {
+    filter: brightness(0) invert(1);
+}
 
 .nav-list {
     list-style: none;
