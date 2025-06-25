@@ -1,10 +1,10 @@
 ﻿:root {
     /* palette */
-    --clr-bg-1: #0f0f0f; 
+    --clr-bg-1: #0f0f0f;
     --clr-bg-2: #0f0f0f;
     --clr-surface-elev: #1f2128;
-    --clr-primary: #ff0038;
-    --clr-primary-light: #ff4d6e;
+    --clr-primary: #ad261a;
+    --clr-primary-light: #ad261a;
     --clr-text-1: #f5f7fa;
     --clr-text-2: #9ca3af;
     --clr-border: #272b33;

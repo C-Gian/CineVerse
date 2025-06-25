@@ -2,6 +2,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    text-decoration: none !important;
 }
 
 .movie-card-image {

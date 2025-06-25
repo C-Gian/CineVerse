@@ -19,8 +19,8 @@ else
 
 						<div style="display: flex; flex-direction: column; gap: 1.5rem;">
 							<div style="display: flex; flex-direction: column; gap: 0.3rem;">
-								<h1>@Movie.Title</h1>
-								<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+								<h1 style="user-select: text">@Movie.Title</h1>
+								<div style="display: flex; flex-direction: column; gap: 1.5rem;">
 									<div class="detail-meta-info">
 										<span>@Movie.ReleaseDate</span>
 										<span>|</span>
@@ -37,7 +37,7 @@ else
 							</div>
 
 							<div style="display: flex; flex-direction: column;">
-								<h3>Overview</h3>
+								<h3 style="font-size: 1.5rem;">Overview</h3>
 								<p class="detail-overview-text">@Movie.Overview</p>
 							</div>
 						</div>
@@ -82,7 +82,7 @@ else
 		<div class="detail-body-section">
 			<!-- CAST -->
 			<div class="detail-section">
-				<h2>Top Billed Cast</h2>
+				<h2>Cast</h2>
 				<div class="detail-cast-list">
 					@foreach (var cast in MovieCast.Cast.Take(10))
 					{

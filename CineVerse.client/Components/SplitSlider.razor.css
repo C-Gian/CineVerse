@@ -8,7 +8,7 @@
 
 .slider-list {
     width: 300px;
-    background: rgba(19, 22, 34, 0.29);
+    background: rgba(22, 22, 22, 1);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

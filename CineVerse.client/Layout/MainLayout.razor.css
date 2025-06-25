@@ -18,7 +18,7 @@
 }
 
     .drawer.closed {
-        width: 80px;
+        width: 105px;
     }
 
     .drawer.open {
@@ -30,7 +30,7 @@
     height: 75px;
     align-items: center;
     gap: 1rem;
-    margin-left: .5rem;
+    padding: var(--sp-4) var(--sp-5);
     cursor: pointer;
 }
 
@@ -65,32 +65,38 @@
 .nav-link {
     display: flex;
     align-items: center;
-    gap: .75rem;
-    padding: .65rem 1rem;
-    color: #AAB0C0;
+    gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-5);
+    border-radius: var(--radius-m);
+    color: var(--clr-text-2);
+    font-size: var(--fs-body);
+    font-weight: 500;
     text-decoration: none;
-    font-size: .95rem;
-    border-radius: 10px;
     transition: background .25s,color .25s;
 }
 
     .nav-link i {
-        font-size: 1.7rem;
+        font-size: 1.3rem;
     }
 
     .nav-link:hover {
         background: rgba(255,255,255,.06);
-        color: #fff;
+        color: var(--clr-text-1);
     }
 
     .nav-link.active {
         background: rgba(255, 255, 255, 0.1);
-        color: #fff;
+        color: var(--clr-text-1);
+        font-weight: 900;
     }
 
     .nav-link > .material-icons {
         position: relative;
         left: -5px;
+        color: #fff; 
+        background: var(--clr-primary); 
+        border-radius: 50%;
+        padding: 8px;
     }
 
 .nav-text {
@@ -113,7 +119,7 @@
 }
 
     .layout-right.closed {
-        margin-left: 80px;
+        margin-left: 105px;
     }
 
     .layout-right.open {
@@ -123,9 +129,9 @@
 .appbar {
     display: flex;
     height: 75px;
-    background: var(--clr-bg-2);
+    background: rgba(0, 0, 0, 0);
     align-items: center;
-    padding: 0 40px 0 0;
+    padding: 0 40px 30px 0;
     z-index: 2000;
 }
 
@@ -149,8 +155,8 @@
     }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
 }
 

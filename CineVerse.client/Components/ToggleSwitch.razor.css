@@ -43,7 +43,7 @@
     }
 
     .toggle-ui.on {
-        background: #2d2668;
+        background: var(--clr-primary);
     }
 
         .toggle-ui.on::before {
