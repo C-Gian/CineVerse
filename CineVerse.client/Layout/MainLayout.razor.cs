@@ -25,7 +25,7 @@ public partial class MainLayout
     #region Methods
 
     #region Private
-    
+
 
     #endregion
 

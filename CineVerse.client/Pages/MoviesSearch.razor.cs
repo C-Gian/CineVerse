@@ -1,10 +1,8 @@
-﻿using CineVerse.client.Services;
-using CineVerse.client.Services.Interfaces;
+﻿using CineVerse.client.Services.Interfaces;
 using CineVerse.shared.ApiResponses;
 using CineVerse.shared.Enums;
 using CineVerse.shared.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
 namespace CineVerse.client.Pages;

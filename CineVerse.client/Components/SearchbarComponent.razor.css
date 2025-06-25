@@ -6,51 +6,56 @@
 
 .search-bar {
     position: relative;
-    width: 600px;
+    width: 800px;
     display: flex;
     align-items: center;
-    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.08); 
+    border-radius: 9999px;
+    background: var(--clr-bg-1);
 }
 
     .search-bar input {
         width: 100%;
-        height: 56px;
-        padding: 0 64px 0 26px;
+        height: 70px;
+        padding: 0 64px 0 28px; 
         border: none;
         border-radius: 9999px;
-        background: rgba(34, 39, 55, .9);
-        color: #fff;
+        background: transparent;
+        color: var(--clr-text-1);
         font-size: 1rem;
         outline: none;
-        box-shadow: 0 2px 4px rgba(0,0,0,.3);
     }
 
         .search-bar input::placeholder {
-            color: #8a8da5;
+            color: var(--clr-text-2);
         }
 
 .trailing-btn {
     position: absolute;
-    right: 8px;
-    width: 42px;
-    height: 42px;
+    right: 5px;
+    width: 50px;
+    height: 50px;
     border: none;
     border-radius: 50%;
-    background:  #3b3f55;
+    background: rgba(255,255,255,.04);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform .1s ease;
+    transition: background .2s ease;
 }
 
     .trailing-btn .material-icons {
-        font-size: 1.5rem;
-        color: #b2b2b2;
+        font-size: 1.3rem;
+        color: var(--clr-text-2);
     }
 
     .trailing-btn:active {
         transform: scale(.95);
+    }
+
+    .trailing-btn:hover {
+        background: rgba(255,255,255,.08);
     }
 
 .clear-btn {

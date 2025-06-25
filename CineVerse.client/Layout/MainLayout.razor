@@ -4,29 +4,14 @@
 <ToastContainerComponent />
 
 <div class="layout-root">
-
-    <!-- ▸ APP BAR ------------------------------------------------------>
-    <div class="appbar">
-        <button class="icon-btn" @onclick="ToggleDrawer">
-            <i class="material-icons">menu</i>
-        </button>
-
-        <div class="logo-area">
-            <img src="/cineverse-icon.png" width="38" />
-            <span class="logo-text">CINEVERSE</span>
-        </div>
-
-        <SearchbarComponent @bind-Query="Query" />
-
-        <img class="avatar" src="https://i.pravatar.cc/40" />
-    </div>
-
-    <!-- ▸ MAIN --------------------------------------------------------->
-    <div class="main-area">
-
+   <div class="layout-left">
         <!-- DRAWER -->
-        <nav class="drawer @( _drawerOpen ? "open" : "closed")"
-             style="--drawer-w:72px; padding: 0 1rem;">
+        <nav class="drawer @( _drawerOpen ? "open" : "closed")">
+            <div class="logo-area" @onclick="ToggleDrawer">
+                <img src="/cineverse-icon.png" width="38" />
+                <span class="logo-text @(_drawerOpen ? "open" : "closed")">CINEVERSE</span>
+            </div>
+
             <ul class="nav-list">
                 <li>
                     <a href="/" class="nav-link @(CurrentUrl == "/" ? "active" : null)">
@@ -42,6 +27,15 @@
                 </li>
             </ul>
         </nav>
+   </div>
+
+    <div class="layout-right @(_drawerOpen ? "open" : "closed")">
+        <!-- ▸ APP BAR ------------------------------------------------------>
+        <div class="appbar">
+            <SearchbarComponent @bind-Query="Query" />
+
+            <img class="avatar" src="https://i.pravatar.cc/40" />
+        </div>
 
         <!-- BODY -->
         <main class="content-area">

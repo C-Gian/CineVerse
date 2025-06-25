@@ -1,12 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 html, body {
-    font-family: 'Manrope', sans-serif !important;
+    /*font-family: 'Manrope', sans-serif !important;*/
     user-select: none;
     margin: 0px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(120,120,120,0.4) transparent;
 }
+
+body {
+    background: radial-gradient(1000px circle at 50% -300px, var(--clr-bg-2) 0%, var(--clr-bg-1) 70%);
+    color: var(--clr-text-1);
+    font-family: 'Inter',sans-serif;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 18%) #0f0f0f;
+}
+
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,.15);
+        border-radius: 6px;
+        transition: background .2s ease;
+    }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,.30);
+        }
+
+        *::-webkit-scrollbar-thumb:active {
+            background: rgba(255,255,255,.45);
+        }
 
 *, *::before, *::after {
     box-sizing: border-box;
